@@ -1,7 +1,0 @@
-{
-  "name": "Lovelace Asset Manager - Server",
-  "description": "This is the Springboot REST server for serving requests to Lovelace Asset manager clients.",
-  "website": "https://www.lovelacetech.io/",
-  "image": "heroku/java",
-  "addons": [ "heroku-postgresql" ]
-}
