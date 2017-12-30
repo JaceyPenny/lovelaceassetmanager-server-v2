@@ -9,7 +9,7 @@ import javax.persistence.Table;
 import java.util.UUID;
 
 @Entity
-@Table(name = "company")
+@Table(name = "company", schema = "lovelace")
 public class Company implements ApiModelConvertible<ApiCompany> {
   @Id
   @Column(name = "id", unique = true, nullable = false, updatable = false)
@@ -20,6 +20,10 @@ public class Company implements ApiModelConvertible<ApiCompany> {
 
   @Column(name = "phone_number", unique = true, nullable = false)
   private String phoneNumber;
+
+  public ApiCompany toApi() {
+    return new ApiCompany(this);
+  }
 
   public UUID getId() {
     return id;
@@ -43,9 +47,5 @@ public class Company implements ApiModelConvertible<ApiCompany> {
 
   public void setPhoneNumber(String phoneNumber) {
     this.phoneNumber = phoneNumber;
-  }
-
-  public ApiCompany toApi() {
-    return new ApiCompany(this);
   }
 }

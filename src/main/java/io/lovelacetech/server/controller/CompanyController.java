@@ -2,13 +2,12 @@ package io.lovelacetech.server.controller;
 
 import io.lovelacetech.server.command.company.CompanyByNameCommand;
 import io.lovelacetech.server.command.company.CompanyByNameOrPhoneNumberCommand;
-import io.lovelacetech.server.model.Company;
+import io.lovelacetech.server.command.company.CompanyByPhoneNumberCommand;
 import io.lovelacetech.server.model.api.Status;
-import io.lovelacetech.server.model.api.model.ApiCompany;
-import io.lovelacetech.server.model.api.model.ApiCompanyList;
-import io.lovelacetech.server.model.api.response.CompanyApiResponse;
-import io.lovelacetech.server.model.api.response.CompanyListApiResponse;
+import io.lovelacetech.server.model.api.response.company.CompanyApiResponse;
+import io.lovelacetech.server.model.api.response.company.CompanyListApiResponse;
 import io.lovelacetech.server.repository.CompanyRepository;
+import io.lovelacetech.server.util.Messages;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,14 +23,10 @@ public class CompanyController {
 
   @RequestMapping(value = "/", method = RequestMethod.GET)
   public CompanyListApiResponse getCompanies() {
-    Iterable<Company> companies = companyRepository.findAll();
-    CompanyListApiResponse apiResponse = new CompanyListApiResponse();
-    apiResponse.setStatus(Status.SUCCESS);
-    apiResponse.setMessage("Success.");
-    ApiCompanyList companyList = new ApiCompanyList();
-    companies.forEach(company -> companyList.addCompany(new ApiCompany(company)));
-    apiResponse.setCompanyList(companyList);
-    return apiResponse;
+    return new CompanyListApiResponse()
+        .setStatus(Status.SUCCESS)
+        .setMessage(Messages.SUCCESS)
+        .setResponse(companyRepository.findAll());
   }
 
   @RequestMapping(value = "/byName/{name}", method = RequestMethod.GET)
@@ -49,6 +44,14 @@ public class CompanyController {
     return new CompanyByNameOrPhoneNumberCommand()
         .setCompanyRepository(companyRepository)
         .setName(name)
+        .setPhoneNumber(phoneNumber)
+        .execute();
+  }
+
+  @RequestMapping(value = "/byPhoneNumber/{phoneNumber}", method = RequestMethod.GET)
+  public CompanyApiResponse getCompanyByPhoneNumber(@PathVariable String phoneNumber) {
+    return new CompanyByPhoneNumberCommand()
+        .setCompanyRepository(companyRepository)
         .setPhoneNumber(phoneNumber)
         .execute();
   }

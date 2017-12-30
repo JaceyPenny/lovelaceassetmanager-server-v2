@@ -13,13 +13,19 @@ public abstract class BaseApiResponse<T extends BaseApiResponse, S> {
     return (T) this;
   }
 
+  public T setSuccess() {
+    setStatus(Status.SUCCESS);
+    setMessage(Messages.SUCCESS);
+    return (T) this;
+  }
+
   public T setStatus(Status status) {
     this.status = status;
     return (T) this;
   }
 
-  public Status getStatus() {
-    return status;
+  public String getStatus() {
+    return status.toString();
   }
 
   public T setMessage(String message) {
@@ -31,5 +37,6 @@ public abstract class BaseApiResponse<T extends BaseApiResponse, S> {
     return message;
   }
 
+  public abstract T setResponse(S value);
   public abstract S getResponse();
 }

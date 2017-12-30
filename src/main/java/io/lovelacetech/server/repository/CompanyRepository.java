@@ -9,7 +9,9 @@ import java.util.UUID;
 
 @RepositoryRestResource
 public interface CompanyRepository extends CrudRepository<Company, UUID> {
-  List<Company> findByNameOrPhoneNumber(String name, String phoneNumber);
-
   Company findByName(String name);
+
+  Company findByPhoneNumber(String phoneNumber);
+
+  List<Company> findByNameOrPhoneNumber(String name, String phoneNumber);
 }

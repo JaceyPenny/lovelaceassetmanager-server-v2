@@ -25,11 +25,26 @@ public class ApiCompany extends BaseApiModel {
     return id;
   }
 
+  public ApiCompany setId(UUID id) {
+    this.id = id;
+    return this;
+  }
+
   public String getName() {
     return name;
   }
 
+  public ApiCompany setName(String name) {
+    this.name = name;
+    return this;
+  }
+
   public String getPhoneNumber() {
     return phoneNumber;
+  }
+
+  public ApiCompany setPhoneNumber(String phoneNumber) {
+    this.phoneNumber = phoneNumber;
+    return this;
   }
 }

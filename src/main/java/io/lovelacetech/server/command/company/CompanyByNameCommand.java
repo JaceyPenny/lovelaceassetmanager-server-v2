@@ -2,9 +2,8 @@ package io.lovelacetech.server.command.company;
 
 import com.google.common.base.Strings;
 import io.lovelacetech.server.command.Responds;
-import io.lovelacetech.server.model.api.Status;
 import io.lovelacetech.server.model.api.model.ApiCompany;
-import io.lovelacetech.server.model.api.response.CompanyApiResponse;
+import io.lovelacetech.server.model.api.response.company.CompanyApiResponse;
 
 public class CompanyByNameCommand extends CompanyCommand<CompanyByNameCommand> implements Responds<CompanyApiResponse> {
   private String name;
@@ -31,9 +30,12 @@ public class CompanyByNameCommand extends CompanyCommand<CompanyByNameCommand> i
     } catch (NullPointerException ignored) {
     }
 
-    return new CompanyApiResponse()
-        .setStatus(apiCompany != null ? Status.SUCCESS : Status.NOT_FOUND)
-        .setMessage(apiCompany != null ? "success" : "no company found for name " + name)
-        .setCompany(apiCompany);
+    if (apiCompany == null) {
+      return new CompanyApiResponse().setNotFoundByName(name);
+    } else {
+      return new CompanyApiResponse()
+          .setSuccess()
+          .setResponse(apiCompany);
+    }
   }
 }
