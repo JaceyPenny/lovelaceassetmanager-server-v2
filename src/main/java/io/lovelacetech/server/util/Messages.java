@@ -3,11 +3,14 @@ package io.lovelacetech.server.util;
 public class Messages {
   public static final String DEFAULT = "an unknown error occurred";
   public static final String SUCCESS = "success";
+  public static final String NOT_FOUND = "requested resource not found";
 
   /*
    * Company response messages
    */
   public static final String NO_COMPANIES_FOUND = "no companies found";
+  public static final String COMPANY_CONFLICTING_NAME = "another company already has this name";
+
   public static String NO_COMPANY_FOUND_BY_NAME(String name) {
     return "no company found with name: " + name;
   }

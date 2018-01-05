@@ -3,9 +3,10 @@ package io.lovelacetech.server.model.api.enums;
 import java.util.HashMap;
 
 public enum AccessLevel {
-  USER(0),
-  ADMIN(1),
-  SUPER(2);
+  DEFAULT(0),
+  USER(1),
+  ADMIN(2),
+  SUPER(3);
 
   private int value;
   AccessLevel(int value) {

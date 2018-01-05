@@ -1,18 +1,17 @@
 package io.lovelacetech.server.model;
 
+import com.google.common.base.Strings;
 import io.lovelacetech.server.model.api.model.ApiCompany;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.UUID;
 
 @Entity
 @Table(name = "company", schema = "lovelace")
-public class Company implements ApiModelConvertible<ApiCompany> {
+public class Company implements DatabaseModel<Company>, ApiModelConvertible<ApiCompany> {
   @Id
-  @Column(name = "id", unique = true, nullable = false, updatable = false)
+  @GeneratedValue
+  @Column(name = "id", unique = true, updatable = false)
   private UUID id;
 
   @Column(name="name", unique = true, nullable = false)
@@ -21,8 +20,33 @@ public class Company implements ApiModelConvertible<ApiCompany> {
   @Column(name = "phone_number", unique = true, nullable = false)
   private String phoneNumber;
 
+  @Transient
   public ApiCompany toApi() {
     return new ApiCompany(this);
+  }
+
+  @Override
+  @Transient
+  public boolean hasId() {
+    return !idEquals(null) && !idEquals(new UUID(0, 0));
+  }
+
+  @Override
+  @Transient
+  public boolean idEquals(UUID otherId) {
+    return id == otherId || (id != null && id.equals(otherId));
+  }
+
+  @Override
+  @Transient
+  public void applyUpdate(Company other) {
+    if (!Strings.isNullOrEmpty(other.name)) {
+      name = other.name;
+    }
+
+    if (!Strings.isNullOrEmpty(other.phoneNumber)) {
+      phoneNumber = other.phoneNumber;
+    }
   }
 
   public UUID getId() {

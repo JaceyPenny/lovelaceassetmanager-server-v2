@@ -1,6 +1,5 @@
 package io.lovelacetech.server.model.api.model;
 
-import io.jsonwebtoken.Claims;
 import io.lovelacetech.server.model.User;
 import io.lovelacetech.server.model.api.enums.AccessLevel;
 
@@ -108,7 +107,20 @@ public class ApiUser extends BaseApiModel {
         .setUsername((String) user.get("username"))
         .setFirstName((String) user.get("firstName"))
         .setLastName((String) user.get("lastName"));
+  }
 
-    // TODO update to create a user from the hashmap
+  @Override
+  public User toDatabase() {
+    User user = new User();
+
+    user.setId(id);
+    user.setEmail(email);
+    user.setUsername(username);
+    user.setAccessLevel(accessLevel.toInt());
+    user.setCompanyId(companyId);
+    user.setFirstName(firstName);
+    user.setLastName(lastName);
+
+    return user;
   }
 }

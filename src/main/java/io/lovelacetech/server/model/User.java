@@ -1,17 +1,17 @@
 package io.lovelacetech.server.model;
 
+import com.google.common.base.Strings;
+import io.lovelacetech.server.model.api.enums.AccessLevel;
 import io.lovelacetech.server.model.api.model.ApiUser;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.UUID;
 
 @Entity
 @Table(name = "users", schema = "lovelace")
-public class User implements ApiModelConvertible<ApiUser> {
+public class User implements DatabaseModel<User>, ApiModelConvertible<ApiUser> {
   @Id
+  @GeneratedValue
   @Column(name = "id", unique = true, nullable = false, updatable = false)
   private UUID id;
 
@@ -36,8 +36,53 @@ public class User implements ApiModelConvertible<ApiUser> {
   @Column(name = "last_name")
   private String lastName;
 
+  @Transient
   public ApiUser toApi() {
     return new ApiUser(this);
+  }
+
+  @Override
+  @Transient
+  public boolean hasId() {
+    return !idEquals(new UUID(0, 0));
+  }
+
+  @Override
+  @Transient
+  public boolean idEquals(UUID otherId) {
+    return id.equals(otherId);
+  }
+
+  @Override
+  @Transient
+  public void applyUpdate(User other) {
+    if (!Strings.isNullOrEmpty(other.email)) {
+      email = other.email;
+    }
+
+    if (!Strings.isNullOrEmpty(other.username)) {
+      username = other.username;
+    }
+
+    if (!Strings.isNullOrEmpty(other.password)) {
+      password = other.password;
+    }
+
+    if (other.accessLevel != AccessLevel.DEFAULT.toInt()) {
+      accessLevel = other.accessLevel;
+    }
+
+    if (other.companyId != null) {
+      companyId = other.companyId;
+    }
+
+    if (!Strings.isNullOrEmpty(other.firstName)) {
+      firstName = other.firstName;
+    }
+
+    if (!Strings.isNullOrEmpty(other.lastName)) {
+      lastName = other.lastName;
+    }
   }
 
   public UUID getId() {

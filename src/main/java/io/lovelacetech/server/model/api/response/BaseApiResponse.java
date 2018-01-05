@@ -1,9 +1,10 @@
 package io.lovelacetech.server.model.api.response;
 
+import io.lovelacetech.server.model.api.model.BaseApiModel;
 import io.lovelacetech.server.util.Messages;
 import org.springframework.http.HttpStatus;
 
-public abstract class BaseApiResponse<T extends BaseApiResponse, S> {
+public abstract class BaseApiResponse<T extends BaseApiResponse, S extends BaseApiModel> {
   private int status;
   private String message;
   private S response;
@@ -17,6 +18,12 @@ public abstract class BaseApiResponse<T extends BaseApiResponse, S> {
   public T setSuccess() {
     setStatus(HttpStatus.OK);
     setMessage(Messages.SUCCESS);
+    return (T) this;
+  }
+
+  public T setNotFound() {
+    setStatus(HttpStatus.NOT_FOUND);
+    setMessage(Messages.NOT_FOUND);
     return (T) this;
   }
 

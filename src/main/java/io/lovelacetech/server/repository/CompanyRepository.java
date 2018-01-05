@@ -14,4 +14,6 @@ public interface CompanyRepository extends CrudRepository<Company, UUID> {
   Company findByPhoneNumber(String phoneNumber);
 
   List<Company> findByNameOrPhoneNumber(String name, String phoneNumber);
+
+  boolean existsByNameOrPhoneNumber(String name, String phoneNumber);
 }

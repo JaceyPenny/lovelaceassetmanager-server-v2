@@ -3,6 +3,7 @@ package io.lovelacetech.server.controller;
 import io.lovelacetech.server.command.company.CompanyByNameCommand;
 import io.lovelacetech.server.command.company.CompanyByNameOrPhoneNumberCommand;
 import io.lovelacetech.server.command.company.CompanyByPhoneNumberCommand;
+import io.lovelacetech.server.command.company.SaveCompanyCommand;
 import io.lovelacetech.server.model.api.model.ApiCompany;
 import io.lovelacetech.server.model.api.response.company.CompanyApiResponse;
 import io.lovelacetech.server.model.api.response.company.CompanyListApiResponse;
@@ -11,6 +12,8 @@ import io.lovelacetech.server.util.Messages;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.ServletException;
 
 @RestController
 @RequestMapping("/api/secure/companies")
@@ -55,9 +58,10 @@ public class CompanyController {
   }
 
   @RequestMapping(value="/", method=RequestMethod.PUT)
-  public CompanyApiResponse putCompany(@RequestBody ApiCompany company) {
-    System.out.println(company);
-
-    return new CompanyApiResponse().setDefault();
+  public CompanyApiResponse putCompany(@RequestBody ApiCompany company) throws ServletException {
+    return new SaveCompanyCommand()
+        .setCompanyRepository(companyRepository)
+        .setCompany(company)
+        .execute();
   }
 }
