@@ -47,4 +47,9 @@ public class ApiCompany extends BaseApiModel {
     this.phoneNumber = phoneNumber;
     return this;
   }
+
+  @Override
+  public String toString() {
+    return "{ \"id\": \"" + this.id + "\", \"name\": \"" + name + "\", \"phoneNumber\": \"" + phoneNumber + "\" }";
+  }
 }

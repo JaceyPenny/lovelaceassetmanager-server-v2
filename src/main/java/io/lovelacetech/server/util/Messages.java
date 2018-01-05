@@ -25,4 +25,10 @@ public class Messages {
   public static String NO_USER_FOUND_BY_EMAIL_PASSWORD(String email) {
     return "no user found email and password: " + email;
   }
+
+  /*
+   * Authentication messages
+   */
+  public static final String LOGIN_INVALID_BODY = "Please fill in usernameOrEmail and password.";
+  public static final String LOGIN_INVALID_CREDENTIALS = "Invalid login. Please check your email/username and password";
 }

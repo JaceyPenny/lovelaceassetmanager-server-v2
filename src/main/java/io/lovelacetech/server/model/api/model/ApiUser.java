@@ -1,8 +1,10 @@
 package io.lovelacetech.server.model.api.model;
 
+import io.jsonwebtoken.Claims;
 import io.lovelacetech.server.model.User;
 import io.lovelacetech.server.model.api.enums.AccessLevel;
 
+import java.util.LinkedHashMap;
 import java.util.UUID;
 
 public class ApiUser extends BaseApiModel {
@@ -95,5 +97,18 @@ public class ApiUser extends BaseApiModel {
   public ApiUser setLastName(String lastName) {
     this.lastName = lastName;
     return this;
+  }
+
+  public static ApiUser fromClaims(LinkedHashMap<String, Object> user) {
+    return new ApiUser()
+        .setId(UUID.fromString((String)user.get("id")))
+        .setAccessLevel(AccessLevel.valueOf((String) user.get("accessLevel")))
+        .setCompanyId(UUID.fromString((String) user.get("companyId")))
+        .setEmail((String) user.get("email"))
+        .setUsername((String) user.get("username"))
+        .setFirstName((String) user.get("firstName"))
+        .setLastName((String) user.get("lastName"));
+
+    // TODO update to create a user from the hashmap
   }
 }

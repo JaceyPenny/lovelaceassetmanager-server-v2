@@ -1,31 +1,41 @@
 package io.lovelacetech.server.model.api.response;
 
-import io.lovelacetech.server.model.api.Status;
 import io.lovelacetech.server.util.Messages;
+import org.springframework.http.HttpStatus;
 
 public abstract class BaseApiResponse<T extends BaseApiResponse, S> {
-  private Status status;
+  private int status;
   private String message;
+  private S response;
 
   public T setDefault() {
-    setStatus(Status.ERROR);
+    setStatus(HttpStatus.INTERNAL_SERVER_ERROR);
     setMessage(Messages.DEFAULT);
     return (T) this;
   }
 
   public T setSuccess() {
-    setStatus(Status.SUCCESS);
+    setStatus(HttpStatus.OK);
     setMessage(Messages.SUCCESS);
     return (T) this;
   }
 
-  public T setStatus(Status status) {
+  public T setStatus(HttpStatus status) {
+    setStatus(status.value());
+    return (T) this;
+  }
+
+  public T setStatus(int status) {
     this.status = status;
     return (T) this;
   }
 
-  public String getStatus() {
-    return status.toString();
+  public int getStatus() {
+    return status;
+  }
+
+  public HttpStatus getHttpStatus() {
+    return HttpStatus.valueOf(status);
   }
 
   public T setMessage(String message) {
@@ -37,6 +47,11 @@ public abstract class BaseApiResponse<T extends BaseApiResponse, S> {
     return message;
   }
 
-  public abstract T setResponse(S value);
-  public abstract S getResponse();
+  public T setResponse(S response) {
+    this.response = response;
+    return (T) this;
+  }
+  public S getResponse() {
+    return response;
+  }
 }
