@@ -13,8 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.ServletException;
-
 @RestController
 @RequestMapping("/api/secure/companies")
 public class CompanyController {
@@ -58,7 +56,7 @@ public class CompanyController {
   }
 
   @RequestMapping(value="/", method=RequestMethod.PUT)
-  public CompanyApiResponse putCompany(@RequestBody ApiCompany company) throws ServletException {
+  public CompanyApiResponse putCompany(@RequestBody ApiCompany company) {
     return new SaveCompanyCommand()
         .setCompanyRepository(companyRepository)
         .setCompany(company)
