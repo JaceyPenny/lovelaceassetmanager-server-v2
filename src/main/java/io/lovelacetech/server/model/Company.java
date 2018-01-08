@@ -11,7 +11,7 @@ import java.util.UUID;
 public class Company implements DatabaseModel<Company>, ApiModelConvertible<ApiCompany> {
   @Id
   @GeneratedValue
-  @Column(name = "id", unique = true, updatable = false)
+  @Column(name = "id", unique = true, nullable = false, updatable = false)
   private UUID id;
 
   @Column(name="name", unique = true, nullable = false)

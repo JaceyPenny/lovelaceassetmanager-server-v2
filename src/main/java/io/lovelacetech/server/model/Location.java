@@ -13,7 +13,7 @@ public class Location implements DatabaseModel<Location>, ApiModelConvertible<Ap
 
   @Id
   @GeneratedValue
-  @Column(name = "id", unique = true, updatable = false)
+  @Column(name = "id", unique = true, nullable = false, updatable = false)
   private UUID id;
 
   @Column(name = "city", nullable = false)
