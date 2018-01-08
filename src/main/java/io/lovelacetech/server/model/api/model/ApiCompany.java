@@ -1,7 +1,7 @@
 package io.lovelacetech.server.model.api.model;
 
-import io.lovelacetech.server.model.ApiModelConvertible;
 import io.lovelacetech.server.model.Company;
+import io.lovelacetech.server.util.UUIDUtils;
 
 import java.util.UUID;
 
@@ -11,7 +11,7 @@ public class ApiCompany extends BaseApiModel {
   private String phoneNumber;
 
   public ApiCompany() {
-    this.id = new UUID(0, 0);
+    this.id = UUIDUtils.empty();
     this.name = "";
     this.phoneNumber = "";
   }
@@ -50,15 +50,10 @@ public class ApiCompany extends BaseApiModel {
   }
 
   @Override
-  public String toString() {
-    return "{ \"id\": \"" + this.id + "\", \"name\": \"" + name + "\", \"phoneNumber\": \"" + phoneNumber + "\" }";
-  }
-
-  @Override
   public Company toDatabase() {
     Company company = new Company();
 
-    company.setId(id.equals(new UUID(0, 0)) ? null : id);
+    company.setId(UUIDUtils.isValidId(id) ? id : null);
     company.setName(name);
     company.setPhoneNumber(phoneNumber);
 

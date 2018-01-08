@@ -3,6 +3,7 @@ package io.lovelacetech.server.model;
 import com.google.common.base.Strings;
 import io.lovelacetech.server.model.api.enums.AccessLevel;
 import io.lovelacetech.server.model.api.model.ApiUser;
+import io.lovelacetech.server.util.UUIDUtils;
 
 import javax.persistence.*;
 import java.util.UUID;
@@ -44,13 +45,13 @@ public class User implements DatabaseModel<User>, ApiModelConvertible<ApiUser> {
   @Override
   @Transient
   public boolean hasId() {
-    return !idEquals(new UUID(0, 0));
+    return UUIDUtils.isValidId(id);
   }
 
   @Override
   @Transient
   public boolean idEquals(UUID otherId) {
-    return id.equals(otherId);
+    return UUIDUtils.idsEqual(id, otherId);
   }
 
   @Override
