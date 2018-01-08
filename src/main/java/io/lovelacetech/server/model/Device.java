@@ -12,7 +12,7 @@ import java.util.UUID;
 public class Device implements DatabaseModel<Device>, ApiModelConvertible<ApiDevice> {
   @Id
   @GeneratedValue
-  @Column(name = "id", unique = true, updatable = false)
+  @Column(name = "id", unique = true, nullable = false, updatable = false)
   private UUID id;
 
   @Column(name = "device_code", updatable = false, nullable = false)
