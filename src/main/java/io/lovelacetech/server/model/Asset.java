@@ -1,12 +1,12 @@
 package io.lovelacetech.server.model;
 
+import io.lovelacetech.server.model.api.enums.AssetStatus;
 import io.lovelacetech.server.model.api.model.ApiAsset;
+import io.lovelacetech.server.model.converter.AssetStatusConverter;
 import io.lovelacetech.server.util.UUIDUtils;
 import org.h2.util.StringUtils;
 
-import javax.persistence.Column;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.util.UUID;
 
 public class Asset implements DatabaseModel<Asset>, ApiModelConvertible<ApiAsset> {
@@ -21,8 +21,9 @@ public class Asset implements DatabaseModel<Asset>, ApiModelConvertible<ApiAsset
   @Column(name = "rfid", nullable = false, unique = true, updatable = false)
   private String rfid;
 
+  @Convert(converter = AssetStatusConverter.class)
   @Column(name = "status")
-  private String status;
+  private AssetStatus status;
 
   @Column(name = "home_id", nullable = false)
   private UUID homeId;
@@ -54,7 +55,7 @@ public class Asset implements DatabaseModel<Asset>, ApiModelConvertible<ApiAsset
       name = other.name;
     }
 
-    if (!StringUtils.isNullOrEmpty(other.status)) {
+    if (other.status != null) {
       status = other.status;
     }
 
@@ -95,11 +96,11 @@ public class Asset implements DatabaseModel<Asset>, ApiModelConvertible<ApiAsset
     this.rfid = rfid;
   }
 
-  public String getStatus() {
+  public AssetStatus getStatus() {
     return status;
   }
 
-  public void setStatus(String status) {
+  public void setStatus(AssetStatus status) {
     this.status = status;
   }
 

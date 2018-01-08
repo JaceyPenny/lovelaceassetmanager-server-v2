@@ -3,6 +3,7 @@ package io.lovelacetech.server.model;
 import com.google.common.base.Strings;
 import io.lovelacetech.server.model.api.enums.AccessLevel;
 import io.lovelacetech.server.model.api.model.ApiUser;
+import io.lovelacetech.server.model.converter.AccessLevelConverter;
 import io.lovelacetech.server.util.UUIDUtils;
 
 import javax.persistence.*;
@@ -25,8 +26,9 @@ public class User implements DatabaseModel<User>, ApiModelConvertible<ApiUser> {
   @Column(name = "password", nullable = false)
   private String password;
 
+  @Convert(converter = AccessLevelConverter.class)
   @Column(name = "access_level", nullable = false)
-  private int accessLevel;
+  private AccessLevel accessLevel;
 
   @Column(name = "company_id")
   private UUID companyId;
@@ -69,7 +71,7 @@ public class User implements DatabaseModel<User>, ApiModelConvertible<ApiUser> {
       password = other.password;
     }
 
-    if (other.accessLevel != AccessLevel.DEFAULT.toInt()) {
+    if (other.accessLevel != null) {
       accessLevel = other.accessLevel;
     }
 
@@ -118,11 +120,11 @@ public class User implements DatabaseModel<User>, ApiModelConvertible<ApiUser> {
     this.password = password;
   }
 
-  public int getAccessLevel() {
+  public AccessLevel getAccessLevel() {
     return accessLevel;
   }
 
-  public void setAccessLevel(int accessLevel) {
+  public void setAccessLevel(AccessLevel accessLevel) {
     this.accessLevel = accessLevel;
   }
 

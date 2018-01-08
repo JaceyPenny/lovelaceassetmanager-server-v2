@@ -29,7 +29,7 @@ public class ApiAsset extends BaseApiModel {
     this.id = asset.getId();
     this.name = asset.getName();
     this.rfid = asset.getRfid();
-    this.status = AssetStatus.fromString(asset.getStatus());
+    this.status = asset.getStatus();
     this.homeId=  asset.getHomeId();
     this.locationId = asset.getLocationId();
     this.deviceId = asset.getDeviceId();
@@ -110,7 +110,7 @@ public class ApiAsset extends BaseApiModel {
     asset.setId(UUIDUtils.isValidId(id) ? id : null);
     asset.setName(name);
     asset.setRfid(rfid);
-    asset.setStatus(status.toString());
+    asset.setStatus(status);
     asset.setHomeId(homeId);
     asset.setLocationId(locationId);
     asset.setDeviceId(deviceId);
