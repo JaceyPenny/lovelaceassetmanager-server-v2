@@ -1,13 +1,12 @@
 package io.lovelacetech.server.controller;
 
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
 import io.lovelacetech.server.model.User;
-import io.lovelacetech.server.model.api.enums.AccessLevel;
 import io.lovelacetech.server.model.api.model.ApiAuthentication;
-import io.lovelacetech.server.model.api.model.ApiToken;
+import io.lovelacetech.server.model.api.model.ApiAuthenticationResult;
+import io.lovelacetech.server.model.api.model.ApiUser;
 import io.lovelacetech.server.model.api.response.authentication.AuthenticationApiResponse;
 import io.lovelacetech.server.repository.UserRepository;
+import io.lovelacetech.server.util.AuthenticationUtils;
 import io.lovelacetech.server.util.Messages;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -16,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.ServletException;
-import java.util.Date;
 
 @RestController
 @RequestMapping("/api/authenticate")
@@ -47,13 +45,13 @@ public class AuthenticationController {
       throw new ServletException(Messages.LOGIN_INVALID_CREDENTIALS);
     }
 
-    String jwt = Jwts.builder()
-        .claim("user", user.toApi())
-        .setIssuedAt(new Date())
-        .signWith(SignatureAlgorithm.HS256, "lovelace!ass!etmanager***jan4changes")
-        .compact();
+    ApiUser apiUser = user.toApi();
+    String jwt = AuthenticationUtils.jwtSign(apiUser);
+
     return new AuthenticationApiResponse()
         .setSuccess()
-        .setResponse(new ApiToken().setToken(jwt));
+        .setResponse(new ApiAuthenticationResult()
+            .setToken(jwt)
+            .setUser(apiUser));
   }
 }

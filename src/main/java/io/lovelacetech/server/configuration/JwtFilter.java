@@ -3,7 +3,13 @@ package io.lovelacetech.server.configuration;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureException;
+import io.lovelacetech.server.model.User;
 import io.lovelacetech.server.model.api.model.ApiUser;
+import io.lovelacetech.server.model.api.response.user.UserApiResponse;
+import io.lovelacetech.server.repository.UserRepository;
+import io.lovelacetech.server.util.Messages;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.web.filter.GenericFilterBean;
 
 import javax.servlet.FilterChain;
@@ -16,6 +22,13 @@ import java.io.IOException;
 import java.util.LinkedHashMap;
 
 public class JwtFilter extends GenericFilterBean {
+
+  private UserRepository userRepository;
+
+  public JwtFilter setUserRepository(UserRepository userRepository) {
+    this.userRepository = userRepository;
+    return this;
+  }
 
   @Override
   public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain)
@@ -43,8 +56,12 @@ public class JwtFilter extends GenericFilterBean {
             .getBody();
 
         ApiUser user = ApiUser.fromClaims((LinkedHashMap<String, Object>) claims.get("user"));
+        User loadedUser = userRepository.findOne(user.getId());
+        if (loadedUser == null) {
+          throw new ServletException(Messages.NO_USER_FOUND_BY_ID);
+        }
 
-        request.setAttribute("authenticatedUser", user);
+        request.setAttribute("authenticatedUser", loadedUser.toApi());
       } catch (final SignatureException e) {
         throw new ServletException("Invalid token");
       }
