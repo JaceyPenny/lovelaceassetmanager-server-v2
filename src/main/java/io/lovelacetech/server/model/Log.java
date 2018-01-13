@@ -4,13 +4,12 @@ import io.lovelacetech.server.model.api.model.ApiLog;
 import io.lovelacetech.server.model.converter.LocalDateTimeConverter;
 import io.lovelacetech.server.util.UUIDUtils;
 
-import javax.persistence.Column;
-import javax.persistence.Convert;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+@Entity
+@Table(name = "log", schema = "lovelace")
 public class Log implements DatabaseModel<Log>, ApiModelConvertible<ApiLog> {
   @Id
   @GeneratedValue

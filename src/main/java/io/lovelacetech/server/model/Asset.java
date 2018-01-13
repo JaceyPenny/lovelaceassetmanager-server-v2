@@ -9,6 +9,8 @@ import org.h2.util.StringUtils;
 import javax.persistence.*;
 import java.util.UUID;
 
+@Entity
+@Table(name = "asset", schema = "lovelace")
 public class Asset implements DatabaseModel<Asset>, ApiModelConvertible<ApiAsset> {
   @Id
   @GeneratedValue

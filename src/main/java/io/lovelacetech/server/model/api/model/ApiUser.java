@@ -29,7 +29,7 @@ public class ApiUser extends BaseApiModel {
     this.id = user.getId();
     this.email = user.getEmail();
     this.username = user.getUsername();
-    this.accessLevel = AccessLevel.fromInt(user.getAccessLevel());
+    this.accessLevel = user.getAccessLevel();
     this.companyId = user.getCompanyId();
     this.firstName = user.getFirstName();
     this.lastName = user.getLastName();
@@ -116,7 +116,7 @@ public class ApiUser extends BaseApiModel {
     user.setId(id);
     user.setEmail(email);
     user.setUsername(username);
-    user.setAccessLevel(accessLevel.toInt());
+    user.setAccessLevel(accessLevel);
     user.setCompanyId(companyId);
     user.setFirstName(firstName);
     user.setLastName(lastName);

@@ -25,6 +25,7 @@ repositories {
 
 dependencies {
     compile group: 'com.google.guava', name: 'guava', version: '23.5-jre'
+	compile group: 'org.postgresql', name: 'postgresql', version: '42.1.4'
     compile('com.sendgrid:sendgrid-java:4.1.2')
     compile('com.google.code.gson:gson:2.8.2')
 	compile('org.springframework.boot:spring-boot-starter-data-jpa')

@@ -4,11 +4,11 @@ import io.lovelacetech.server.model.api.model.ApiDevice;
 import io.lovelacetech.server.util.UUIDUtils;
 import org.assertj.core.util.Strings;
 
-import javax.persistence.Column;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.util.UUID;
 
+@Entity
+@Table(name = "device", schema = "lovelace")
 public class Device implements DatabaseModel<Device>, ApiModelConvertible<ApiDevice> {
   @Id
   @GeneratedValue

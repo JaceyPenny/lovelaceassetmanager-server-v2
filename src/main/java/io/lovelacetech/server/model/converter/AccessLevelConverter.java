@@ -7,11 +7,11 @@ import javax.persistence.AttributeConverter;
 public class AccessLevelConverter implements AttributeConverter<AccessLevel, Integer> {
   @Override
   public Integer convertToDatabaseColumn(AccessLevel attribute) {
-    return attribute.toInt();
+    return attribute != null ? attribute.toInt() : null;
   }
 
   @Override
   public AccessLevel convertToEntityAttribute(Integer dbData) {
-    return AccessLevel.fromInt(dbData);
+    return dbData != null ? AccessLevel.fromInt(dbData) : null;
   }
 }
