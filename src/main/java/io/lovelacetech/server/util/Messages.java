@@ -10,6 +10,7 @@ public class Messages {
    */
   public static final String NO_COMPANIES_FOUND = "no companies found";
   public static final String COMPANY_CONFLICTING_NAME = "another company already has this name";
+  public static final String API_WELCOME = "Welcome to the LovelaceAssetManager API. We will soon be including documentation here, but for now, authenticate yourself at \"/api/authenticate\"";
 
   public static String NO_COMPANY_FOUND_BY_NAME(String name) {
     return "no company found with name: " + name;
