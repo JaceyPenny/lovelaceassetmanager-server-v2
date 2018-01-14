@@ -1,9 +1,9 @@
 package io.lovelacetech.server.model.api.model;
 
 import io.lovelacetech.server.model.Company;
-import io.lovelacetech.server.model.Location;
 import io.lovelacetech.server.util.UUIDUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -12,18 +12,20 @@ public class ApiCompany extends BaseApiModel {
   private String name;
   private String phoneNumber;
 
-  private List<Location> locations;
+  private List<ApiLocation> locations;
 
   public ApiCompany() {
     this.id = UUIDUtils.empty();
     this.name = "";
     this.phoneNumber = "";
+    this.locations = new ArrayList<>();
   }
 
   public ApiCompany(Company company) {
     this.id = company.getId();
     this.name = company.getName();
     this.phoneNumber = company.getPhoneNumber();
+    this.locations = new ArrayList<>();
   }
 
   public ApiCompany setId(UUID id) {
@@ -53,12 +55,17 @@ public class ApiCompany extends BaseApiModel {
     return this;
   }
 
-  public List<Location> getLocations() {
+  public List<ApiLocation> getLocations() {
     return locations;
   }
 
-  public ApiCompany setLocations(List<Location> locations) {
+  public ApiCompany setLocations(List<ApiLocation> locations) {
     this.locations = locations;
+    return this;
+  }
+
+  public ApiCompany addLocation(ApiLocation location) {
+    this.locations.add(location);
     return this;
   }
 

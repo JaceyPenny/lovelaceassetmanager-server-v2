@@ -1,15 +1,11 @@
 package io.lovelacetech.server.controller;
 
-import io.lovelacetech.server.command.company.CompanyByNameCommand;
-import io.lovelacetech.server.command.company.CompanyByNameOrPhoneNumberCommand;
-import io.lovelacetech.server.command.company.CompanyByPhoneNumberCommand;
-import io.lovelacetech.server.command.company.SaveCompanyCommand;
+import io.lovelacetech.server.command.company.*;
 import io.lovelacetech.server.model.api.model.ApiCompany;
 import io.lovelacetech.server.model.api.model.ApiUser;
 import io.lovelacetech.server.model.api.response.company.CompanyApiResponse;
 import io.lovelacetech.server.model.api.response.company.CompanyListApiResponse;
-import io.lovelacetech.server.repository.CompanyRepository;
-import io.lovelacetech.server.repository.UserRepository;
+import io.lovelacetech.server.repository.*;
 import io.lovelacetech.server.util.Messages;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -24,6 +20,15 @@ public class CompanyController extends BaseController {
 
   @Autowired
   UserRepository userRepository;
+
+  @Autowired
+  LocationRepository locationRepository;
+
+  @Autowired
+  AssetRepository assetRepository;
+
+  @Autowired
+  DeviceRepository deviceRepository;
 
   @RequestMapping(value = "/", method = RequestMethod.GET)
   public CompanyListApiResponse getCompanies(@RequestAttribute ApiUser authenticatedUser) {
@@ -70,6 +75,26 @@ public class CompanyController extends BaseController {
     return new CompanyByPhoneNumberCommand()
         .setCompanyRepository(companyRepository)
         .setPhoneNumber(phoneNumber)
+        .execute();
+  }
+
+  @RequestMapping(value = "/forAuthenticated", method = RequestMethod.GET)
+  public CompanyApiResponse getCompanyForAuthenticatedUser(@RequestAttribute ApiUser authenticatedUser) {
+    return new CompaniesForUserCommand()
+        .setCompanyRepository(companyRepository)
+        .setUser(authenticatedUser)
+        .execute();
+  }
+
+  @RequestMapping(value = "/forAuthenticated/filled", method = RequestMethod.GET)
+  public CompanyApiResponse getCompanyForAuthenticatedUserFilled(@RequestAttribute ApiUser authenticatedUser) {
+    return new CompaniesForUserCommand()
+        .setCompanyRepository(companyRepository)
+        .setUser(authenticatedUser)
+        .setFilled(true)
+        .setLocationRepository(locationRepository)
+        .setDeviceRepository(deviceRepository)
+        .setAssetRepository(assetRepository)
         .execute();
   }
 

@@ -47,7 +47,6 @@ public class LocationController extends BaseController {
     return new LocationsForUserCommand()
         .setLocationRepository(locationRepository)
         .setUser(authenticatedUser)
-        .setFilled(false)
         .execute();
   }
 }

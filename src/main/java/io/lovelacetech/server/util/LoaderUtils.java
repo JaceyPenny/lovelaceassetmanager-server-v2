@@ -143,5 +143,6 @@ public class LoaderUtils {
       AssetRepository assetRepository) {
     List<ApiLocation> locations = RepositoryUtils.toApiList(locationRepository.findAllByCompanyId(company.getId()));
     populateLocations(locations, deviceRepository, assetRepository);
+    company.setLocations(locations);
   }
 }
