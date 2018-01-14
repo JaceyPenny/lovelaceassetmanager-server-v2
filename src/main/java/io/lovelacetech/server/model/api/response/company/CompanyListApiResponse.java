@@ -6,7 +6,8 @@ import io.lovelacetech.server.model.api.response.BaseApiResponse;
 import io.lovelacetech.server.util.Messages;
 import org.springframework.http.HttpStatus;
 
-public class CompanyListApiResponse extends BaseApiResponse<CompanyListApiResponse, ApiCompanyList> {
+public class CompanyListApiResponse
+    extends BaseApiResponse<CompanyListApiResponse, ApiCompanyList> {
   public CompanyListApiResponse setNotFound() {
     setStatus(HttpStatus.NOT_FOUND);
     setMessage(Messages.NO_COMPANIES_FOUND);

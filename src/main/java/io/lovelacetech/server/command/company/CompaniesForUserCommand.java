@@ -24,17 +24,9 @@ public class CompaniesForUserCommand extends CompanyCommand<CompaniesForUserComm
     return this;
   }
 
-  public boolean isFilled() {
-    return filled;
-  }
-
   public CompaniesForUserCommand setFilled(boolean filled) {
     this.filled = filled;
     return this;
-  }
-
-  public LocationRepository getLocationRepository() {
-    return locationRepository;
   }
 
   public CompaniesForUserCommand setLocationRepository(LocationRepository locationRepository) {
@@ -42,17 +34,9 @@ public class CompaniesForUserCommand extends CompanyCommand<CompaniesForUserComm
     return this;
   }
 
-  public DeviceRepository getDeviceRepository() {
-    return deviceRepository;
-  }
-
   public CompaniesForUserCommand setDeviceRepository(DeviceRepository deviceRepository) {
     this.deviceRepository = deviceRepository;
     return this;
-  }
-
-  public AssetRepository getAssetRepository() {
-    return assetRepository;
   }
 
   public CompaniesForUserCommand setAssetRepository(AssetRepository assetRepository) {
@@ -64,7 +48,8 @@ public class CompaniesForUserCommand extends CompanyCommand<CompaniesForUserComm
   public boolean checkCommand() {
     return super.checkCommand()
         && user != null
-        && (!filled || (locationRepository != null && deviceRepository != null && assetRepository != null));
+        && (!filled
+            || (locationRepository != null && deviceRepository != null && assetRepository != null));
   }
 
   @Override

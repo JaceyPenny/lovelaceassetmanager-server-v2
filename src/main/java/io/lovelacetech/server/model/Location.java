@@ -16,6 +16,9 @@ public class Location implements DatabaseModel<Location>, ApiModelConvertible<Ap
   @Column(name = "id", unique = true, nullable = false, updatable = false)
   private UUID id;
 
+  @Column(name = "name", nullable = false)
+  private String name;
+
   @Column(name = "city", nullable = false)
   private String city;
 
@@ -43,6 +46,10 @@ public class Location implements DatabaseModel<Location>, ApiModelConvertible<Ap
 
   @Override
   public void applyUpdate(Location other) {
+    if (!Strings.isNullOrEmpty(other.name)) {
+      name = other.name;
+    }
+
     if (!Strings.isNullOrEmpty(other.city)) {
       city = other.city;
     }
@@ -62,6 +69,14 @@ public class Location implements DatabaseModel<Location>, ApiModelConvertible<Ap
 
   public void setId(UUID id) {
     this.id = id;
+  }
+
+  public String getName() {
+    return name;
+  }
+
+  public void setName(String name) {
+    this.name = name;
   }
 
   public String getCity() {

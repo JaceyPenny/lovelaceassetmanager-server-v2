@@ -5,7 +5,9 @@ import io.lovelacetech.server.command.Responds;
 import io.lovelacetech.server.model.api.model.ApiCompanyList;
 import io.lovelacetech.server.model.api.response.company.CompanyListApiResponse;
 
-public class CompanyByNameOrPhoneNumberCommand extends CompanyCommand<CompanyByNameOrPhoneNumberCommand> implements Responds<CompanyListApiResponse> {
+public class CompanyByNameOrPhoneNumberCommand
+    extends CompanyCommand<CompanyByNameOrPhoneNumberCommand>
+    implements Responds<CompanyListApiResponse> {
   private String name;
   private String phoneNumber;
 
@@ -21,7 +23,9 @@ public class CompanyByNameOrPhoneNumberCommand extends CompanyCommand<CompanyByN
 
   @Override
   public boolean checkCommand() {
-    return super.checkCommand() && !Strings.isNullOrEmpty(name) && !Strings.isNullOrEmpty(phoneNumber);
+    return super.checkCommand()
+        && !Strings.isNullOrEmpty(name)
+        && !Strings.isNullOrEmpty(phoneNumber);
   }
 
   @Override
@@ -32,7 +36,8 @@ public class CompanyByNameOrPhoneNumberCommand extends CompanyCommand<CompanyByN
 
     ApiCompanyList apiCompanyList = null;
     try {
-      apiCompanyList = new ApiCompanyList(getCompanyRepository().findByNameOrPhoneNumber(name, phoneNumber));
+      apiCompanyList = new ApiCompanyList(
+          getCompanyRepository().findByNameOrPhoneNumber(name, phoneNumber));
     } catch (NullPointerException ignored) {
     }
 

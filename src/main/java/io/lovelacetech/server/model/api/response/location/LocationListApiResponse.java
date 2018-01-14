@@ -6,7 +6,8 @@ import io.lovelacetech.server.model.api.response.BaseApiResponse;
 import io.lovelacetech.server.util.Messages;
 import org.springframework.http.HttpStatus;
 
-public class LocationListApiResponse extends BaseApiResponse<LocationListApiResponse, ApiLocationList> {
+public class LocationListApiResponse
+    extends BaseApiResponse<LocationListApiResponse, ApiLocationList> {
   public LocationListApiResponse setNotFound() {
     setStatus(HttpStatus.NOT_FOUND);
     setMessage(Messages.NO_LOCATIONS_FOUND);

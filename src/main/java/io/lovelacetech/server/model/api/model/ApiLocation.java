@@ -1,5 +1,6 @@
 package io.lovelacetech.server.model.api.model;
 
+import com.google.common.base.Strings;
 import io.lovelacetech.server.model.Location;
 import io.lovelacetech.server.util.UUIDUtils;
 
@@ -9,6 +10,7 @@ import java.util.UUID;
 
 public class ApiLocation extends BaseApiModel {
   private UUID id;
+  private String name;
   private String city;
   private String state;
   private UUID companyId;
@@ -18,6 +20,7 @@ public class ApiLocation extends BaseApiModel {
 
   public ApiLocation() {
     this.id = UUIDUtils.empty();
+    this.name = "";
     this.city = "";
     this.state = "";
     this.companyId = UUIDUtils.empty();
@@ -27,6 +30,7 @@ public class ApiLocation extends BaseApiModel {
 
   public ApiLocation(Location location) {
     this.id = location.getId();
+    this.name = location.getName();
     this.city = location.getCity();
     this.state = location.getState();
     this.companyId = location.getCompanyId();
@@ -41,6 +45,15 @@ public class ApiLocation extends BaseApiModel {
   public ApiLocation setId(UUID id) {
     this.id = id;
     return this;
+  }
+
+  public ApiLocation setName(String name) {
+    this.name = name;
+    return this;
+  }
+
+  public String getName() {
+    return name;
   }
 
   public String getCity() {
@@ -99,13 +112,22 @@ public class ApiLocation extends BaseApiModel {
   }
 
   @Override
+  public boolean isValid() {
+    return !Strings.isNullOrEmpty(name)
+        && !Strings.isNullOrEmpty(city)
+        && !Strings.isNullOrEmpty(state)
+        && UUIDUtils.isValidId(companyId);
+  }
+
+  @Override
   public Location toDatabase() {
     Location location = new Location();
 
     location.setId(UUIDUtils.isValidId(id) ? id : null);
+    location.setName(name);
     location.setCity(city);
     location.setState(state);
-    location.setCompanyId(UUIDUtils.isValidId(id) ? id : null);
+    location.setCompanyId(UUIDUtils.isValidId(companyId) ? companyId : null);
 
     return location;
   }

@@ -3,7 +3,8 @@ package io.lovelacetech.server.command.location;
 import io.lovelacetech.server.command.BaseCommand;
 import io.lovelacetech.server.repository.LocationRepository;
 
-public abstract class LocationCommand<T extends LocationCommand> implements BaseCommand {
+public abstract class LocationCommand<T extends LocationCommand>
+    implements BaseCommand {
   private LocationRepository locationRepository;
 
   public T setLocationRepository(LocationRepository locationRepository) {

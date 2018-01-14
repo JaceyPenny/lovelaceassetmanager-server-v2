@@ -8,6 +8,7 @@ import io.lovelacetech.server.model.api.model.ApiUser;
 import io.lovelacetech.server.model.api.response.company.CompanyApiResponse;
 import io.lovelacetech.server.repository.UserRepository;
 import io.lovelacetech.server.util.Messages;
+import io.lovelacetech.server.util.RepositoryUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.method.P;
 
@@ -45,8 +46,11 @@ public class SaveCompanyCommand extends CompanyCommand<SaveCompanyCommand> {
       return new CompanyApiResponse().setDefault();
     }
 
+    // Remembers if this is a new company being created
     boolean isNewCompany = false;
 
+    // If the user supplied "id" with their request, fetch the existing Company
+    // for that ID. Otherwise, throw "Not Found"
     Company companyUpdate = company.toDatabase();
     if (companyUpdate.hasId()) {
       Company existingCompany = getCompanyRepository().findOne(companyUpdate.getId());
@@ -61,14 +65,13 @@ public class SaveCompanyCommand extends CompanyCommand<SaveCompanyCommand> {
       isNewCompany = true;
     }
 
+    // A Company cannot be added to the database if its name is taken by another company
     Company existingCompanyWithName = getCompanyRepository().findByName(company.getName());
-    if (existingCompanyWithName != null) {
-      if (!companyUpdate.hasId()
-          || (companyUpdate.hasId() && !companyUpdate.idEquals(existingCompanyWithName.getId()))) {
-        return new CompanyApiResponse()
-            .setStatus(HttpStatus.CONFLICT)
-            .setMessage(Messages.COMPANY_CONFLICTING_NAME);
-      }
+    if (existingCompanyWithName != null
+        && RepositoryUtils.updateConflictsWithExistingRow(companyUpdate, existingCompanyWithName)) {
+      return new CompanyApiResponse()
+          .setStatus(HttpStatus.CONFLICT)
+          .setMessage(Messages.COMPANY_CONFLICTING_NAME);
     }
 
     companyUpdate = getCompanyRepository().save(companyUpdate);

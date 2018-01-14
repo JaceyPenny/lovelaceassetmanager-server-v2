@@ -37,6 +37,7 @@ public class Messages {
    * Location response messages
    */
   public static final String NO_LOCATIONS_FOUND = "no locations found";
+  public static final String LOCATION_CONFLICTING_NAME = "another location at this company already has this name";
 
   /*
    * Authentication messages

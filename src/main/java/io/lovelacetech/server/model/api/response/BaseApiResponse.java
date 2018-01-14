@@ -4,6 +4,8 @@ import io.lovelacetech.server.model.api.model.BaseApiModel;
 import io.lovelacetech.server.util.Messages;
 import org.springframework.http.HttpStatus;
 
+import java.beans.Transient;
+
 public abstract class BaseApiResponse<T extends BaseApiResponse, S extends BaseApiModel> {
   private int status;
   private String message;
@@ -42,6 +44,7 @@ public abstract class BaseApiResponse<T extends BaseApiResponse, S extends BaseA
     return status;
   }
 
+  @Transient
   public HttpStatus getHttpStatus() {
     return HttpStatus.valueOf(status);
   }

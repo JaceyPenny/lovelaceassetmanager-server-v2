@@ -40,7 +40,8 @@ public class LoaderUtils {
         .stream()
         .collect(Collectors.toMap(ApiDevice::getId, Functions.identity()));
     List<UUID> deviceIds = new ArrayList<>(deviceMap.keySet());
-    List<ApiAsset> assets = RepositoryUtils.toApiList(assetRepository.findAllByDeviceIdIn(deviceIds));
+    List<ApiAsset> assets = RepositoryUtils.toApiList(
+        assetRepository.findAllByDeviceIdIn(deviceIds));
 
     populateDevices(deviceMap, assets);
   }
@@ -55,7 +56,8 @@ public class LoaderUtils {
   }
 
   /**
-   * Uses a DeviceRepository and an AssetRepository to populate the "assets" list and the "devices" list of "location".
+   * Uses a DeviceRepository and an AssetRepository to populate the "assets" list and the "devices"
+   * list of "location".
    * Each ApiDevice that is fetched for "location" will also be populated with its child ApiAssets.
    * <br>
    * Generates 2 PostgreSQL queries.
@@ -73,10 +75,10 @@ public class LoaderUtils {
   }
 
   /**
-   * Uses a DeviceRepository and an AssetRepository to populate the "assets" list and the "devices" list of each
-   * ApiLocation in "locations".
-   * Each ApiDevice that is fetched for the ApiLocations in "locations" will also be populated with their child
-   * ApiAssets.
+   * Uses a DeviceRepository and an AssetRepository to populate the "assets" list and the "devices"
+   * list of each ApiLocation in "locations".
+   * Each ApiDevice that is fetched for the ApiLocations in "locations" will also be populated with
+   * their child ApiAssets.
    * <br>
    * Generates 2 PostgreSQL queries.
    *
@@ -95,10 +97,12 @@ public class LoaderUtils {
     List<UUID> locationIds = new ArrayList<>(locationMap.keySet());
 
     // Get the devices at these locations
-    List<ApiDevice> devices = RepositoryUtils.toApiList(deviceRepository.findAllByLocationIdIn(locationIds));
+    List<ApiDevice> devices = RepositoryUtils.toApiList(
+        deviceRepository.findAllByLocationIdIn(locationIds));
 
     // Get all assets for each location
-    List<ApiAsset> assets = RepositoryUtils.toApiList(assetRepository.findAllByLocationIdIn(locationIds));
+    List<ApiAsset> assets = RepositoryUtils.toApiList(
+        assetRepository.findAllByLocationIdIn(locationIds));
 
     // Populate the Location objects with all the fetched data
     populateDevices(devices, assetRepository);
@@ -106,7 +110,9 @@ public class LoaderUtils {
     populateLocationsWithDevices(locationMap, devices);
   }
 
-  public static void populateLocationsWithAssets(Map<UUID, ApiLocation> locationMap, List<ApiAsset> assets) {
+  public static void populateLocationsWithAssets(
+      Map<UUID, ApiLocation> locationMap,
+      List<ApiAsset> assets) {
     for (ApiAsset asset : assets) {
       ApiLocation location = locationMap.get(asset.getLocationId());
       if (location != null) {
@@ -115,7 +121,9 @@ public class LoaderUtils {
     }
   }
 
-  public static void populateLocationsWithDevices(Map<UUID, ApiLocation> locationMap, List<ApiDevice> devices) {
+  public static void populateLocationsWithDevices(
+      Map<UUID, ApiLocation> locationMap,
+      List<ApiDevice> devices) {
     for (ApiDevice device : devices) {
       ApiLocation location = locationMap.get(device.getLocationId());
       if (location != null) {
@@ -125,8 +133,8 @@ public class LoaderUtils {
   }
 
   /**
-   * Uses multiple *Repository resources to populate an ApiCompany with its children ApiLocation objects. The
-   * ApiLocation objects that are fetched are further populated using
+   * Uses multiple *Repository resources to populate an ApiCompany with its children ApiLocation
+   * objects. The ApiLocation objects that are fetched are further populated using
    * {@link #populateLocations(List, DeviceRepository, AssetRepository)}.
    * <br>
    * Generates 3 PostgreSQL queries.
@@ -141,7 +149,8 @@ public class LoaderUtils {
       LocationRepository locationRepository,
       DeviceRepository deviceRepository,
       AssetRepository assetRepository) {
-    List<ApiLocation> locations = RepositoryUtils.toApiList(locationRepository.findAllByCompanyId(company.getId()));
+    List<ApiLocation> locations = RepositoryUtils.toApiList(
+        locationRepository.findAllByCompanyId(company.getId()));
     populateLocations(locations, deviceRepository, assetRepository);
     company.setLocations(locations);
   }

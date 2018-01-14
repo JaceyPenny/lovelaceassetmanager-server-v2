@@ -5,7 +5,9 @@ import io.lovelacetech.server.command.Responds;
 import io.lovelacetech.server.model.api.model.ApiCompany;
 import io.lovelacetech.server.model.api.response.company.CompanyApiResponse;
 
-public class CompanyByNameCommand extends CompanyCommand<CompanyByNameCommand> implements Responds<CompanyApiResponse> {
+public class CompanyByNameCommand
+    extends CompanyCommand<CompanyByNameCommand>
+    implements Responds<CompanyApiResponse> {
   private String name;
 
   public CompanyByNameCommand setName(String name) {

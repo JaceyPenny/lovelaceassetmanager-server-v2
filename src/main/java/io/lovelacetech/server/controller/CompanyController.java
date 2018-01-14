@@ -79,7 +79,8 @@ public class CompanyController extends BaseController {
   }
 
   @RequestMapping(value = "/forAuthenticated", method = RequestMethod.GET)
-  public CompanyApiResponse getCompanyForAuthenticatedUser(@RequestAttribute ApiUser authenticatedUser) {
+  public CompanyApiResponse getCompanyForAuthenticatedUser(
+      @RequestAttribute ApiUser authenticatedUser) {
     return new CompaniesForUserCommand()
         .setCompanyRepository(companyRepository)
         .setUser(authenticatedUser)
@@ -87,7 +88,8 @@ public class CompanyController extends BaseController {
   }
 
   @RequestMapping(value = "/forAuthenticated/filled", method = RequestMethod.GET)
-  public CompanyApiResponse getCompanyForAuthenticatedUserFilled(@RequestAttribute ApiUser authenticatedUser) {
+  public CompanyApiResponse getCompanyForAuthenticatedUserFilled(
+      @RequestAttribute ApiUser authenticatedUser) {
     return new CompaniesForUserCommand()
         .setCompanyRepository(companyRepository)
         .setUser(authenticatedUser)

@@ -19,7 +19,15 @@ public class AuthenticationUtils {
         .compact();
   }
 
+  public static boolean userIsAtLeast(ApiUser user, AccessLevel accessLevel) {
+    return user.getAccessLevel().toInt() >= accessLevel.toInt();
+  }
+
   public static boolean userIsSuper(ApiUser user) {
     return user.getAccessLevel() == AccessLevel.SUPER;
+  }
+
+  public static boolean userIsAdmin(ApiUser user) {
+    return user.getAccessLevel() == AccessLevel.ADMIN;
   }
 }

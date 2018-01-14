@@ -30,7 +30,8 @@ public class RegistrationController {
   PasswordEncoder passwordEncoder;
 
   @RequestMapping(value = "/register", method = RequestMethod.POST)
-  public AuthenticationApiResponse register(@RequestBody ApiRegistration registration) throws ServletException {
+  public AuthenticationApiResponse register(@RequestBody ApiRegistration registration)
+      throws ServletException {
     if (!registration.isValid()) {
       return new AuthenticationApiResponse()
           .setStatus(HttpStatus.BAD_REQUEST)
