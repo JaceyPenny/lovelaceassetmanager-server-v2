@@ -3,6 +3,8 @@ package io.lovelacetech.server.model.api.model;
 import io.lovelacetech.server.model.Location;
 import io.lovelacetech.server.util.UUIDUtils;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 public class ApiLocation extends BaseApiModel {
@@ -11,11 +13,16 @@ public class ApiLocation extends BaseApiModel {
   private String state;
   private UUID companyId;
 
+  private List<ApiDevice> devices;
+  private List<ApiAsset> assets;
+
   public ApiLocation() {
     this.id = UUIDUtils.empty();
     this.city = "";
     this.state = "";
     this.companyId = UUIDUtils.empty();
+    this.devices = new ArrayList<>();
+    this.assets = new ArrayList<>();
   }
 
   public ApiLocation(Location location) {
@@ -23,6 +30,8 @@ public class ApiLocation extends BaseApiModel {
     this.city = location.getCity();
     this.state = location.getState();
     this.companyId = location.getCompanyId();
+    this.devices = new ArrayList<>();
+    this.assets = new ArrayList<>();
   }
 
   public UUID getId() {
@@ -58,6 +67,34 @@ public class ApiLocation extends BaseApiModel {
 
   public ApiLocation setCompanyId(UUID companyId) {
     this.companyId = companyId;
+    return this;
+  }
+
+  public List<ApiDevice> getDevices() {
+    return devices;
+  }
+
+  public ApiLocation setDevices(List<ApiDevice> devices) {
+    this.devices = devices;
+    return this;
+  }
+
+  public ApiLocation addDevice(ApiDevice device) {
+    devices.add(device);
+    return this;
+  }
+
+  public List<ApiAsset> getAssets() {
+    return assets;
+  }
+
+  public ApiLocation setAssets(List<ApiAsset> assets) {
+    this.assets = assets;
+    return this;
+  }
+
+  public ApiLocation addAsset(ApiAsset asset) {
+    assets.add(asset);
     return this;
   }
 

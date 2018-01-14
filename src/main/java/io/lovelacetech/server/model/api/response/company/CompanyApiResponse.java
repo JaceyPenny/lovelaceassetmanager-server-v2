@@ -6,13 +6,6 @@ import io.lovelacetech.server.util.Messages;
 import org.springframework.http.HttpStatus;
 
 public class CompanyApiResponse extends BaseApiResponse<CompanyApiResponse, ApiCompany> {
-  @Override
-  public CompanyApiResponse setDefault() {
-    super.setDefault();
-    setResponse(null);
-    return this;
-  }
-
   public CompanyApiResponse setNotFoundByName(String name) {
     setStatus(HttpStatus.NOT_FOUND);
     setMessage(Messages.NO_COMPANY_FOUND_BY_NAME(name));

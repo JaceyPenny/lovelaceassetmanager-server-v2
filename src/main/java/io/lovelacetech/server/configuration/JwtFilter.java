@@ -7,6 +7,7 @@ import io.lovelacetech.server.model.User;
 import io.lovelacetech.server.model.api.model.ApiUser;
 import io.lovelacetech.server.model.api.response.user.UserApiResponse;
 import io.lovelacetech.server.repository.UserRepository;
+import io.lovelacetech.server.util.AuthenticationUtils;
 import io.lovelacetech.server.util.Messages;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -51,7 +52,7 @@ public class JwtFilter extends GenericFilterBean {
 
       try {
         Claims claims = Jwts.parser()
-            .setSigningKey("lovelace!ass!etmanager***jan4changes")
+            .setSigningKey(AuthenticationUtils.JWT_SIGNATURE_KEY)
             .parseClaimsJws(token)
             .getBody();
 

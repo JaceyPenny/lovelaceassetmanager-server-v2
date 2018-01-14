@@ -1,13 +1,10 @@
 package io.lovelacetech.server.model.api.model;
 
-import com.google.common.collect.Streams;
 import io.lovelacetech.server.model.Company;
 import io.lovelacetech.server.util.RepositoryUtils;
-import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class ApiCompanyList extends BaseApiModel {
   private List<ApiCompany> companies;

@@ -34,6 +34,11 @@ public class Messages {
   }
 
   /*
+   * Location response messages
+   */
+  public static final String NO_LOCATIONS_FOUND = "no locations found";
+
+  /*
    * Authentication messages
    */
   public static final String LOGIN_INVALID_BODY = "Please fill in usernameOrEmail and password.";

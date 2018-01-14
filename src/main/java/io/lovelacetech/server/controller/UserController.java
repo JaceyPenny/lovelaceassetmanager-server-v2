@@ -16,15 +16,13 @@ import javax.servlet.ServletException;
 
 @RestController
 @RequestMapping("/api/secure/users")
-public class UserController {
+public class UserController extends BaseController {
   @Autowired
   private UserRepository userRepository;
 
   @RequestMapping(value = "/", method = RequestMethod.GET)
   public UserListApiResponse getUsers(@RequestAttribute ApiUser authenticatedUser) {
-    if (!AuthenticationUtils.userIsSuper(authenticatedUser)) {
-      throw new AccessDeniedException(Messages.ACCESS_DENIED);
-    }
+    checkIsSuper(authenticatedUser);
 
     return new UserListApiResponse()
         .setSuccess()

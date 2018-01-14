@@ -12,6 +12,7 @@ public abstract class BaseApiResponse<T extends BaseApiResponse, S extends BaseA
   public T setDefault() {
     setStatus(HttpStatus.INTERNAL_SERVER_ERROR);
     setMessage(Messages.DEFAULT);
+    response = null;
     return (T) this;
   }
 

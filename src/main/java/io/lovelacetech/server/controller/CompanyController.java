@@ -10,16 +10,14 @@ import io.lovelacetech.server.model.api.response.company.CompanyApiResponse;
 import io.lovelacetech.server.model.api.response.company.CompanyListApiResponse;
 import io.lovelacetech.server.repository.CompanyRepository;
 import io.lovelacetech.server.repository.UserRepository;
-import io.lovelacetech.server.util.AuthenticationUtils;
 import io.lovelacetech.server.util.Messages;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/secure/companies")
-public class CompanyController {
+public class CompanyController extends BaseController {
 
   @Autowired
   CompanyRepository companyRepository;
@@ -29,9 +27,7 @@ public class CompanyController {
 
   @RequestMapping(value = "/", method = RequestMethod.GET)
   public CompanyListApiResponse getCompanies(@RequestAttribute ApiUser authenticatedUser) {
-    if (!AuthenticationUtils.userIsSuper(authenticatedUser)) {
-      throw new AccessDeniedException(Messages.ACCESS_DENIED);
-    }
+    checkIsSuper(authenticatedUser);
 
     return new CompanyListApiResponse()
         .setStatus(HttpStatus.OK)
@@ -43,9 +39,7 @@ public class CompanyController {
   public CompanyApiResponse getCompanyByName(
       @RequestAttribute ApiUser authenticatedUser,
       @PathVariable String name) {
-    if (!AuthenticationUtils.userIsSuper(authenticatedUser)) {
-      throw new AccessDeniedException(Messages.ACCESS_DENIED);
-    }
+    checkIsSuper(authenticatedUser);
 
     return new CompanyByNameCommand()
         .setCompanyRepository(companyRepository)
@@ -58,9 +52,7 @@ public class CompanyController {
       @RequestAttribute ApiUser authenticatedUser,
       @PathVariable String name,
       @PathVariable String phoneNumber) {
-    if (!AuthenticationUtils.userIsSuper(authenticatedUser)) {
-      throw new AccessDeniedException(Messages.ACCESS_DENIED);
-    }
+    checkIsSuper(authenticatedUser);
 
     return new CompanyByNameOrPhoneNumberCommand()
         .setCompanyRepository(companyRepository)
@@ -73,9 +65,7 @@ public class CompanyController {
   public CompanyApiResponse getCompanyByPhoneNumber(
       @RequestAttribute ApiUser authenticatedUser,
       @PathVariable String phoneNumber) {
-    if (!AuthenticationUtils.userIsSuper(authenticatedUser)) {
-      throw new AccessDeniedException(Messages.ACCESS_DENIED);
-    }
+    checkIsSuper(authenticatedUser);
 
     return new CompanyByPhoneNumberCommand()
         .setCompanyRepository(companyRepository)
