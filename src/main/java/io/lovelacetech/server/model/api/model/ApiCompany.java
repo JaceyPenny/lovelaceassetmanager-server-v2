@@ -1,14 +1,18 @@
 package io.lovelacetech.server.model.api.model;
 
 import io.lovelacetech.server.model.Company;
+import io.lovelacetech.server.model.Location;
 import io.lovelacetech.server.util.UUIDUtils;
 
+import java.util.List;
 import java.util.UUID;
 
 public class ApiCompany extends BaseApiModel {
   private UUID id;
   private String name;
   private String phoneNumber;
+
+  private List<Location> locations;
 
   public ApiCompany() {
     this.id = UUIDUtils.empty();
@@ -46,6 +50,15 @@ public class ApiCompany extends BaseApiModel {
 
   public ApiCompany setPhoneNumber(String phoneNumber) {
     this.phoneNumber = phoneNumber;
+    return this;
+  }
+
+  public List<Location> getLocations() {
+    return locations;
+  }
+
+  public ApiCompany setLocations(List<Location> locations) {
+    this.locations = locations;
     return this;
   }
 

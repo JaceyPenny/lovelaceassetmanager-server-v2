@@ -3,6 +3,8 @@ package io.lovelacetech.server.model.api.model;
 import io.lovelacetech.server.model.Device;
 import io.lovelacetech.server.util.UUIDUtils;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 public class ApiDevice extends BaseApiModel {
@@ -11,11 +13,14 @@ public class ApiDevice extends BaseApiModel {
   private String name;
   private UUID locationId;
 
+  private List<ApiAsset> assets;
+
   public ApiDevice() {
     this.id = UUIDUtils.empty();
     this.deviceCode = "";
     this.name = "";
     this.locationId = UUIDUtils.empty();
+    this.assets = new ArrayList<>();
   }
 
   public ApiDevice(Device device) {
@@ -23,6 +28,7 @@ public class ApiDevice extends BaseApiModel {
     this.deviceCode = device.getDeviceCode();
     this.name = device.getName();
     this.locationId = device.getLocationId();
+    this.assets = new ArrayList<>();
   }
 
 
@@ -59,6 +65,20 @@ public class ApiDevice extends BaseApiModel {
 
   public ApiDevice setLocationId(UUID locationId) {
     this.locationId = locationId;
+    return this;
+  }
+
+  public List<ApiAsset> getAssets() {
+    return assets;
+  }
+
+  public ApiDevice setAssets(List<ApiAsset> assets) {
+    this.assets = assets;
+    return this;
+  }
+
+  public ApiDevice addAsset(ApiAsset asset) {
+    this.assets.add(asset);
     return this;
   }
 
