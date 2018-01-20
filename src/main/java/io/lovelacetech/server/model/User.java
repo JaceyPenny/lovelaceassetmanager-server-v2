@@ -40,7 +40,7 @@ public class User implements DatabaseModel<User>, ApiModelConvertible<ApiUser> {
   @Column(name = "last_name")
   private String lastName;
 
-  @ManyToMany(fetch = FetchType.LAZY)
+  @ManyToMany(fetch = FetchType.EAGER)
   @JoinTable(name = "users_locations", schema = "lovelace",
       joinColumns = { @JoinColumn(name = "user_id", nullable = false, updatable = false) },
       inverseJoinColumns = {
@@ -160,10 +160,12 @@ public class User implements DatabaseModel<User>, ApiModelConvertible<ApiUser> {
     this.lastName = lastName;
   }
 
+  @Transient
   public List<Location> getLocations() {
     return locations;
   }
 
+  @Transient
   public void setLocations(List<Location> locations) {
     this.locations = locations;
   }

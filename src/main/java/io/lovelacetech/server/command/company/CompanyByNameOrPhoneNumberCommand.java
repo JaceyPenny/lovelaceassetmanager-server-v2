@@ -1,13 +1,11 @@
 package io.lovelacetech.server.command.company;
 
 import com.google.common.base.Strings;
-import io.lovelacetech.server.command.Responds;
 import io.lovelacetech.server.model.api.model.ApiCompanyList;
 import io.lovelacetech.server.model.api.response.company.CompanyListApiResponse;
 
 public class CompanyByNameOrPhoneNumberCommand
-    extends CompanyCommand<CompanyByNameOrPhoneNumberCommand>
-    implements Responds<CompanyListApiResponse> {
+    extends CompanyCommand<CompanyByNameOrPhoneNumberCommand> {
   private String name;
   private String phoneNumber;
 

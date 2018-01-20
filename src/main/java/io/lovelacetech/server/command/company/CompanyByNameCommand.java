@@ -1,13 +1,10 @@
 package io.lovelacetech.server.command.company;
 
 import com.google.common.base.Strings;
-import io.lovelacetech.server.command.Responds;
 import io.lovelacetech.server.model.api.model.ApiCompany;
 import io.lovelacetech.server.model.api.response.company.CompanyApiResponse;
 
-public class CompanyByNameCommand
-    extends CompanyCommand<CompanyByNameCommand>
-    implements Responds<CompanyApiResponse> {
+public class CompanyByNameCommand extends CompanyCommand<CompanyByNameCommand> {
   private String name;
 
   public CompanyByNameCommand setName(String name) {

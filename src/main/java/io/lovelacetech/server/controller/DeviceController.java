@@ -50,7 +50,7 @@ public class DeviceController extends BaseController {
       @PathVariable UUID locationId,
       @RequestParam(defaultValue = "true") boolean filled) {
     if (!AccessUtils.userCanAccessLocation(authenticatedUser, locationId, locationRepository)) {
-      throw new AccessDeniedException(Messages.ACCESS_DENIED);
+      return new DeviceListApiResponse().setAccessDenied();
     }
 
     return new DeviceByLocationIdCommand()

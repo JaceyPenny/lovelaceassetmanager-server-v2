@@ -1,13 +1,11 @@
 package io.lovelacetech.server.command.company;
 
-import io.lovelacetech.server.command.Responds;
 import io.lovelacetech.server.model.api.model.ApiCompany;
 import io.lovelacetech.server.model.api.response.company.CompanyApiResponse;
 import org.h2.util.StringUtils;
 
 public class CompanyByPhoneNumberCommand
-    extends CompanyCommand<CompanyByPhoneNumberCommand>
-    implements Responds<CompanyApiResponse> {
+    extends CompanyCommand<CompanyByPhoneNumberCommand> {
 
   private String phoneNumber;
 

@@ -48,6 +48,12 @@ public abstract class BaseApiResponse<T extends BaseApiResponse, S extends BaseA
     return (T) this;
   }
 
+  public T setCannotModify() {
+    setStatus(HttpStatus.NOT_ACCEPTABLE);
+    setMessage(Messages.CANNOT_MODIFY);
+    return (T) this;
+  }
+
   public T setStatus(HttpStatus status) {
     setStatus(status.value());
     return (T) this;

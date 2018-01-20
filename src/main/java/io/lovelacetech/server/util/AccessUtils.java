@@ -1,9 +1,11 @@
 package io.lovelacetech.server.util;
 
+import io.lovelacetech.server.model.Asset;
 import io.lovelacetech.server.model.Device;
 import io.lovelacetech.server.model.Location;
 import io.lovelacetech.server.model.api.model.ApiLocation;
 import io.lovelacetech.server.model.api.model.ApiUser;
+import io.lovelacetech.server.repository.AssetRepository;
 import io.lovelacetech.server.repository.DeviceRepository;
 import io.lovelacetech.server.repository.LocationRepository;
 
@@ -48,5 +50,24 @@ public class AccessUtils {
       Device device,
       LocationRepository locationRepository) {
     return userCanAccessLocation(user, device.getLocationId(), locationRepository);
+  }
+
+  public static boolean userCanAccessAsset(
+      ApiUser user,
+      UUID assetId,
+      AssetRepository assetRepository,
+      DeviceRepository deviceRepository,
+      LocationRepository locationRepository) {
+    Asset fetchedAsset = assetRepository.findOne(assetId);
+    return assetId != null
+        && userCanAccessAsset(user, fetchedAsset, deviceRepository, locationRepository);
+  }
+
+  public static boolean userCanAccessAsset(
+      ApiUser user,
+      Asset asset,
+      DeviceRepository deviceRepository,
+      LocationRepository locationRepository) {
+    return userCanAccessDevice(user, asset.getHomeId(), deviceRepository, locationRepository);
   }
 }

@@ -9,6 +9,7 @@ public class Messages {
   public static final String ACCESS_DENIED = "access denied";
   public static final String INVALID_BODY = "invalid body. please fill in all required fields";
   public static final String CONFLICT = "there was a conflict with another record in the database";
+  public static final String CANNOT_MODIFY = "you have attempted to modify a non-modifiable field";
 
   /*
    * Company response messages
@@ -44,6 +45,11 @@ public class Messages {
    * Device response messages
    */
   public static final String DEVICE_CONFLICTING_DEVICE_CODE = "another device already has this device code";
+
+  /*
+   * Asset response messages
+   */
+  public static final String ASSET_CONFLICTING_RFID = "another asset already has this RFID tag";
 
   /*
    * Authentication messages
