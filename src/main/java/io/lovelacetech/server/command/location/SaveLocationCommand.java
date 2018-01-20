@@ -4,10 +4,7 @@ import io.lovelacetech.server.model.Location;
 import io.lovelacetech.server.model.api.model.ApiLocation;
 import io.lovelacetech.server.model.api.model.ApiUser;
 import io.lovelacetech.server.model.api.response.location.LocationApiResponse;
-import io.lovelacetech.server.util.AuthenticationUtils;
-import io.lovelacetech.server.util.Messages;
-import io.lovelacetech.server.util.RepositoryUtils;
-import io.lovelacetech.server.util.UUIDUtils;
+import io.lovelacetech.server.util.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.AccessDeniedException;
 
@@ -44,29 +41,28 @@ public class SaveLocationCommand extends LocationCommand<SaveLocationCommand> {
 
       if (existingLocation == null) {
         return new LocationApiResponse().setNotFound();
-      } else {
-        existingLocation.applyUpdate(locationUpdate);
-        locationUpdate = existingLocation;
       }
+
+      // If the user cannot access this location due to being:
+      //   1. AccessLevel USER without permissions for this location
+      //   2. AccessLevel ADMIN trying to modify a location from another company
+      // then return FORBIDDEN
+      if (!AccessUtils.userCanAccessLocation(user, existingLocation)) {
+        return new LocationApiResponse().setAccessDenied();
+      }
+
+      existingLocation.applyUpdate(locationUpdate);
+      locationUpdate = existingLocation;
     }
 
-    // The user must belong to the company for the location they are modifying.
-    // The user cannot set a location's company to a different company
-    // Super users can override this check
-    if (UUIDUtils.isValidId(locationUpdate.getCompanyId())
-        && !UUIDUtils.idsEqual(locationUpdate.getCompanyId(), user.getCompanyId())
-        && !AuthenticationUtils.userIsSuper(user)) {
-      throw new AccessDeniedException(Messages.ACCESS_DENIED);
-    } else if (!UUIDUtils.isValidId(locationUpdate.getCompanyId())) {
+    // Check if the location's company has been set. If not, default to user's company ID
+    if (!UUIDUtils.isValidId(locationUpdate.getCompanyId())) {
       locationUpdate.setCompanyId(user.getCompanyId());
     }
 
     // The Location must have all required fields before we can proceed.
     if (!locationUpdate.toApi().isValid()) {
-      System.out.println(locationUpdate.toApi());
-      return new LocationApiResponse()
-          .setStatus(HttpStatus.BAD_REQUEST)
-          .setMessage(Messages.INVALID_BODY);
+      return new LocationApiResponse().setInvalidBody();
     }
 
     // A location cannot be added to the database if its name and company ID
@@ -78,7 +74,7 @@ public class SaveLocationCommand extends LocationCommand<SaveLocationCommand> {
             locationUpdate,
             existingLocationWithInfo)) {
       return new LocationApiResponse()
-          .setStatus(HttpStatus.CONFLICT)
+          .setConflict()
           .setMessage(Messages.LOCATION_CONFLICTING_NAME);
     }
 

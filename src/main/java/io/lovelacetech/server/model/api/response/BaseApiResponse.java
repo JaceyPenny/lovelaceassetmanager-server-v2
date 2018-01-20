@@ -1,7 +1,9 @@
 package io.lovelacetech.server.model.api.response;
 
+import io.lovelacetech.server.model.ApiModelConvertible;
 import io.lovelacetech.server.model.api.model.BaseApiModel;
 import io.lovelacetech.server.util.Messages;
+import javafx.util.Builder;
 import org.springframework.http.HttpStatus;
 
 import java.beans.Transient;
@@ -27,6 +29,24 @@ public abstract class BaseApiResponse<T extends BaseApiResponse, S extends BaseA
   public T setNotFound() {
     setStatus(HttpStatus.NOT_FOUND);
     setMessage(Messages.NOT_FOUND);
+    return (T) this;
+  }
+
+  public T setAccessDenied() {
+    setStatus(HttpStatus.FORBIDDEN);
+    setMessage(Messages.ACCESS_DENIED);
+    return (T) this;
+  }
+
+  public T setInvalidBody() {
+    setStatus(HttpStatus.BAD_REQUEST);
+    setMessage(Messages.INVALID_BODY);
+    return (T) this;
+  }
+
+  public T setConflict() {
+    setStatus(HttpStatus.CONFLICT);
+    setMessage(Messages.CONFLICT);
     return (T) this;
   }
 

@@ -8,6 +8,7 @@ public class Messages {
   public static final String NOT_FOUND = "requested resource not found";
   public static final String ACCESS_DENIED = "access denied";
   public static final String INVALID_BODY = "invalid body. please fill in all required fields";
+  public static final String CONFLICT = "there was a conflict with another record in the database";
 
   /*
    * Company response messages
@@ -38,6 +39,11 @@ public class Messages {
    */
   public static final String NO_LOCATIONS_FOUND = "no locations found";
   public static final String LOCATION_CONFLICTING_NAME = "another location at this company already has this name";
+
+  /*
+   * Device response messages
+   */
+  public static final String DEVICE_CONFLICTING_DEVICE_CODE = "another device already has this device code";
 
   /*
    * Authentication messages

@@ -9,6 +9,8 @@ import java.util.UUID;
 
 @RepositoryRestResource
 public interface DeviceRepository extends CrudRepository<Device, UUID> {
+  Device findOneByDeviceCode(String deviceCode);
+
   List<Device> findAllByLocationId(UUID locationId);
 
   List<Device> findAllByLocationIdIn(List<UUID> locationIds);
