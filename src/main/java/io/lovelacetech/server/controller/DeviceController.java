@@ -68,6 +68,7 @@ public class DeviceController extends BaseController {
     return new SaveDeviceCommand()
         .setDeviceRepository(deviceRepository)
         .setLocationRepository(locationRepository)
+        .setUser(authenticatedUser)
         .setDevice(device)
         .execute();
   }

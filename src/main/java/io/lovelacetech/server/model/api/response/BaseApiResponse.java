@@ -1,9 +1,7 @@
 package io.lovelacetech.server.model.api.response;
 
-import io.lovelacetech.server.model.ApiModelConvertible;
 import io.lovelacetech.server.model.api.model.BaseApiModel;
 import io.lovelacetech.server.util.Messages;
-import javafx.util.Builder;
 import org.springframework.http.HttpStatus;
 
 import java.beans.Transient;
