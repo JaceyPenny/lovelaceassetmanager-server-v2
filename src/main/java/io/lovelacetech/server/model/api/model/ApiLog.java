@@ -6,7 +6,7 @@ import io.lovelacetech.server.util.UUIDUtils;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-public class ApiLog extends BaseApiModel {
+public class ApiLog extends BaseApiModel<Log> {
 
   private UUID id;
   private UUID assetId;

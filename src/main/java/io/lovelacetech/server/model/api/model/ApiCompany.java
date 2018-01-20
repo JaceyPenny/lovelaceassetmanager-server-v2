@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-public class ApiCompany extends BaseApiModel {
+public class ApiCompany extends BaseApiModel<Company> {
   private UUID id;
   private String name;
   private String phoneNumber;

@@ -1,12 +1,17 @@
 package io.lovelacetech.server.model.api.model;
 
+import io.lovelacetech.server.model.Location;
 import io.lovelacetech.server.model.User;
 import io.lovelacetech.server.model.api.enums.AccessLevel;
+import io.lovelacetech.server.util.RepositoryUtils;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
-public class ApiUser extends BaseApiModel {
+public class ApiUser extends BaseApiModel<User> {
   private UUID id;
   private String email;
   private String username;
@@ -14,6 +19,8 @@ public class ApiUser extends BaseApiModel {
   private UUID companyId;
   private String firstName;
   private String lastName;
+
+  private List<ApiLocation> locations;
 
   public ApiUser() {
     this.id = new UUID(0, 0);
@@ -23,6 +30,7 @@ public class ApiUser extends BaseApiModel {
     this.companyId = new UUID(0, 0);
     this.firstName = "";
     this.lastName = "";
+    this.locations = new ArrayList<>();
   }
   
   public ApiUser(User user) {
@@ -33,6 +41,7 @@ public class ApiUser extends BaseApiModel {
     this.companyId = user.getCompanyId();
     this.firstName = user.getFirstName();
     this.lastName = user.getLastName();
+    this.locations = RepositoryUtils.toApiList(user.getLocations());
   }
 
   public UUID getId() {
@@ -98,15 +107,28 @@ public class ApiUser extends BaseApiModel {
     return this;
   }
 
+  public List<ApiLocation> getLocations() {
+    return locations;
+  }
+
+  public void setLocations(List<ApiLocation> locations) {
+    this.locations = locations;
+  }
+
   public static ApiUser fromClaims(LinkedHashMap<String, Object> user) {
-    return new ApiUser()
+    ApiUser result = new ApiUser()
         .setId(UUID.fromString((String)user.get("id")))
         .setAccessLevel(AccessLevel.valueOf((String) user.get("accessLevel")))
-        .setCompanyId(UUID.fromString((String) user.get("companyId")))
         .setEmail((String) user.get("email"))
         .setUsername((String) user.get("username"))
         .setFirstName((String) user.get("firstName"))
         .setLastName((String) user.get("lastName"));
+
+    if (user.get("companyId") != null) {
+      result.setCompanyId(UUID.fromString((String) user.get("companyId")));
+    }
+
+    return result;
   }
 
   @Override
@@ -120,6 +142,7 @@ public class ApiUser extends BaseApiModel {
     user.setCompanyId(companyId);
     user.setFirstName(firstName);
     user.setLastName(lastName);
+    user.setLocations(RepositoryUtils.toDatabaseList(locations));
 
     return user;
   }

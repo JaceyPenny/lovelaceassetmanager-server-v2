@@ -9,6 +9,8 @@ import java.util.UUID;
 
 @RepositoryRestResource
 public interface LocationRepository extends CrudRepository<Location, UUID> {
+  List<Location> findAllByIdIn(List<UUID> locationIds);
+
   List<Location> findAllByCompanyId(UUID companyId);
 
   Location findByCompanyIdAndName(UUID companyId, String name);

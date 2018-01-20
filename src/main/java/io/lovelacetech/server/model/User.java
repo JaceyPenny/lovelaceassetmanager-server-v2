@@ -7,6 +7,7 @@ import io.lovelacetech.server.model.converter.AccessLevelConverter;
 import io.lovelacetech.server.util.UUIDUtils;
 
 import javax.persistence.*;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -38,6 +39,13 @@ public class User implements DatabaseModel<User>, ApiModelConvertible<ApiUser> {
 
   @Column(name = "last_name")
   private String lastName;
+
+  @ManyToMany(fetch = FetchType.LAZY)
+  @JoinTable(name = "users_locations", schema = "lovelace",
+      joinColumns = { @JoinColumn(name = "user_id", nullable = false, updatable = false) },
+      inverseJoinColumns = {
+      @JoinColumn(name = "location_id", nullable = false, updatable = false) })
+  private List<Location> locations;
 
   @Transient
   public ApiUser toApi() {
@@ -150,5 +158,13 @@ public class User implements DatabaseModel<User>, ApiModelConvertible<ApiUser> {
 
   public void setLastName(String lastName) {
     this.lastName = lastName;
+  }
+
+  public List<Location> getLocations() {
+    return locations;
+  }
+
+  public void setLocations(List<Location> locations) {
+    this.locations = locations;
   }
 }

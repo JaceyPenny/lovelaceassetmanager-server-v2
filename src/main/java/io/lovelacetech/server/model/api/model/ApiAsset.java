@@ -6,7 +6,7 @@ import io.lovelacetech.server.util.UUIDUtils;
 
 import java.util.UUID;
 
-public class ApiAsset extends BaseApiModel {
+public class ApiAsset extends BaseApiModel<Asset> {
   private UUID id;
   private String name;
   private String rfid;

@@ -79,21 +79,13 @@ public class CompanyController extends BaseController {
   }
 
   @RequestMapping(value = "/forAuthenticated", method = RequestMethod.GET)
-  public CompanyApiResponse getCompanyForAuthenticatedUser(
-      @RequestAttribute ApiUser authenticatedUser) {
-    return new CompaniesForUserCommand()
-        .setCompanyRepository(companyRepository)
-        .setUser(authenticatedUser)
-        .execute();
-  }
-
-  @RequestMapping(value = "/forAuthenticated/filled", method = RequestMethod.GET)
   public CompanyApiResponse getCompanyForAuthenticatedUserFilled(
-      @RequestAttribute ApiUser authenticatedUser) {
+      @RequestAttribute ApiUser authenticatedUser,
+      @RequestParam(defaultValue = "true") boolean filled) {
     return new CompaniesForUserCommand()
         .setCompanyRepository(companyRepository)
         .setUser(authenticatedUser)
-        .setFilled(true)
+        .setFilled(filled)
         .setLocationRepository(locationRepository)
         .setDeviceRepository(deviceRepository)
         .setAssetRepository(assetRepository)

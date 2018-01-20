@@ -21,7 +21,7 @@ public class Device implements DatabaseModel<Device>, ApiModelConvertible<ApiDev
   @Column(name = "name", nullable = false)
   private String name;
 
-  @Column(name = "location_id", nullable = false)
+  @Column(name = "location_id")
   private UUID locationId;
 
   @Override

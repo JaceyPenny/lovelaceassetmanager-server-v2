@@ -6,7 +6,7 @@ import io.lovelacetech.server.model.ApiModelConvertible;
 
 import java.beans.Transient;
 
-public class BaseApiModel {
+public class BaseApiModel<T extends ApiModelConvertible<? extends BaseApiModel>> {
   @Override
   public String toString() {
     Gson gson = new GsonBuilder().create();
@@ -18,7 +18,7 @@ public class BaseApiModel {
     return true;
   }
 
-  public <T extends ApiModelConvertible> T toDatabase() {
+  public T toDatabase() {
     return null;
   }
 }

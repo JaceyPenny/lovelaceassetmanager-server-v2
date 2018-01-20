@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-public class ApiLocation extends BaseApiModel {
+public class ApiLocation extends BaseApiModel<Location> {
   private UUID id;
   private String name;
   private String city;

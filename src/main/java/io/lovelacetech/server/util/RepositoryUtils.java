@@ -10,10 +10,17 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public class RepositoryUtils {
-  public static <T extends BaseApiModel> List<T> toApiList(
+  public static <R extends ApiModelConvertible<T>, T extends BaseApiModel<R>> List<T> toApiList(
       Iterable<? extends ApiModelConvertible<T>> iterable) {
     return Streams.stream(iterable)
         .map(ApiModelConvertible::toApi)
+        .collect(Collectors.toList());
+  }
+
+  public static <R extends ApiModelConvertible<T>, T extends BaseApiModel<R>>
+      List<R> toDatabaseList(Iterable<T> iterable) {
+    return Streams.stream(iterable)
+        .map(BaseApiModel::toDatabase)
         .collect(Collectors.toList());
   }
 

@@ -24,8 +24,8 @@ public class AuthenticationController {
   UserRepository userRepository;
 
   @RequestMapping(value = "/login", method = RequestMethod.POST)
-  public AuthenticationApiResponse login(
-      @RequestBody ApiAuthentication login) throws ServletException {
+  public AuthenticationApiResponse login(@RequestBody ApiAuthentication login)
+      throws ServletException {
     if (login.getUsernameOrEmail() == null || login.getPassword() == null) {
       throw new ServletException(Messages.LOGIN_INVALID_BODY);
     }

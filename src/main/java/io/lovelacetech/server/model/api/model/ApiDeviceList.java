@@ -21,12 +21,12 @@ public class ApiDeviceList extends BaseApiModel {
     return devices;
   }
 
-  public ApiDeviceList setLocations(List<ApiDevice> devices) {
+  public ApiDeviceList setDevices(List<ApiDevice> devices) {
     this.devices = devices;
     return this;
   }
 
-  public ApiDeviceList addLocation(ApiDevice device) {
+  public ApiDeviceList addDevice(ApiDevice device) {
     devices.add(device);
     return this;
   }

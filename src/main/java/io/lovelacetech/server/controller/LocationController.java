@@ -1,5 +1,6 @@
 package io.lovelacetech.server.controller;
 
+import io.lovelacetech.server.command.location.LocationsByCompanyIdCommand;
 import io.lovelacetech.server.command.location.LocationsForUserCommand;
 import io.lovelacetech.server.command.location.SaveLocationCommand;
 import io.lovelacetech.server.model.api.enums.AccessLevel;
@@ -10,11 +11,10 @@ import io.lovelacetech.server.model.api.response.location.LocationListApiRespons
 import io.lovelacetech.server.repository.AssetRepository;
 import io.lovelacetech.server.repository.DeviceRepository;
 import io.lovelacetech.server.repository.LocationRepository;
-import io.lovelacetech.server.util.AuthenticationUtils;
-import io.lovelacetech.server.util.Messages;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/secure/locations")
@@ -38,24 +38,32 @@ public class LocationController extends BaseController {
         .setResponse(locationRepository.findAll());
   }
 
-  @RequestMapping(value = "/forAuthenticated/filled", method = RequestMethod.GET)
+  @RequestMapping(value = "/forAuthenticated", method = RequestMethod.GET)
   public LocationListApiResponse getLocationsForAuthenticatedUserFilled(
-      @RequestAttribute ApiUser authenticatedUser) {
+      @RequestAttribute ApiUser authenticatedUser,
+      @RequestParam(defaultValue = "true") boolean filled) {
     return new LocationsForUserCommand()
         .setLocationRepository(locationRepository)
         .setUser(authenticatedUser)
-        .setFilled(true)
+        .setFilled(filled)
         .setAssetRepository(assetRepository)
         .setDeviceRepository(deviceRepository)
         .execute();
   }
 
-  @RequestMapping(value = "/forAuthenticated", method = RequestMethod.GET)
-  public LocationListApiResponse getLocationsForAuthenticatedUser(
-      @RequestAttribute ApiUser authenticatedUser) {
-    return new LocationsForUserCommand()
+  @RequestMapping(value = "/byCompanyId/{companyId}", method = RequestMethod.GET)
+  public LocationListApiResponse getLocationsByCompanyId(
+      @RequestAttribute ApiUser authenticatedUser,
+      @PathVariable UUID companyId,
+      @RequestParam(defaultValue = "true") boolean filled) {
+    checkIsSuper(authenticatedUser);
+
+    return new LocationsByCompanyIdCommand()
         .setLocationRepository(locationRepository)
-        .setUser(authenticatedUser)
+        .setCompanyId(companyId)
+        .setFilled(filled)
+        .setAssetRepository(assetRepository)
+        .setDeviceRepository(deviceRepository)
         .execute();
   }
 
@@ -63,9 +71,7 @@ public class LocationController extends BaseController {
   public LocationApiResponse putLocationForAuthenticatedAdmin(
       @RequestAttribute ApiUser authenticatedUser,
       @RequestBody ApiLocation location) {
-    if (!AuthenticationUtils.userIsAtLeast(authenticatedUser, AccessLevel.ADMIN)) {
-      throw new AccessDeniedException(Messages.ACCESS_DENIED);
-    }
+    checkAccess(authenticatedUser, AccessLevel.ADMIN);
 
     return new SaveLocationCommand()
         .setLocationRepository(locationRepository)

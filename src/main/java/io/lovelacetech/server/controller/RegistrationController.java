@@ -17,8 +17,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.servlet.ServletException;
-
 @RestController
 @RequestMapping("/api/registration")
 public class RegistrationController {
@@ -30,8 +28,7 @@ public class RegistrationController {
   PasswordEncoder passwordEncoder;
 
   @RequestMapping(value = "/register", method = RequestMethod.POST)
-  public AuthenticationApiResponse register(@RequestBody ApiRegistration registration)
-      throws ServletException {
+  public AuthenticationApiResponse register(@RequestBody ApiRegistration registration) {
     if (!registration.isValid()) {
       return new AuthenticationApiResponse()
           .setStatus(HttpStatus.BAD_REQUEST)
