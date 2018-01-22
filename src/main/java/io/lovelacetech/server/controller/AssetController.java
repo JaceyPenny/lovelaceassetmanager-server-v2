@@ -91,6 +91,7 @@ public class AssetController extends BaseController {
         .setAssetRepository(assetRepository)
         .setDeviceRepository(deviceRepository)
         .setLocationRepository(locationRepository)
+        .setUser(authenticatedUser)
         .setAsset(asset)
         .execute();
   }
