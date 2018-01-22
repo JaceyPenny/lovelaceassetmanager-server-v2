@@ -12,22 +12,18 @@ import java.util.stream.Collectors;
 public class RepositoryUtils {
   public static <R extends ApiModelConvertible<T>, T extends BaseApiModel<R>> List<T> toApiList(
       Iterable<? extends ApiModelConvertible<T>> iterable) {
-    return Streams.stream(iterable)
-        .map(ApiModelConvertible::toApi)
-        .collect(Collectors.toList());
+    return mapIterable(iterable, ApiModelConvertible::toApi);
   }
 
   public static <R extends ApiModelConvertible<T>, T extends BaseApiModel<R>>
       List<R> toDatabaseList(Iterable<T> iterable) {
-    return Streams.stream(iterable)
-        .map(BaseApiModel::toDatabase)
-        .collect(Collectors.toList());
+    return mapIterable(iterable, BaseApiModel::toDatabase);
   }
 
-  public static <FROM, TO> List<TO> mapList(
-      List<FROM> list,
+  public static <FROM, TO> List<TO> mapIterable(
+      Iterable<FROM> iterable,
       Function<FROM, ? extends TO> function) {
-    return list.stream().map(function).collect(Collectors.toList());
+    return Streams.stream(iterable).map(function).collect(Collectors.toList());
   }
 
   public static <T extends DatabaseModel> boolean updateConflictsWithExistingRow(

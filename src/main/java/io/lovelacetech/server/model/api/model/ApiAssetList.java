@@ -17,6 +17,10 @@ public class ApiAssetList extends BaseApiModel {
     this.assets = RepositoryUtils.toApiList(assets);
   }
 
+  public ApiAssetList(List<ApiAsset> assets) {
+    this.assets = assets;
+  }
+
   public List<ApiAsset> getAssets() {
     return assets;
   }

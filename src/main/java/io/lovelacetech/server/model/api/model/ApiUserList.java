@@ -1,6 +1,5 @@
 package io.lovelacetech.server.model.api.model;
 
-import com.google.common.collect.Streams;
 import io.lovelacetech.server.model.User;
 import io.lovelacetech.server.util.RepositoryUtils;
 
@@ -16,6 +15,10 @@ public class ApiUserList extends BaseApiModel {
 
   public ApiUserList(Iterable<User> users) {
     this.users = RepositoryUtils.toApiList(users);
+  }
+
+  public ApiUserList(List<ApiUser> users) {
+    this.users = users;
   }
 
   public List<ApiUser> getUsers() {

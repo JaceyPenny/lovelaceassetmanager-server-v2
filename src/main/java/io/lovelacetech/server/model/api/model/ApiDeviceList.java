@@ -17,6 +17,10 @@ public class ApiDeviceList extends BaseApiModel {
     this.devices = RepositoryUtils.toApiList(devices);
   }
 
+  public ApiDeviceList(List<ApiDevice> devices) {
+    this.devices = devices;
+  }
+
   public List<ApiDevice> getDevices() {
     return devices;
   }

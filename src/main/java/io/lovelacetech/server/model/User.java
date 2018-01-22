@@ -47,6 +47,7 @@ public class User implements DatabaseModel<User>, ApiModelConvertible<ApiUser> {
       @JoinColumn(name = "location_id", nullable = false, updatable = false) })
   private List<Location> locations;
 
+  @Override
   @Transient
   public ApiUser toApi() {
     return new ApiUser(this);

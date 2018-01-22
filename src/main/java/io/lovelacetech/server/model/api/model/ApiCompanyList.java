@@ -17,6 +17,10 @@ public class ApiCompanyList extends BaseApiModel {
     this.companies = RepositoryUtils.toApiList(companies);
   }
 
+  public ApiCompanyList(List<ApiCompany> companies) {
+    this.companies = companies;
+  }
+
   public List<ApiCompany> getCompanies() {
     return companies;
   }

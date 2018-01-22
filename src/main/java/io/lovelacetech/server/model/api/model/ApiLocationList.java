@@ -17,6 +17,10 @@ public class ApiLocationList extends BaseApiModel {
     this.locations = RepositoryUtils.toApiList(locations);
   }
 
+  public ApiLocationList(List<ApiLocation> locations) {
+    this.locations = locations;
+  }
+
   public List<ApiLocation> getLocations() {
     return locations;
   }
