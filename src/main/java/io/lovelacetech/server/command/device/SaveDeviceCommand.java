@@ -1,13 +1,17 @@
 package io.lovelacetech.server.command.device;
 
+import com.google.common.base.Strings;
 import io.lovelacetech.server.model.Device;
 import io.lovelacetech.server.model.api.model.ApiDevice;
 import io.lovelacetech.server.model.api.model.ApiUser;
 import io.lovelacetech.server.model.api.response.device.DeviceApiResponse;
 import io.lovelacetech.server.repository.LocationRepository;
 import io.lovelacetech.server.util.AccessUtils;
+import io.lovelacetech.server.util.AuthenticationUtils;
 import io.lovelacetech.server.util.Messages;
 import io.lovelacetech.server.util.RepositoryUtils;
+import org.h2.util.StringUtils;
+import org.springframework.dao.DataIntegrityViolationException;
 
 public class SaveDeviceCommand extends DeviceCommand<SaveDeviceCommand> {
   private ApiDevice device;
@@ -59,8 +63,20 @@ public class SaveDeviceCommand extends DeviceCommand<SaveDeviceCommand> {
         return new DeviceApiResponse().setAccessDenied();
       }
 
+      if (!StringUtils.isNullOrEmpty(device.getDeviceCode()) && !device.getDeviceCode().equals(existingDevice.getDeviceCode())) {
+        return new DeviceApiResponse()
+            .setCannotModify()
+            .setMessage(Messages.DEVICE_CANNOT_MODIFY_DEVICE_CODE);
+      }
+
       existingDevice.applyUpdate(deviceUpdate);
       deviceUpdate = existingDevice;
+    } else if (!AuthenticationUtils.userIsSuper(user)) {
+      return new DeviceApiResponse().setAccessDenied();
+    }
+
+    if (Strings.isNullOrEmpty(deviceUpdate.getName())) {
+      deviceUpdate.setName("New Device");
     }
 
     if (!deviceUpdate.toApi().isValid()) {
@@ -76,7 +92,11 @@ public class SaveDeviceCommand extends DeviceCommand<SaveDeviceCommand> {
           .setMessage(Messages.DEVICE_CONFLICTING_DEVICE_CODE);
     }
 
-    deviceUpdate = getDeviceRepository().save(deviceUpdate);
+    try {
+      deviceUpdate = getDeviceRepository().save(deviceUpdate);
+    } catch (DataIntegrityViolationException exception) {
+      return new DeviceApiResponse().setBadId();
+    }
 
     return new DeviceApiResponse()
         .setSuccess()

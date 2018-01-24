@@ -11,6 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.UUID;
+
 @RestController
 @RequestMapping("/api/secure/companies")
 public class CompanyController extends BaseController {
@@ -38,6 +40,22 @@ public class CompanyController extends BaseController {
         .setStatus(HttpStatus.OK)
         .setMessage(Messages.SUCCESS)
         .setResponse(companyRepository.findAll());
+  }
+
+  @RequestMapping(value = "/byCompanyId/{companyId}")
+  public CompanyApiResponse getCompanyByCompanyId(
+      @RequestAttribute ApiUser authenticatedUser,
+      @PathVariable UUID companyId,
+      @RequestParam(defaultValue = "false") boolean filled) {
+    return new CompanyByCompanyIdCommand()
+        .setCompanyRepository(companyRepository)
+        .setLocationRepository(locationRepository)
+        .setDeviceRepository(deviceRepository)
+        .setAssetRepository(assetRepository)
+        .setUser(authenticatedUser)
+        .setCompanyId(companyId)
+        .setFilled(filled)
+        .execute();
   }
 
   @RequestMapping(value = "/byName/{name}", method = RequestMethod.GET)
@@ -92,8 +110,8 @@ public class CompanyController extends BaseController {
         .execute();
   }
 
-  @RequestMapping(value="/", method=RequestMethod.PUT)
-  public CompanyApiResponse putCompany(
+  @RequestMapping(value="/forAuthenticated", method=RequestMethod.POST)
+  public CompanyApiResponse putCompanyForAuthenticatedUser(
       @RequestAttribute ApiUser authenticatedUser,
       @RequestBody ApiCompany company) {
     return new SaveCompanyCommand()

@@ -3,6 +3,7 @@ package io.lovelacetech.server.model.api.model;
 import io.lovelacetech.server.model.Asset;
 import io.lovelacetech.server.model.api.enums.AssetStatus;
 import io.lovelacetech.server.util.UUIDUtils;
+import org.assertj.core.util.Strings;
 
 import java.util.UUID;
 
@@ -16,13 +17,13 @@ public class ApiAsset extends BaseApiModel<Asset> {
   private UUID deviceId;
 
   public ApiAsset() {
-    this.id = UUIDUtils.empty();
+    this.id = null;
     this.name = "";
     this.rfid = "";
     this.status = AssetStatus.AVAILABLE;
-    this.homeId = UUIDUtils.empty();
-    this.locationId = UUIDUtils.empty();
-    this.deviceId = UUIDUtils.empty();
+    this.homeId = null;
+    this.locationId = null;
+    this.deviceId = null;
   }
 
   public ApiAsset(Asset asset) {
@@ -101,6 +102,14 @@ public class ApiAsset extends BaseApiModel<Asset> {
   public ApiAsset setDeviceId(UUID deviceId) {
     this.deviceId = deviceId;
     return this;
+  }
+
+  @Override
+  public boolean isValid() {
+    return !Strings.isNullOrEmpty(name)
+        && !Strings.isNullOrEmpty(rfid)
+        && UUIDUtils.isValidId(homeId)
+        && status != null;
   }
 
   @Override

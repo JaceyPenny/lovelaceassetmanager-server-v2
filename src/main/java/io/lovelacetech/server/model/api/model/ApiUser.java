@@ -1,6 +1,5 @@
 package io.lovelacetech.server.model.api.model;
 
-import io.lovelacetech.server.model.Location;
 import io.lovelacetech.server.model.User;
 import io.lovelacetech.server.model.api.enums.AccessLevel;
 import io.lovelacetech.server.util.RepositoryUtils;
@@ -10,12 +9,12 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 public class ApiUser extends BaseApiModel<User> {
   private UUID id;
   private String email;
   private String username;
+  private String password;
   private AccessLevel accessLevel;
   private UUID companyId;
   private String firstName;
@@ -27,6 +26,7 @@ public class ApiUser extends BaseApiModel<User> {
     this.id = UUIDUtils.empty();
     this.email = "";
     this.username = "";
+    this.password = "";
     this.accessLevel = AccessLevel.USER;
     this.companyId = UUIDUtils.empty();
     this.firstName = "";
@@ -38,6 +38,7 @@ public class ApiUser extends BaseApiModel<User> {
     this.id = user.getId();
     this.email = user.getEmail();
     this.username = user.getUsername();
+    this.password = user.getPassword();
     this.accessLevel = user.getAccessLevel();
     this.companyId = user.getCompanyId();
     this.firstName = user.getFirstName();
@@ -139,6 +140,7 @@ public class ApiUser extends BaseApiModel<User> {
     user.setId(id);
     user.setEmail(email);
     user.setUsername(username);
+    user.setPassword(password);
     user.setAccessLevel(accessLevel);
     user.setCompanyId(companyId);
     user.setFirstName(firstName);

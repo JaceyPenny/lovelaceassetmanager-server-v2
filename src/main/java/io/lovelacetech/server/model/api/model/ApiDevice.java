@@ -2,6 +2,7 @@ package io.lovelacetech.server.model.api.model;
 
 import io.lovelacetech.server.model.Device;
 import io.lovelacetech.server.util.UUIDUtils;
+import org.assertj.core.util.Strings;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -80,6 +81,12 @@ public class ApiDevice extends BaseApiModel<Device> {
   public ApiDevice addAsset(ApiAsset asset) {
     this.assets.add(asset);
     return this;
+  }
+
+  @Override
+  public boolean isValid() {
+    return !Strings.isNullOrEmpty(name)
+        && !Strings.isNullOrEmpty(deviceCode);
   }
 
   @Override

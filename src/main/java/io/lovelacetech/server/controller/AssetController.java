@@ -1,9 +1,6 @@
 package io.lovelacetech.server.controller;
 
-import io.lovelacetech.server.command.asset.AssetByDeviceIdCommand;
-import io.lovelacetech.server.command.asset.AssetByHomeIdCommand;
-import io.lovelacetech.server.command.asset.AssetByLocationIdCommand;
-import io.lovelacetech.server.command.asset.SaveAssetCommand;
+import io.lovelacetech.server.command.asset.*;
 import io.lovelacetech.server.model.api.model.ApiAsset;
 import io.lovelacetech.server.model.api.model.ApiUser;
 import io.lovelacetech.server.model.api.response.asset.AssetApiResponse;
@@ -37,6 +34,19 @@ public class AssetController extends BaseController {
     return new AssetListApiResponse()
         .setSuccess()
         .setResponse(assetRepository.findAll());
+  }
+
+  @RequestMapping(value = "/byAssetId/{assetId}", method = RequestMethod.GET)
+  public AssetApiResponse getAssetByAssetId(
+      @RequestAttribute ApiUser authenticatedUser,
+      @PathVariable UUID assetId) {
+    return new AssetByAssetIdCommand()
+        .setLocationRepository(locationRepository)
+        .setDeviceRepository(deviceRepository)
+        .setAssetRepository(assetRepository)
+        .setUser(authenticatedUser)
+        .setAssetId(assetId)
+        .execute();
   }
 
   @RequestMapping(value = "/currentlyInDeviceId/{deviceId}", method = RequestMethod.GET)

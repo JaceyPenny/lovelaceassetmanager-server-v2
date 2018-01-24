@@ -2,9 +2,11 @@ package io.lovelacetech.server.command.location;
 
 import io.lovelacetech.server.model.api.model.ApiLocation;
 import io.lovelacetech.server.model.api.model.ApiLocationList;
+import io.lovelacetech.server.model.api.model.ApiUser;
 import io.lovelacetech.server.model.api.response.location.LocationListApiResponse;
 import io.lovelacetech.server.repository.AssetRepository;
 import io.lovelacetech.server.repository.DeviceRepository;
+import io.lovelacetech.server.util.AuthenticationUtils;
 import io.lovelacetech.server.util.LoaderUtils;
 import io.lovelacetech.server.util.RepositoryUtils;
 import io.lovelacetech.server.util.UUIDUtils;
@@ -13,11 +15,17 @@ import java.util.List;
 import java.util.UUID;
 
 public class LocationsByCompanyIdCommand extends LocationCommand<LocationsByCompanyIdCommand> {
+  private ApiUser user;
   private UUID companyId;
   private boolean filled = false;
 
   private DeviceRepository deviceRepository;
   private AssetRepository assetRepository;
+
+  public LocationsByCompanyIdCommand setUser(ApiUser user) {
+    this.user = user;
+    return this;
+  }
 
   public LocationsByCompanyIdCommand setCompanyId(UUID companyId) {
     this.companyId = companyId;
@@ -44,6 +52,7 @@ public class LocationsByCompanyIdCommand extends LocationCommand<LocationsByComp
   @Override
   public boolean checkCommand() {
     return super.checkCommand()
+        && user != null
         && UUIDUtils.isValidId(companyId)
         && (!filled || (deviceRepository != null && assetRepository != null));
   }
@@ -52,6 +61,10 @@ public class LocationsByCompanyIdCommand extends LocationCommand<LocationsByComp
   public LocationListApiResponse execute() {
     if (!checkCommand()) {
       return new LocationListApiResponse().setDefault();
+    }
+
+    if (!AuthenticationUtils.userIsSuper(user) || !UUIDUtils.idsEqual(user.getCompanyId(), companyId)) {
+      return new LocationListApiResponse().setAccessDenied();
     }
 
     List<ApiLocation> locations = RepositoryUtils.toApiList(

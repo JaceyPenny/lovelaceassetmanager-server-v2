@@ -15,7 +15,7 @@ public class ApiCompany extends BaseApiModel<Company> {
   private List<ApiLocation> locations;
 
   public ApiCompany() {
-    this.id = UUIDUtils.empty();
+    this.id = null;
     this.name = "";
     this.phoneNumber = "";
     this.locations = new ArrayList<>();

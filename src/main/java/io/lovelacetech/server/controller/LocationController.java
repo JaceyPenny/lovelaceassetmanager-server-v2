@@ -1,5 +1,6 @@
 package io.lovelacetech.server.controller;
 
+import io.lovelacetech.server.command.location.LocationByLocationIdCommand;
 import io.lovelacetech.server.command.location.LocationsByCompanyIdCommand;
 import io.lovelacetech.server.command.location.LocationsForUserCommand;
 import io.lovelacetech.server.command.location.SaveLocationCommand;
@@ -37,6 +38,21 @@ public class LocationController extends BaseController {
         .setResponse(locationRepository.findAll());
   }
 
+  @RequestMapping(value = "/byLocationId/{locationId}", method = RequestMethod.GET)
+  public LocationApiResponse getLocationByLocationId(
+      @RequestAttribute ApiUser authenticatedUser,
+      @PathVariable UUID locationId,
+      @RequestParam(defaultValue = "false") boolean filled) {
+    return new LocationByLocationIdCommand()
+        .setLocationRepository(locationRepository)
+        .setDeviceRepository(deviceRepository)
+        .setAssetRepository(assetRepository)
+        .setUser(authenticatedUser)
+        .setLocationId(locationId)
+        .setFilled(filled)
+        .execute();
+  }
+
   @RequestMapping(value = "/forAuthenticated", method = RequestMethod.GET)
   public LocationListApiResponse getLocationsForAuthenticatedUserFilled(
       @RequestAttribute ApiUser authenticatedUser,
@@ -55,11 +71,10 @@ public class LocationController extends BaseController {
       @RequestAttribute ApiUser authenticatedUser,
       @PathVariable UUID companyId,
       @RequestParam(defaultValue = "true") boolean filled) {
-    checkIsSuper(authenticatedUser);
-
     return new LocationsByCompanyIdCommand()
         .setLocationRepository(locationRepository)
         .setCompanyId(companyId)
+        .setUser(authenticatedUser)
         .setFilled(filled)
         .setAssetRepository(assetRepository)
         .setDeviceRepository(deviceRepository)

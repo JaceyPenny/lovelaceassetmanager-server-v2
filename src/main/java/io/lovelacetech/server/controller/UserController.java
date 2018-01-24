@@ -1,14 +1,12 @@
 package io.lovelacetech.server.controller;
 
+import io.lovelacetech.server.command.user.UpdateUserCommand;
 import io.lovelacetech.server.model.api.model.ApiUser;
 import io.lovelacetech.server.model.api.response.user.UserApiResponse;
 import io.lovelacetech.server.model.api.response.user.UserListApiResponse;
 import io.lovelacetech.server.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/secure/users")
@@ -31,5 +29,16 @@ public class UserController extends BaseController {
     return new UserApiResponse()
         .setSuccess()
         .setResponse(authenticatedUser);
+  }
+
+  @RequestMapping(value = "/updateProfile", method = RequestMethod.POST)
+  public UserApiResponse updateProfileForAuthenticatedUser(
+      @RequestAttribute ApiUser authenticatedUser,
+      @RequestBody ApiUser userUpdate) {
+    return new UpdateUserCommand()
+        .setUserRepository(userRepository)
+        .setActingUser(authenticatedUser)
+        .setUserUpdate(userUpdate)
+        .execute();
   }
 }

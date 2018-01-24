@@ -5,6 +5,7 @@ import io.lovelacetech.server.model.ApiModelConvertible;
 import io.lovelacetech.server.model.DatabaseModel;
 import io.lovelacetech.server.model.api.model.BaseApiModel;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -23,7 +24,7 @@ public class RepositoryUtils {
   public static <FROM, TO> List<TO> mapIterable(
       Iterable<FROM> iterable,
       Function<FROM, ? extends TO> function) {
-    return Streams.stream(iterable).map(function).collect(Collectors.toList());
+    return iterable == null ? new ArrayList<>() : Streams.stream(iterable).map(function).collect(Collectors.toList());
   }
 
   public static <T extends DatabaseModel> boolean updateConflictsWithExistingRow(

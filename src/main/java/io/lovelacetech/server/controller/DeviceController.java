@@ -1,10 +1,13 @@
 package io.lovelacetech.server.controller;
 
+import io.lovelacetech.server.command.device.ActivateDeviceCommand;
+import io.lovelacetech.server.command.device.DeviceByDeviceIdCommand;
 import io.lovelacetech.server.command.device.DeviceByLocationIdCommand;
 import io.lovelacetech.server.command.device.SaveDeviceCommand;
 import io.lovelacetech.server.model.Device;
 import io.lovelacetech.server.model.Location;
 import io.lovelacetech.server.model.api.model.ApiDevice;
+import io.lovelacetech.server.model.api.model.ApiDeviceActivation;
 import io.lovelacetech.server.model.api.model.ApiUser;
 import io.lovelacetech.server.model.api.response.device.DeviceApiResponse;
 import io.lovelacetech.server.model.api.response.device.DeviceListApiResponse;
@@ -44,8 +47,23 @@ public class DeviceController extends BaseController {
         .setResponse(deviceRepository.findAll());
   }
 
-  @RequestMapping(value = "/forLocationId/{locationId}", method = RequestMethod.GET)
-  public DeviceListApiResponse getDevicesForLocationId(
+  @RequestMapping(value = "/byDeviceId/{deviceId}", method = RequestMethod.GET)
+  public DeviceApiResponse getDeviceByDeviceId(
+      @RequestAttribute ApiUser authenticatedUser,
+      @PathVariable UUID deviceId,
+      @RequestParam(defaultValue = "false") boolean filled) {
+    return new DeviceByDeviceIdCommand()
+        .setDeviceRepository(deviceRepository)
+        .setLocationRepository(locationRepository)
+        .setAssetRepository(assetRepository)
+        .setDeviceId(deviceId)
+        .setUser(authenticatedUser)
+        .setFilled(filled)
+        .execute();
+  }
+
+  @RequestMapping(value = "/byLocationId/{locationId}", method = RequestMethod.GET)
+  public DeviceListApiResponse getDevicesByLocationId(
       @RequestAttribute ApiUser authenticatedUser,
       @PathVariable UUID locationId,
       @RequestParam(defaultValue = "true") boolean filled) {
@@ -70,6 +88,18 @@ public class DeviceController extends BaseController {
         .setLocationRepository(locationRepository)
         .setUser(authenticatedUser)
         .setDevice(device)
+        .execute();
+  }
+
+  @RequestMapping(value = "/activateDevice", method = RequestMethod.POST)
+  public DeviceApiResponse activateDeviceWithCode(
+      @RequestAttribute ApiUser authenticatedUser,
+      @RequestBody ApiDeviceActivation deviceActivation) {
+    return new ActivateDeviceCommand()
+        .setDeviceRepository(deviceRepository)
+        .setLocationRepository(locationRepository)
+        .setUser(authenticatedUser)
+        .setDeviceActivation(deviceActivation)
         .execute();
   }
 }

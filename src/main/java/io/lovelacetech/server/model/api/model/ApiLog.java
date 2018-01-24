@@ -15,10 +15,10 @@ public class ApiLog extends BaseApiModel<Log> {
   private LocalDateTime timestamp;
 
   public ApiLog() {
-    id = UUIDUtils.empty();
-    assetId = UUIDUtils.empty();
-    fromId = UUIDUtils.empty();
-    toId = UUIDUtils.empty();
+    id = null;
+    assetId = null;
+    fromId = null;
+    toId = null;
     timestamp = LocalDateTime.now();
   }
 

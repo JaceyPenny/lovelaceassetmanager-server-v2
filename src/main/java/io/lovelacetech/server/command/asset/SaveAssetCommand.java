@@ -2,6 +2,7 @@ package io.lovelacetech.server.command.asset;
 
 import com.google.common.base.Strings;
 import io.lovelacetech.server.model.Asset;
+import io.lovelacetech.server.model.api.enums.AssetStatus;
 import io.lovelacetech.server.model.api.model.ApiAsset;
 import io.lovelacetech.server.model.api.model.ApiUser;
 import io.lovelacetech.server.model.api.response.asset.AssetApiResponse;
@@ -10,6 +11,10 @@ import io.lovelacetech.server.repository.LocationRepository;
 import io.lovelacetech.server.util.AccessUtils;
 import io.lovelacetech.server.util.Messages;
 import io.lovelacetech.server.util.RepositoryUtils;
+import org.h2.util.StringUtils;
+import org.hibernate.exception.ConstraintViolationException;
+import org.postgresql.util.PSQLException;
+import org.springframework.dao.DataIntegrityViolationException;
 
 public class SaveAssetCommand extends AssetCommand<SaveAssetCommand> {
   private ApiAsset asset;
@@ -79,6 +84,14 @@ public class SaveAssetCommand extends AssetCommand<SaveAssetCommand> {
       assetUpdate = existingAsset;
     }
 
+    if (Strings.isNullOrEmpty(assetUpdate.getName())) {
+      assetUpdate.setName("{NEW ASSET}");
+    }
+
+    if (assetUpdate.getStatus() == null) {
+      assetUpdate.setStatus(AssetStatus.AVAILABLE);
+    }
+
     if (!assetUpdate.toApi().isValid()) {
       return new AssetApiResponse().setInvalidBody();
     }
@@ -91,7 +104,11 @@ public class SaveAssetCommand extends AssetCommand<SaveAssetCommand> {
           .setMessage(Messages.ASSET_CONFLICTING_RFID);
     }
 
-    assetUpdate = getAssetRepository().save(assetUpdate);
+    try {
+      assetUpdate = getAssetRepository().save(assetUpdate);
+    } catch (DataIntegrityViolationException constraintViolationException) {
+      return new AssetApiResponse().setBadId();
+    }
 
     return new AssetApiResponse()
         .setSuccess()

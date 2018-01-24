@@ -1,7 +1,6 @@
 package io.lovelacetech.server.command.company;
 
 import io.lovelacetech.server.model.Company;
-import io.lovelacetech.server.model.User;
 import io.lovelacetech.server.model.api.enums.AccessLevel;
 import io.lovelacetech.server.model.api.model.ApiCompany;
 import io.lovelacetech.server.model.api.model.ApiUser;
@@ -10,7 +9,6 @@ import io.lovelacetech.server.repository.UserRepository;
 import io.lovelacetech.server.util.Messages;
 import io.lovelacetech.server.util.RepositoryUtils;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.access.method.P;
 
 public class SaveCompanyCommand extends CompanyCommand<SaveCompanyCommand> {
   private ApiCompany company;
@@ -80,8 +78,7 @@ public class SaveCompanyCommand extends CompanyCommand<SaveCompanyCommand> {
       user.setCompanyId(companyUpdate.getId());
       user.setAccessLevel(AccessLevel.ADMIN);
 
-      User result = userRepository.save(user.toDatabase());
-      System.out.println(result.toApi());
+      userRepository.save(user.toDatabase());
     }
 
     return new CompanyApiResponse()

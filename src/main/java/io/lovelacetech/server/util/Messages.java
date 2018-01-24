@@ -40,16 +40,23 @@ public class Messages {
    */
   public static final String NO_LOCATIONS_FOUND = "no locations found";
   public static final String LOCATION_CONFLICTING_NAME = "another location at this company already has this name";
+  public static final String NO_LOCATION_FOUND_WITH_ID = "no location was found with this id";
+  public static final String LOCATION_BAD_ID = "companyId does not reference a company";
 
   /*
    * Device response messages
    */
   public static final String DEVICE_CONFLICTING_DEVICE_CODE = "another device already has this device code";
+  public static final String DEVICE_ALREADY_ACTIVATED = "this device has already been activated";
+  public static final String DEVICE_NO_DEVICE_CODE = "no device was found with this device code";
+  public static final String DEVICE_CANNOT_MODIFY_DEVICE_CODE = "device codes cannot be updated";
+  public static final String DEVICE_BAD_ID = "locationId does not reference a location";
 
   /*
    * Asset response messages
    */
   public static final String ASSET_CONFLICTING_RFID = "another asset already has this RFID tag";
+  public static final String ASSET_BAD_ID = "one or more of the IDs you've specified do not reference proper locations or devices. check your input";
 
   /*
    * Authentication messages

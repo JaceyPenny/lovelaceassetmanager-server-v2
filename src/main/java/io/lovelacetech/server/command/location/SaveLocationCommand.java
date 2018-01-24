@@ -4,9 +4,11 @@ import io.lovelacetech.server.model.Location;
 import io.lovelacetech.server.model.api.model.ApiLocation;
 import io.lovelacetech.server.model.api.model.ApiUser;
 import io.lovelacetech.server.model.api.response.location.LocationApiResponse;
-import io.lovelacetech.server.util.*;
-import org.springframework.http.HttpStatus;
-import org.springframework.security.access.AccessDeniedException;
+import io.lovelacetech.server.util.AccessUtils;
+import io.lovelacetech.server.util.Messages;
+import io.lovelacetech.server.util.RepositoryUtils;
+import io.lovelacetech.server.util.UUIDUtils;
+import org.springframework.dao.DataIntegrityViolationException;
 
 public class SaveLocationCommand extends LocationCommand<SaveLocationCommand> {
   private ApiLocation location;
@@ -79,7 +81,11 @@ public class SaveLocationCommand extends LocationCommand<SaveLocationCommand> {
     }
 
     // Save the location
-    locationUpdate = getLocationRepository().save(locationUpdate);
+    try {
+      locationUpdate = getLocationRepository().save(locationUpdate);
+    } catch (DataIntegrityViolationException exception) {
+      return new LocationApiResponse().setBadId();
+    }
 
     return new LocationApiResponse()
         .setSuccess()
