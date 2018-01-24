@@ -6,8 +6,10 @@ import io.lovelacetech.server.model.api.model.ApiCompany;
 import io.lovelacetech.server.model.api.model.ApiUser;
 import io.lovelacetech.server.model.api.response.company.CompanyApiResponse;
 import io.lovelacetech.server.repository.UserRepository;
+import io.lovelacetech.server.util.AuthenticationUtils;
 import io.lovelacetech.server.util.Messages;
 import io.lovelacetech.server.util.RepositoryUtils;
+import io.lovelacetech.server.util.UUIDUtils;
 import org.springframework.http.HttpStatus;
 
 public class SaveCompanyCommand extends CompanyCommand<SaveCompanyCommand> {
@@ -55,10 +57,15 @@ public class SaveCompanyCommand extends CompanyCommand<SaveCompanyCommand> {
 
       if (existingCompany == null) {
         return new CompanyApiResponse().setNotFound();
-      } else {
-        existingCompany.applyUpdate(companyUpdate);
-        companyUpdate = existingCompany;
       }
+
+      if (!AuthenticationUtils.userIsAtLeast(user, AccessLevel.ADMIN)
+          && !UUIDUtils.idsEqual(existingCompany.getId(), user.getCompanyId())) {
+        return new CompanyApiResponse().setAccessDenied();
+      }
+
+      existingCompany.applyUpdate(companyUpdate);
+      companyUpdate = existingCompany;
     } else {
       isNewCompany = true;
     }

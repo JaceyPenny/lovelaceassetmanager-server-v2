@@ -23,6 +23,23 @@ public class AuthenticationController {
   @Autowired
   UserRepository userRepository;
 
+  /**
+   * <b>  POST /api/authenticate/login  </b>
+   * <br><br>
+   * Authenticates a user by usernameOrEmail and password.
+   * <br><br>
+   * <b>  RESULT:  </b><br>
+   * {@code
+   * {
+   *   "status": 200,
+   *   "message": "success",
+   *   "response": {
+   *     "user": User,
+   *     "token": JWT
+   *   }
+   * }
+   * }
+   */
   @RequestMapping(value = "/login", method = RequestMethod.POST)
   public AuthenticationApiResponse login(@RequestBody ApiAuthentication login)
       throws ServletException {
