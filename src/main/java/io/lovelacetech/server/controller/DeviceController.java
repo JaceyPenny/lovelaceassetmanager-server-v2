@@ -1,5 +1,6 @@
 package io.lovelacetech.server.controller;
 
+import io.lovelacetech.server.LovelaceAssetManagerServerApplication;
 import io.lovelacetech.server.command.device.ActivateDeviceCommand;
 import io.lovelacetech.server.command.device.DeviceByDeviceIdCommand;
 import io.lovelacetech.server.command.device.DeviceByLocationIdCommand;
@@ -26,6 +27,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.UUID;
 
 @RestController
+@CrossOrigin(LovelaceAssetManagerServerApplication.ORIGIN_URL)
 @RequestMapping(value = "/api/secure/devices")
 public class DeviceController extends BaseController {
 

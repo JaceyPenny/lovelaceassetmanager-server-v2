@@ -1,5 +1,6 @@
 package io.lovelacetech.server.controller;
 
+import io.lovelacetech.server.LovelaceAssetManagerServerApplication;
 import io.lovelacetech.server.command.location.LocationByLocationIdCommand;
 import io.lovelacetech.server.command.location.LocationsByCompanyIdCommand;
 import io.lovelacetech.server.command.location.LocationsForUserCommand;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.UUID;
 
 @RestController
+@CrossOrigin(LovelaceAssetManagerServerApplication.ORIGIN_URL)
 @RequestMapping("/api/secure/locations")
 public class LocationController extends BaseController {
 

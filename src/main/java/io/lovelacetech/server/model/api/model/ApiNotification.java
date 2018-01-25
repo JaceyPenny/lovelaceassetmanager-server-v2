@@ -115,6 +115,14 @@ public class ApiNotification extends BaseApiModel<Notification> {
   }
 
   @Override
+  public boolean isValid() {
+    return UUIDUtils.isValidId(id)
+        && UUIDUtils.isValidId(userId)
+        && time != null
+        && notificationType != null;
+  }
+
+  @Override
   public Notification toDatabase() {
     Notification notification = new Notification();
 

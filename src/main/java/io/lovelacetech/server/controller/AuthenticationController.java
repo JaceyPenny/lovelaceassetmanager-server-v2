@@ -1,5 +1,6 @@
 package io.lovelacetech.server.controller;
 
+import io.lovelacetech.server.LovelaceAssetManagerServerApplication;
 import io.lovelacetech.server.model.User;
 import io.lovelacetech.server.model.api.model.ApiAuthentication;
 import io.lovelacetech.server.model.api.model.ApiAuthenticationResult;
@@ -9,14 +10,12 @@ import io.lovelacetech.server.repository.UserRepository;
 import io.lovelacetech.server.util.AuthenticationUtils;
 import io.lovelacetech.server.util.Messages;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.ServletException;
 
 @RestController
+@CrossOrigin(LovelaceAssetManagerServerApplication.ORIGIN_URL)
 @RequestMapping("/api/authenticate")
 public class AuthenticationController {
 

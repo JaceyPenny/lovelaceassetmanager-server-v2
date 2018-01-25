@@ -1,5 +1,6 @@
 package io.lovelacetech.server.controller;
 
+import io.lovelacetech.server.LovelaceAssetManagerServerApplication;
 import io.lovelacetech.server.command.user.UpdateUserCommand;
 import io.lovelacetech.server.model.api.model.ApiUser;
 import io.lovelacetech.server.model.api.response.user.UserApiResponse;
@@ -9,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
+@CrossOrigin(LovelaceAssetManagerServerApplication.ORIGIN_URL)
 @RequestMapping("/api/secure/users")
 public class UserController extends BaseController {
   @Autowired

@@ -1,16 +1,18 @@
 package io.lovelacetech.server.controller;
 
+import io.lovelacetech.server.LovelaceAssetManagerServerApplication;
 import io.lovelacetech.server.command.notification.NotificationsForUserCommand;
+import io.lovelacetech.server.command.notification.SaveNotificationCommand;
+import io.lovelacetech.server.model.api.model.ApiNotification;
 import io.lovelacetech.server.model.api.model.ApiUser;
+import io.lovelacetech.server.model.api.response.notification.NotificationApiResponse;
 import io.lovelacetech.server.model.api.response.notification.NotificationListApiResponse;
 import io.lovelacetech.server.repository.NotificationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
+@CrossOrigin(LovelaceAssetManagerServerApplication.ORIGIN_URL)
 @RequestMapping(value = "/api/secure/notifications")
 public class NotificationController extends BaseController {
 
@@ -31,6 +33,17 @@ public class NotificationController extends BaseController {
       @RequestAttribute ApiUser authenticatedUser) {
     return new NotificationsForUserCommand()
         .setNotificationRepository(notificationRepository)
+        .setUser(authenticatedUser)
+        .execute();
+  }
+
+  @RequestMapping(value = "/forAuthenticated", method = RequestMethod.POST)
+  public NotificationApiResponse putNotificationForAuthenticated(
+      @RequestAttribute ApiUser authenticatedUser,
+      @RequestBody ApiNotification notification) {
+    return new SaveNotificationCommand()
+        .setNotificationRepository(notificationRepository)
+        .setNotification(notification)
         .setUser(authenticatedUser)
         .execute();
   }
