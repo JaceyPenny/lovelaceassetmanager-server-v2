@@ -1,10 +1,8 @@
 package io.lovelacetech.server.util;
 
 import com.google.common.base.Functions;
-import io.lovelacetech.server.model.api.model.ApiAsset;
-import io.lovelacetech.server.model.api.model.ApiCompany;
-import io.lovelacetech.server.model.api.model.ApiDevice;
-import io.lovelacetech.server.model.api.model.ApiLocation;
+import io.lovelacetech.server.model.api.enums.AccessLevel;
+import io.lovelacetech.server.model.api.model.*;
 import io.lovelacetech.server.repository.AssetRepository;
 import io.lovelacetech.server.repository.DeviceRepository;
 import io.lovelacetech.server.repository.LocationRepository;
@@ -153,5 +151,16 @@ public class LoaderUtils {
         locationRepository.findAllByCompanyId(company.getId()));
     populateLocations(locations, deviceRepository, assetRepository);
     company.setLocations(locations);
+  }
+
+  public static List<ApiLocation> getLocationsForUser(
+      ApiUser user,
+      LocationRepository locationRepository) {
+    if (AuthenticationUtils.userIsAtLeast(user, AccessLevel.ADMIN)) {
+      return RepositoryUtils.toApiList(
+          locationRepository.findAllByCompanyId(user.getCompanyId()));
+    }
+
+    return user.getLocations();
   }
 }

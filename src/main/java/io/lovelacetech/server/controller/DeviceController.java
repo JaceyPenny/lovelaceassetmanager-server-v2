@@ -46,6 +46,8 @@ public class DeviceController extends BaseController {
       @RequestAttribute ApiUser authenticatedUser,
       @PathVariable UUID deviceId,
       @RequestParam(defaultValue = "false") boolean filled) {
+    checkBelongsToCompany(authenticatedUser);
+
     return new DeviceByDeviceIdCommand()
         .setDeviceRepository(deviceRepository)
         .setLocationRepository(locationRepository)
@@ -61,15 +63,15 @@ public class DeviceController extends BaseController {
       @RequestAttribute ApiUser authenticatedUser,
       @PathVariable UUID locationId,
       @RequestParam(defaultValue = "true") boolean filled) {
-    if (!AccessUtils.userCanAccessLocation(authenticatedUser, locationId, locationRepository)) {
-      return new DeviceListApiResponse().setAccessDenied();
-    }
+    checkBelongsToCompany(authenticatedUser);
 
     return new DeviceByLocationIdCommand()
         .setDeviceRepository(deviceRepository)
         .setLocationId(locationId)
+        .setUser(authenticatedUser)
         .setFilled(filled)
         .setAssetRepository(assetRepository)
+        .setLocationRepository(locationRepository)
         .execute();
   }
 
@@ -77,6 +79,8 @@ public class DeviceController extends BaseController {
   public DeviceApiResponse putDeviceForAuthenticated(
       @RequestAttribute ApiUser authenticatedUser,
       @RequestBody ApiDevice device) {
+    checkBelongsToCompany(authenticatedUser);
+
     return new SaveDeviceCommand()
         .setDeviceRepository(deviceRepository)
         .setLocationRepository(locationRepository)
@@ -89,6 +93,8 @@ public class DeviceController extends BaseController {
   public DeviceApiResponse activateDeviceWithCode(
       @RequestAttribute ApiUser authenticatedUser,
       @RequestBody ApiDeviceActivation deviceActivation) {
+    checkBelongsToCompany(authenticatedUser);
+
     return new ActivateDeviceCommand()
         .setDeviceRepository(deviceRepository)
         .setLocationRepository(locationRepository)

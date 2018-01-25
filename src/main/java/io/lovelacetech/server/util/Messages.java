@@ -10,6 +10,7 @@ public class Messages {
   public static final String INVALID_BODY = "invalid body. please fill in all required fields";
   public static final String CONFLICT = "there was a conflict with another record in the database";
   public static final String CANNOT_MODIFY = "you have attempted to modify a non-modifiable field";
+  public static final String USER_DOES_NOT_BELONG_TO_COMPANY = "the calling user does not belong to a company";
 
   /*
    * Company response messages

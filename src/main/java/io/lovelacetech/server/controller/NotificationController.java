@@ -30,6 +30,8 @@ public class NotificationController extends BaseController {
   @RequestMapping(value = "/forAuthenticated", method = RequestMethod.GET)
   public NotificationListApiResponse getNotificationsForAuthenticated(
       @RequestAttribute ApiUser authenticatedUser) {
+    checkBelongsToCompany(authenticatedUser);
+
     return new NotificationsForUserCommand()
         .setNotificationRepository(notificationRepository)
         .setUser(authenticatedUser)
@@ -40,6 +42,8 @@ public class NotificationController extends BaseController {
   public NotificationApiResponse putNotificationForAuthenticated(
       @RequestAttribute ApiUser authenticatedUser,
       @RequestBody ApiNotification notification) {
+    checkBelongsToCompany(authenticatedUser);
+
     return new SaveNotificationCommand()
         .setNotificationRepository(notificationRepository)
         .setNotification(notification)

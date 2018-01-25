@@ -79,6 +79,8 @@ public class AssetController extends BaseController {
   public AssetApiResponse getAssetByAssetId(
       @RequestAttribute ApiUser authenticatedUser,
       @PathVariable UUID assetId) {
+    checkBelongsToCompany(authenticatedUser);
+
     return new AssetByAssetIdCommand()
         .setLocationRepository(locationRepository)
         .setDeviceRepository(deviceRepository)
@@ -112,13 +114,13 @@ public class AssetController extends BaseController {
   public AssetListApiResponse getAssetsInDeviceByDeviceId(
       @RequestAttribute ApiUser authenticatedUser,
       @PathVariable UUID deviceId) {
-    if (!AccessUtils.userCanAccessDevice(
-        authenticatedUser, deviceId, deviceRepository, locationRepository)) {
-      return new AssetListApiResponse().setAccessDenied();
-    }
+    checkBelongsToCompany(authenticatedUser);
 
     return new AssetByDeviceIdCommand()
         .setAssetRepository(assetRepository)
+        .setDeviceRepository(deviceRepository)
+        .setLocationRepository(locationRepository)
+        .setUser(authenticatedUser)
         .setDeviceId(deviceId)
         .execute();
   }
@@ -147,12 +149,12 @@ public class AssetController extends BaseController {
   public AssetListApiResponse getAssetsInLocationByLocationId(
       @RequestAttribute ApiUser authenticatedUser,
       @PathVariable UUID locationId) {
-    if (!AccessUtils.userCanAccessLocation(authenticatedUser, locationId, locationRepository)) {
-      return new AssetListApiResponse().setAccessDenied();
-    }
+    checkBelongsToCompany(authenticatedUser);
 
     return new AssetByLocationIdCommand()
         .setAssetRepository(assetRepository)
+        .setLocationRepository(locationRepository)
+        .setUser(authenticatedUser)
         .setLocationId(locationId)
         .execute();
   }
@@ -182,13 +184,13 @@ public class AssetController extends BaseController {
   public AssetListApiResponse getAssetsBelongingToDeviceId(
       @RequestAttribute ApiUser authenticatedUser,
       @PathVariable UUID deviceId) {
-    if (!AccessUtils.userCanAccessDevice(
-        authenticatedUser, deviceId, deviceRepository, locationRepository)) {
-      return new AssetListApiResponse().setAccessDenied();
-    }
+    checkBelongsToCompany(authenticatedUser);
 
     return new AssetByHomeIdCommand()
         .setAssetRepository(assetRepository)
+        .setDeviceRepository(deviceRepository)
+        .setLocationRepository(locationRepository)
+        .setUser(authenticatedUser)
         .setHomeId(deviceId)
         .execute();
   }
@@ -241,6 +243,8 @@ public class AssetController extends BaseController {
   public AssetApiResponse putAssetForAuthenticated(
       @RequestAttribute ApiUser authenticatedUser,
       @RequestBody ApiAsset asset) {
+    checkBelongsToCompany(authenticatedUser);
+
     return new SaveAssetCommand()
         .setAssetRepository(assetRepository)
         .setDeviceRepository(deviceRepository)

@@ -1,12 +1,15 @@
 package io.lovelacetech.server.command.company;
 
 import io.lovelacetech.server.model.api.model.ApiCompany;
+import io.lovelacetech.server.model.api.model.ApiLocation;
 import io.lovelacetech.server.model.api.model.ApiUser;
 import io.lovelacetech.server.model.api.response.company.CompanyApiResponse;
 import io.lovelacetech.server.repository.AssetRepository;
 import io.lovelacetech.server.repository.DeviceRepository;
 import io.lovelacetech.server.repository.LocationRepository;
 import io.lovelacetech.server.util.LoaderUtils;
+
+import java.util.List;
 
 public class CompaniesForUserCommand extends CompanyCommand<CompaniesForUserCommand> {
   private ApiUser user;
@@ -61,7 +64,9 @@ public class CompaniesForUserCommand extends CompanyCommand<CompaniesForUserComm
     ApiCompany company = getCompanyRepository().findOne(user.getCompanyId()).toApi();
 
     if (filled) {
-      LoaderUtils.populateCompany(company, locationRepository, deviceRepository, assetRepository);
+      List<ApiLocation> locations = LoaderUtils.getLocationsForUser(user, locationRepository);
+      LoaderUtils.populateLocations(locations, deviceRepository, assetRepository);
+      company.setLocations(locations);
     }
 
     return new CompanyApiResponse()

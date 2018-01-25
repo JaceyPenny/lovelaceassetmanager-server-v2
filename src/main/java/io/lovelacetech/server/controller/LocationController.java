@@ -44,6 +44,8 @@ public class LocationController extends BaseController {
       @RequestAttribute ApiUser authenticatedUser,
       @PathVariable UUID locationId,
       @RequestParam(defaultValue = "false") boolean filled) {
+    checkBelongsToCompany(authenticatedUser);
+
     return new LocationByLocationIdCommand()
         .setLocationRepository(locationRepository)
         .setDeviceRepository(deviceRepository)
@@ -58,6 +60,8 @@ public class LocationController extends BaseController {
   public LocationListApiResponse getLocationsForAuthenticatedUserFilled(
       @RequestAttribute ApiUser authenticatedUser,
       @RequestParam(defaultValue = "true") boolean filled) {
+    checkBelongsToCompany(authenticatedUser);
+
     return new LocationsForUserCommand()
         .setLocationRepository(locationRepository)
         .setUser(authenticatedUser)
@@ -72,6 +76,8 @@ public class LocationController extends BaseController {
       @RequestAttribute ApiUser authenticatedUser,
       @PathVariable UUID companyId,
       @RequestParam(defaultValue = "true") boolean filled) {
+    checkIsSuper(authenticatedUser);
+
     return new LocationsByCompanyIdCommand()
         .setLocationRepository(locationRepository)
         .setCompanyId(companyId)
@@ -86,6 +92,8 @@ public class LocationController extends BaseController {
   public LocationApiResponse putLocationForAuthenticatedAdmin(
       @RequestAttribute ApiUser authenticatedUser,
       @RequestBody ApiLocation location) {
+    checkBelongsToCompany(authenticatedUser);
+
     return new SaveLocationCommand()
         .setLocationRepository(locationRepository)
         .setLocation(location)

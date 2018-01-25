@@ -209,6 +209,8 @@ public class CompanyController extends BaseController {
   public CompanyApiResponse getCompanyForAuthenticatedUserFilled(
       @RequestAttribute ApiUser authenticatedUser,
       @RequestParam(defaultValue = "true") boolean filled) {
+    checkBelongsToCompany(authenticatedUser);
+
     return new CompaniesForUserCommand()
         .setCompanyRepository(companyRepository)
         .setUser(authenticatedUser)

@@ -1,9 +1,11 @@
 package io.lovelacetech.server.command.location;
 
+import io.lovelacetech.server.model.Location;
 import io.lovelacetech.server.model.api.enums.AccessLevel;
 import io.lovelacetech.server.model.api.model.ApiLocation;
 import io.lovelacetech.server.model.api.model.ApiLocationList;
 import io.lovelacetech.server.model.api.model.ApiUser;
+import io.lovelacetech.server.model.api.response.authentication.AuthenticationApiResponse;
 import io.lovelacetech.server.model.api.response.location.LocationListApiResponse;
 import io.lovelacetech.server.repository.AssetRepository;
 import io.lovelacetech.server.repository.DeviceRepository;
@@ -56,15 +58,7 @@ public class LocationsForUserCommand extends LocationCommand<LocationsForUserCom
       return new LocationListApiResponse().setDefault();
     }
 
-    List<ApiLocation> locations;
-
-    if (AuthenticationUtils.userIsAtLeast(user, AccessLevel.ADMIN)) {
-      locations = RepositoryUtils.toApiList(
-          getLocationRepository().findAllByCompanyId(user.getCompanyId()));
-    } else {
-      locations = new ArrayList<>();
-//      locations = RepositoryUtils.toApiList(getLocationRepository().findAllByIdIn(locationIds));
-    }
+    List<ApiLocation> locations = LoaderUtils.getLocationsForUser(user, getLocationRepository());
 
     if (filled) {
       LoaderUtils.populateLocations(locations, deviceRepository, assetRepository);
@@ -72,6 +66,6 @@ public class LocationsForUserCommand extends LocationCommand<LocationsForUserCom
 
     return new LocationListApiResponse()
         .setSuccess()
-        .setResponse(new ApiLocationList().setLocations(locations));
+        .setResponse(new ApiLocationList(locations));
   }
 }
