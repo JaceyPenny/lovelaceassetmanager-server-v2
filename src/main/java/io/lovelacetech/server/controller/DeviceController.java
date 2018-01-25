@@ -1,12 +1,9 @@
 package io.lovelacetech.server.controller;
 
-import io.lovelacetech.server.LovelaceAssetManagerServerApplication;
 import io.lovelacetech.server.command.device.ActivateDeviceCommand;
 import io.lovelacetech.server.command.device.DeviceByDeviceIdCommand;
 import io.lovelacetech.server.command.device.DeviceByLocationIdCommand;
 import io.lovelacetech.server.command.device.SaveDeviceCommand;
-import io.lovelacetech.server.model.Device;
-import io.lovelacetech.server.model.Location;
 import io.lovelacetech.server.model.api.model.ApiDevice;
 import io.lovelacetech.server.model.api.model.ApiDeviceActivation;
 import io.lovelacetech.server.model.api.model.ApiUser;
@@ -16,18 +13,13 @@ import io.lovelacetech.server.repository.AssetRepository;
 import io.lovelacetech.server.repository.DeviceRepository;
 import io.lovelacetech.server.repository.LocationRepository;
 import io.lovelacetech.server.util.AccessUtils;
-import io.lovelacetech.server.util.AuthenticationUtils;
-import io.lovelacetech.server.util.Messages;
-import io.lovelacetech.server.util.UUIDUtils;
-import javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
 
 @RestController
-@CrossOrigin(LovelaceAssetManagerServerApplication.ORIGIN_URL)
+@CrossOrigin
 @RequestMapping(value = "/api/secure/devices")
 public class DeviceController extends BaseController {
 

@@ -1,6 +1,5 @@
 package io.lovelacetech.server.controller;
 
-import io.lovelacetech.server.LovelaceAssetManagerServerApplication;
 import io.lovelacetech.server.command.asset.*;
 import io.lovelacetech.server.model.api.model.ApiAsset;
 import io.lovelacetech.server.model.api.model.ApiUser;
@@ -16,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.UUID;
 
 @RestController
-@CrossOrigin(LovelaceAssetManagerServerApplication.ORIGIN_URL)
+@CrossOrigin
 @RequestMapping(value = "/api/secure/assets")
 public class AssetController extends BaseController {
 

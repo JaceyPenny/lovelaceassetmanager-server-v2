@@ -1,6 +1,5 @@
 package io.lovelacetech.server.controller;
 
-import io.lovelacetech.server.LovelaceAssetManagerServerApplication;
 import io.lovelacetech.server.command.notification.NotificationsForUserCommand;
 import io.lovelacetech.server.command.notification.SaveNotificationCommand;
 import io.lovelacetech.server.model.api.model.ApiNotification;
@@ -12,7 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@CrossOrigin(LovelaceAssetManagerServerApplication.ORIGIN_URL)
+@CrossOrigin
 @RequestMapping(value = "/api/secure/notifications")
 public class NotificationController extends BaseController {
 

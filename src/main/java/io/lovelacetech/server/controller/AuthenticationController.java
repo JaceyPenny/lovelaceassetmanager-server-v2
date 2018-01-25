@@ -1,6 +1,5 @@
 package io.lovelacetech.server.controller;
 
-import io.lovelacetech.server.LovelaceAssetManagerServerApplication;
 import io.lovelacetech.server.model.User;
 import io.lovelacetech.server.model.api.model.ApiAuthentication;
 import io.lovelacetech.server.model.api.model.ApiAuthenticationResult;
@@ -15,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.ServletException;
 
 @RestController
-@CrossOrigin(LovelaceAssetManagerServerApplication.ORIGIN_URL)
+@CrossOrigin
 @RequestMapping("/api/authenticate")
 public class AuthenticationController {
 

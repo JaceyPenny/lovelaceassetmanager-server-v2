@@ -1,6 +1,5 @@
 package io.lovelacetech.server.controller;
 
-import io.lovelacetech.server.LovelaceAssetManagerServerApplication;
 import io.lovelacetech.server.model.User;
 import io.lovelacetech.server.model.api.model.ApiAuthenticationResult;
 import io.lovelacetech.server.model.api.model.ApiRegistration;
@@ -16,7 +15,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@CrossOrigin(LovelaceAssetManagerServerApplication.ORIGIN_URL)
+@CrossOrigin
 @RequestMapping("/api/registration")
 public class RegistrationController {
 
