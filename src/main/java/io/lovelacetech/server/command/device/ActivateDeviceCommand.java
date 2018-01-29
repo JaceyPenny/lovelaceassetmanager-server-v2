@@ -10,6 +10,7 @@ import io.lovelacetech.server.repository.LocationRepository;
 import io.lovelacetech.server.util.AuthenticationUtils;
 import io.lovelacetech.server.util.Messages;
 import io.lovelacetech.server.util.UUIDUtils;
+import org.assertj.core.util.Strings;
 
 import java.util.UUID;
 
@@ -78,6 +79,12 @@ public class ActivateDeviceCommand extends DeviceCommand<ActivateDeviceCommand> 
     if (!AuthenticationUtils.userIsAtLeast(user, AccessLevel.ADMIN)) {
       return new DeviceApiResponse()
           .setAccessDenied();
+    }
+
+    if (!Strings.isNullOrEmpty(deviceActivation.getName())) {
+      existingDeviceWithCode.setName(deviceActivation.getName());
+    } else {
+      existingDeviceWithCode.setName("Device " + deviceActivation.getDeviceCode());
     }
 
     existingDeviceWithCode.setLocationId(locationId);
