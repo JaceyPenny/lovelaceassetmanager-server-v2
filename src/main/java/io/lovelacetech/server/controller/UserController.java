@@ -1,6 +1,8 @@
 package io.lovelacetech.server.controller;
 
 import io.lovelacetech.server.command.user.UpdateUserCommand;
+import io.lovelacetech.server.command.user.UsersForAdminCommand;
+import io.lovelacetech.server.model.api.enums.AccessLevel;
 import io.lovelacetech.server.model.api.model.ApiUser;
 import io.lovelacetech.server.model.api.response.user.UserApiResponse;
 import io.lovelacetech.server.model.api.response.user.UserListApiResponse;
@@ -40,6 +42,16 @@ public class UserController extends BaseController {
         .setUserRepository(userRepository)
         .setActingUser(authenticatedUser)
         .setUserUpdate(userUpdate)
+        .execute();
+  }
+
+  @RequestMapping(value = "/forAdmin", method = RequestMethod.GET)
+  public UserListApiResponse getUsersForAdmin(@RequestAttribute ApiUser authenticatedUser) {
+    checkAccess(authenticatedUser, AccessLevel.ADMIN);
+
+    return new UsersForAdminCommand()
+        .setUserRepository(userRepository)
+        .setUser(authenticatedUser)
         .execute();
   }
 }
