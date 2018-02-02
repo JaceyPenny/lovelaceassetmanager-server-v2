@@ -13,10 +13,5 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     http.authorizeRequests()
         .antMatchers("^(?!/api/secure/).*$")
         .permitAll();
-
-    http.headers()
-        .httpStrictTransportSecurity()
-            .includeSubDomains(true)
-            .maxAgeInSeconds(31526000);
   }
 }
