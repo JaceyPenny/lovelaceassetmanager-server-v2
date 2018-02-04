@@ -4,6 +4,7 @@ import io.lovelacetech.server.command.device.ActivateDeviceCommand;
 import io.lovelacetech.server.command.device.DeviceByDeviceIdCommand;
 import io.lovelacetech.server.command.device.DeviceByLocationIdCommand;
 import io.lovelacetech.server.command.device.SaveDeviceCommand;
+import io.lovelacetech.server.model.Device;
 import io.lovelacetech.server.model.api.model.ApiDevice;
 import io.lovelacetech.server.model.api.model.ApiDeviceActivation;
 import io.lovelacetech.server.model.api.model.ApiUser;
@@ -23,14 +24,19 @@ import java.util.UUID;
 @RequestMapping(value = "/api/secure/devices")
 public class DeviceController extends BaseController {
 
-  @Autowired
-  AssetRepository assetRepository;
+  private final AssetRepository assetRepository;
+  private final DeviceRepository deviceRepository;
+  private final LocationRepository locationRepository;
 
   @Autowired
-  DeviceRepository deviceRepository;
-
-  @Autowired
-  LocationRepository locationRepository;
+  DeviceController(
+      AssetRepository assetRepository,
+      DeviceRepository deviceRepository,
+      LocationRepository locationRepository) {
+    this.assetRepository = assetRepository;
+    this.deviceRepository = deviceRepository;
+    this.locationRepository = locationRepository;
+  }
 
   @RequestMapping(value = "/", method = RequestMethod.GET)
   public DeviceListApiResponse getDevices(@RequestAttribute ApiUser authenticatedUser) {

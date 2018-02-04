@@ -5,6 +5,7 @@ import io.lovelacetech.server.model.api.enums.AssetStatus;
 import io.lovelacetech.server.util.UUIDUtils;
 import org.assertj.core.util.Strings;
 
+import java.beans.Transient;
 import java.util.UUID;
 
 public class ApiAsset extends BaseApiModel<Asset> {
@@ -15,6 +16,7 @@ public class ApiAsset extends BaseApiModel<Asset> {
   private UUID homeId;
   private UUID locationId;
   private UUID deviceId;
+  private ApiAssetType assetType;
 
   public ApiAsset() {
     this.id = null;
@@ -24,6 +26,7 @@ public class ApiAsset extends BaseApiModel<Asset> {
     this.homeId = null;
     this.locationId = null;
     this.deviceId = null;
+    this.assetType = new ApiAssetType();
   }
 
   public ApiAsset(Asset asset) {
@@ -34,6 +37,7 @@ public class ApiAsset extends BaseApiModel<Asset> {
     this.homeId=  asset.getHomeId();
     this.locationId = asset.getLocationId();
     this.deviceId = asset.getDeviceId();
+    this.assetType = new ApiAssetType(asset.getAssetType());
   }
 
   public UUID getId() {
@@ -104,11 +108,32 @@ public class ApiAsset extends BaseApiModel<Asset> {
     return this;
   }
 
+  @Transient
+  public ApiAssetType getAssetType() {
+    return assetType;
+  }
+
+  @Transient
+  public ApiAsset setAssetType(ApiAssetType assetType) {
+    this.assetType = assetType;
+    return this;
+  }
+
+  public String getType() {
+    return (assetType == null) ? null : assetType.getType();
+  }
+
+  public void setType(String type) {
+    assetType = new ApiAssetType();
+    assetType.setType(type);
+  }
+
   @Override
   public boolean isValid() {
     return !Strings.isNullOrEmpty(name)
         && !Strings.isNullOrEmpty(rfid)
         && UUIDUtils.isValidId(homeId)
+        && assetType != null
         && status != null;
   }
 
@@ -123,6 +148,7 @@ public class ApiAsset extends BaseApiModel<Asset> {
     asset.setHomeId(homeId);
     asset.setLocationId(locationId);
     asset.setDeviceId(deviceId);
+    asset.setAssetType(assetType.toDatabase());
 
     return asset;
   }

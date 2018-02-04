@@ -21,14 +21,19 @@ import java.util.UUID;
 @RequestMapping("/api/secure/locations")
 public class LocationController extends BaseController {
 
-  @Autowired
-  LocationRepository locationRepository;
+  private final LocationRepository locationRepository;
+  private final AssetRepository assetRepository;
+  private final DeviceRepository deviceRepository;
 
   @Autowired
-  AssetRepository assetRepository;
-
-  @Autowired
-  DeviceRepository deviceRepository;
+  public LocationController(
+      LocationRepository locationRepository,
+      AssetRepository assetRepository,
+      DeviceRepository deviceRepository) {
+    this.locationRepository = locationRepository;
+    this.assetRepository = assetRepository;
+    this.deviceRepository = deviceRepository;
+  }
 
   @RequestMapping(value = "/", method = RequestMethod.GET)
   public LocationListApiResponse getLocations(@RequestAttribute ApiUser authenticatedUser) {

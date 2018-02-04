@@ -2,15 +2,20 @@ package io.lovelacetech.server.command.asset;
 
 import com.google.common.base.Strings;
 import io.lovelacetech.server.model.Asset;
+import io.lovelacetech.server.model.AssetType;
 import io.lovelacetech.server.model.api.enums.AssetStatus;
 import io.lovelacetech.server.model.api.model.ApiAsset;
+import io.lovelacetech.server.model.api.model.ApiAssetType;
 import io.lovelacetech.server.model.api.model.ApiUser;
 import io.lovelacetech.server.model.api.response.asset.AssetApiResponse;
+import io.lovelacetech.server.repository.AssetRepository;
+import io.lovelacetech.server.repository.AssetTypeRepository;
 import io.lovelacetech.server.repository.DeviceRepository;
 import io.lovelacetech.server.repository.LocationRepository;
 import io.lovelacetech.server.util.AccessUtils;
 import io.lovelacetech.server.util.Messages;
 import io.lovelacetech.server.util.RepositoryUtils;
+import io.lovelacetech.server.util.UUIDUtils;
 import org.h2.util.StringUtils;
 import org.hibernate.exception.ConstraintViolationException;
 import org.postgresql.util.PSQLException;
@@ -19,6 +24,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 public class SaveAssetCommand extends AssetCommand<SaveAssetCommand> {
   private ApiAsset asset;
   private ApiUser user;
+  private AssetTypeRepository assetTypeRepository;
   private DeviceRepository deviceRepository;
   private LocationRepository locationRepository;
 
@@ -29,6 +35,11 @@ public class SaveAssetCommand extends AssetCommand<SaveAssetCommand> {
 
   public SaveAssetCommand setUser(ApiUser user) {
     this.user = user;
+    return this;
+  }
+
+  public SaveAssetCommand setAssetTypeRepository(AssetTypeRepository assetTypeRepository) {
+    this.assetTypeRepository = assetTypeRepository;
     return this;
   }
 
@@ -46,6 +57,7 @@ public class SaveAssetCommand extends AssetCommand<SaveAssetCommand> {
   public boolean checkCommand() {
     return super.checkCommand()
         && asset != null
+        && assetTypeRepository != null
         && deviceRepository != null
         && locationRepository != null;
   }
@@ -103,6 +115,37 @@ public class SaveAssetCommand extends AssetCommand<SaveAssetCommand> {
           .setConflict()
           .setMessage(Messages.ASSET_CONFLICTING_RFID);
     }
+
+    System.out.println("1" + assetUpdate.getAssetType().toApi());
+
+    if (assetUpdate.getAssetType() == null) {
+      assetUpdate.setAssetType(ApiAssetType.getDefault().toDatabase());
+    }
+
+    System.out.println("2" + assetUpdate.getAssetType().toApi());
+
+    if (!UUIDUtils.isValidId(assetUpdate.getAssetType().getCompanyId())) {
+      assetUpdate.getAssetType().setCompanyId(user.getCompanyId());
+    }
+
+    System.out.println("3" + assetUpdate.getAssetType().toApi());
+
+    if (!assetUpdate.getAssetType().toApi().isValid()) {
+      AssetType assetType = assetTypeRepository.findOneByCompanyIdAndType(
+          user.getCompanyId(), assetUpdate.getAssetType().getType());
+
+      if (assetType == null) {
+        assetType = assetTypeRepository.save(assetUpdate.getAssetType());
+      }
+
+      assetUpdate.setAssetType(assetType);
+    }
+
+    if (assetUpdate.getAssetType().getType().equals("")) {
+      assetUpdate.getAssetType().setType(ApiAssetType.DEFAULT_ASSET_TYPE);
+    }
+
+    System.out.println("4" + assetUpdate.getAssetType().toApi());
 
     try {
       assetUpdate = getAssetRepository().save(assetUpdate);

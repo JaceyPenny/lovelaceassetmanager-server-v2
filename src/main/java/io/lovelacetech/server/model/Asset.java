@@ -36,6 +36,12 @@ public class Asset implements DatabaseModel<Asset>, ApiModelConvertible<ApiAsset
   @Column(name = "device_id")
   private UUID deviceId;
 
+  @ManyToOne(fetch = FetchType.EAGER)
+  @JoinTable(name = "asset_asset_type", schema = "lovelace",
+    joinColumns = { @JoinColumn(name = "asset_id", nullable = false, updatable = false)},
+    inverseJoinColumns = { @JoinColumn(name = "asset_type_id", nullable = false, updatable = false)})
+  private AssetType assetType;
+
   @Override
   public ApiAsset toApi() {
     return new ApiAsset(this);
@@ -71,6 +77,10 @@ public class Asset implements DatabaseModel<Asset>, ApiModelConvertible<ApiAsset
 
     if (UUIDUtils.isValidId(other.deviceId)) {
       deviceId = other.deviceId;
+    }
+
+    if (other.assetType != null) {
+      assetType = other.assetType;
     }
   }
 
@@ -128,5 +138,13 @@ public class Asset implements DatabaseModel<Asset>, ApiModelConvertible<ApiAsset
 
   public void setDeviceId(UUID deviceId) {
     this.deviceId = deviceId;
+  }
+
+  public AssetType getAssetType() {
+    return assetType;
+  }
+
+  public void setAssetType(AssetType assetType) {
+    this.assetType = assetType;
   }
 }

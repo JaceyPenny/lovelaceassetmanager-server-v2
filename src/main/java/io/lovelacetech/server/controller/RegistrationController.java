@@ -19,11 +19,16 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/registration")
 public class RegistrationController {
 
-  @Autowired
-  UserRepository userRepository;
+  private final UserRepository userRepository;
+  private final PasswordEncoder passwordEncoder;
 
   @Autowired
-  PasswordEncoder passwordEncoder;
+  public RegistrationController(
+      UserRepository userRepository,
+      PasswordEncoder passwordEncoder) {
+    this.userRepository = userRepository;
+    this.passwordEncoder = passwordEncoder;
+  }
 
   @RequestMapping(value = "/register", method = RequestMethod.POST)
   public AuthenticationApiResponse register(@RequestBody ApiRegistration registration) {

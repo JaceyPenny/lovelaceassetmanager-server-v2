@@ -6,6 +6,7 @@ import io.lovelacetech.server.model.api.model.ApiUser;
 import io.lovelacetech.server.model.api.response.asset.AssetApiResponse;
 import io.lovelacetech.server.model.api.response.asset.AssetListApiResponse;
 import io.lovelacetech.server.repository.AssetRepository;
+import io.lovelacetech.server.repository.AssetTypeRepository;
 import io.lovelacetech.server.repository.DeviceRepository;
 import io.lovelacetech.server.repository.LocationRepository;
 import io.lovelacetech.server.util.AccessUtils;
@@ -19,14 +20,22 @@ import java.util.UUID;
 @RequestMapping(value = "/api/secure/assets")
 public class AssetController extends BaseController {
 
-  @Autowired
-  LocationRepository locationRepository;
+  private final LocationRepository locationRepository;
+  private final DeviceRepository deviceRepository;
+  private final AssetRepository assetRepository;
+  private final AssetTypeRepository assetTypeRepository;
 
   @Autowired
-  DeviceRepository deviceRepository;
-
-  @Autowired
-  AssetRepository assetRepository;
+  public AssetController(
+      LocationRepository locationRepository,
+      DeviceRepository deviceRepository,
+      AssetRepository assetRepository,
+      AssetTypeRepository assetTypeRepository) {
+    this.locationRepository = locationRepository;
+    this.deviceRepository = deviceRepository;
+    this.assetRepository = assetRepository;
+    this.assetTypeRepository = assetTypeRepository;
+  }
 
   /**
    * <b>  GET /api/secure/assets/  </b>
@@ -246,6 +255,7 @@ public class AssetController extends BaseController {
     checkBelongsToCompany(authenticatedUser);
 
     return new SaveAssetCommand()
+        .setAssetTypeRepository(assetTypeRepository)
         .setAssetRepository(assetRepository)
         .setDeviceRepository(deviceRepository)
         .setLocationRepository(locationRepository)

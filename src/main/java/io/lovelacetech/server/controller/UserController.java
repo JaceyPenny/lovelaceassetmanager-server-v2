@@ -14,8 +14,13 @@ import org.springframework.web.bind.annotation.*;
 @CrossOrigin
 @RequestMapping("/api/secure/users")
 public class UserController extends BaseController {
+
+  private final UserRepository userRepository;
+
   @Autowired
-  private UserRepository userRepository;
+  public UserController(UserRepository userRepository) {
+    this.userRepository = userRepository;
+  }
 
   @RequestMapping(value = "/", method = RequestMethod.GET)
   public UserListApiResponse getUsers(@RequestAttribute ApiUser authenticatedUser) {

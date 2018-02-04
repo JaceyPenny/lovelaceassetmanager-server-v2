@@ -15,8 +15,12 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping(value = "/api/secure/notifications")
 public class NotificationController extends BaseController {
 
+  private final NotificationRepository notificationRepository;
+
   @Autowired
-  NotificationRepository notificationRepository;
+  public NotificationController(NotificationRepository notificationRepository) {
+    this.notificationRepository = notificationRepository;
+  }
 
   @RequestMapping(value = "/", method = RequestMethod.GET)
   public NotificationListApiResponse getNotifications(@RequestAttribute ApiUser authenticatedUser) {

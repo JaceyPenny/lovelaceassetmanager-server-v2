@@ -18,8 +18,12 @@ import javax.servlet.ServletException;
 @RequestMapping("/api/authenticate")
 public class AuthenticationController {
 
+  private final UserRepository userRepository;
+
   @Autowired
-  UserRepository userRepository;
+  public AuthenticationController(UserRepository userRepository) {
+    this.userRepository = userRepository;
+  }
 
   /**
    * <b>  POST /api/authenticate/login  </b>

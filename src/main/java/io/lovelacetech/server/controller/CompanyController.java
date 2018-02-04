@@ -18,20 +18,25 @@ import java.util.UUID;
 @RequestMapping("/api/secure/companies")
 public class CompanyController extends BaseController {
 
-  @Autowired
-  CompanyRepository companyRepository;
+  private final CompanyRepository companyRepository;
+  private final UserRepository userRepository;
+  private final LocationRepository locationRepository;
+  private final AssetRepository assetRepository;
+  private final DeviceRepository deviceRepository;
 
   @Autowired
-  UserRepository userRepository;
-
-  @Autowired
-  LocationRepository locationRepository;
-
-  @Autowired
-  AssetRepository assetRepository;
-
-  @Autowired
-  DeviceRepository deviceRepository;
+  public CompanyController(
+      CompanyRepository companyRepository,
+      UserRepository userRepository,
+      LocationRepository locationRepository,
+      AssetRepository assetRepository,
+      DeviceRepository deviceRepository) {
+    this.companyRepository = companyRepository;
+    this.userRepository = userRepository;
+    this.locationRepository = locationRepository;
+    this.assetRepository = assetRepository;
+    this.deviceRepository = deviceRepository;
+  }
 
   /**
    * <b>  GET /api/secure/companies/  </b>
@@ -228,34 +233,28 @@ public class CompanyController extends BaseController {
    * <br><br>
    * To <b>CREATE</b> a Company, supply the body in the following manner:
    * <br>
-   * {@code
-   * {
+   * <pre>{@code    {
    *   (required) "name": ...,
    *   (required) "phoneNumber": ...
-   * }
-   * }
-   * <br>
+   * }}
+   * </pre>
    * Once the Company is created, the calling user has their "companyId" set to the newly created
    * Company's id, and their "accessLevel" set to ADMIN.
    * <br><br>
    * To <b>UPDATE</b> a Company, supply the body in the following manner:
-   * {@code
-   * {
+   * <pre>{@code    {
    *   (required) "id": ...,
    *   (optional) "name": ...,
    *   (optional) "phoneNumber": ...
-   * }
-   * }
-   * <br><br>
-   * <b>  RESULT:  </b><br>
-   * {@code
-   * {
+   * }}
+   * </pre>
+   * <b>  RESULT:  </b>
+   * <pre>{@code    {
    *   "status": 200,
    *   "message": "success",
    *   "response": Company
-   * }
-   * }
-   * <br><br>
+   * }}
+   * </pre>
    * <b>  PERMISSIONS  </b><br>
    * If the calling user is updating a Company, they must be the ADMIN for that Company. Any user
    * is allowed to create a Company.
