@@ -58,6 +58,12 @@ public class ApiAssetType extends BaseApiModel<AssetType> {
     return this;
   }
 
+  public boolean isEmpty() {
+    return !UUIDUtils.isValidId(id)
+        && !UUIDUtils.isValidId(companyId)
+        && Strings.isNullOrEmpty(type);
+  }
+
   @Override
   public boolean isValid() {
     return UUIDUtils.isValidId(id)

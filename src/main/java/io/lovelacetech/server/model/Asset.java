@@ -79,7 +79,7 @@ public class Asset implements DatabaseModel<Asset>, ApiModelConvertible<ApiAsset
       deviceId = other.deviceId;
     }
 
-    if (other.assetType != null) {
+    if (other.assetType != null && !other.assetType.toApi().isEmpty()) {
       assetType = other.assetType;
     }
   }

@@ -3,6 +3,7 @@ package io.lovelacetech.server.command.asset;
 import com.google.common.base.Strings;
 import io.lovelacetech.server.model.Asset;
 import io.lovelacetech.server.model.AssetType;
+import io.lovelacetech.server.model.api.enums.AccessLevel;
 import io.lovelacetech.server.model.api.enums.AssetStatus;
 import io.lovelacetech.server.model.api.model.ApiAsset;
 import io.lovelacetech.server.model.api.model.ApiAssetType;
@@ -116,36 +117,33 @@ public class SaveAssetCommand extends AssetCommand<SaveAssetCommand> {
           .setMessage(Messages.ASSET_CONFLICTING_RFID);
     }
 
-    System.out.println("1" + assetUpdate.getAssetType().toApi());
-
     if (assetUpdate.getAssetType() == null) {
       assetUpdate.setAssetType(ApiAssetType.getDefault().toDatabase());
     }
 
-    System.out.println("2" + assetUpdate.getAssetType().toApi());
-
     if (!UUIDUtils.isValidId(assetUpdate.getAssetType().getCompanyId())) {
       assetUpdate.getAssetType().setCompanyId(user.getCompanyId());
-    }
-
-    System.out.println("3" + assetUpdate.getAssetType().toApi());
-
-    if (!assetUpdate.getAssetType().toApi().isValid()) {
-      AssetType assetType = assetTypeRepository.findOneByCompanyIdAndType(
-          user.getCompanyId(), assetUpdate.getAssetType().getType());
-
-      if (assetType == null) {
-        assetType = assetTypeRepository.save(assetUpdate.getAssetType());
-      }
-
-      assetUpdate.setAssetType(assetType);
     }
 
     if (assetUpdate.getAssetType().getType().equals("")) {
       assetUpdate.getAssetType().setType(ApiAssetType.DEFAULT_ASSET_TYPE);
     }
 
-    System.out.println("4" + assetUpdate.getAssetType().toApi());
+    if (!assetUpdate.getAssetType().toApi().isValid()) {
+      AssetType assetType = assetTypeRepository.findOneByCompanyIdAndType(
+          user.getCompanyId(), assetUpdate.getAssetType().getType());
+
+      if (assetType == null) {
+        if (!assetUpdate.getAssetType().getType().equals(ApiAssetType.DEFAULT_ASSET_TYPE)
+            && user.getAccessLevel() == AccessLevel.USER) {
+          return new AssetApiResponse().setAccessDenied().setMessage(Messages.ASSET_CANNOT_CREATE_NEW_ASSET_TYPE);
+        }
+
+        assetType = assetTypeRepository.save(assetUpdate.getAssetType());
+      }
+
+      assetUpdate.setAssetType(assetType);
+    }
 
     try {
       assetUpdate = getAssetRepository().save(assetUpdate);

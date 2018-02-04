@@ -1,6 +1,7 @@
 package io.lovelacetech.server.controller;
 
 import io.lovelacetech.server.command.asset.*;
+import io.lovelacetech.server.model.api.enums.AccessLevel;
 import io.lovelacetech.server.model.api.model.ApiAsset;
 import io.lovelacetech.server.model.api.model.ApiUser;
 import io.lovelacetech.server.model.api.response.asset.AssetApiResponse;
@@ -43,16 +44,14 @@ public class AssetController extends BaseController {
    * Gets all the Assets in the database and returns in a list.
    * <br><br>
    * <b>  RESULT:  </b><br>
-   * {@code
-   * {
+   * <pre>{@code    {
    *   "status": 200,
    *   "message": "success",
    *   "response": {
    *     "assets": [Asset]
    *   }
-   * }
-   * }
-   * <br><br>
+   * }}</pre>
+   * <br>
    * <b>  PERMISSIONS  </b><br>
    * User must be SUPER to access this endpoint.
    *
@@ -72,14 +71,12 @@ public class AssetController extends BaseController {
    * Gets a single Asset by its ID.
    * <br><br>
    * <b>  RESULT:  </b><br>
-   * {@code
-   * {
+   * <pre>{@code    {
    *   "status": 200,
    *   "message": "success",
    *   "response": Asset
-   * }
-   * }
-   * <br><br>
+   * }}</pre>
+   * <br>
    * <b>  PERMISSIONS  </b><br>
    * The user must have permissions for this Asset. See {@link AccessUtils} for definitions
    * concerning user access.
@@ -105,16 +102,14 @@ public class AssetController extends BaseController {
    * Gets the list of Assets currently in the Device with id "deviceId".
    * <br><br>
    * <b>  RESULT:  </b><br>
-   * {@code
-   * {
+   * <pre>{@code    {
    *   "status": 200,
    *   "message": "success",
    *   "response": {
    *     "assets": [Asset]
    *   }
-   * }
-   * }
-   * <br><br>
+   * }}</pre>
+   * <br>
    * <b>  PERMISSIONS  </b><br>
    * The user must have permissions for the Device with id "deviceId". See {@link AccessUtils}
    * for definitions concerning user access.
@@ -140,16 +135,14 @@ public class AssetController extends BaseController {
    * Gets the list of Assets currently in the Location (aka "missing") with id "locationId".
    * <br><br>
    * <b>  RESULT:  </b><br>
-   * {@code
-   * {
+   * <pre>{@code    {
    *   "status": 200,
    *   "message": "success",
    *   "response": {
    *     "assets": [Asset]
    *   }
-   * }
-   * }
-   * <br><br>
+   * }}</pre>
+   * <br>
    * <b>  PERMISSIONS  </b><br>
    * The user must have permission for the Location with id "locationId". See {@link AccessUtils}
    * for definitions concerning user access.
@@ -175,16 +168,14 @@ public class AssetController extends BaseController {
    * returned Assets all have their homeId set to "deviceId"
    * <br><br>
    * <b>  RESULT:  </b><br>
-   * {@code
-   * {
+   * <pre>{@code    {
    *   "status": 200,
    *   "message": "success",
    *   "response": {
    *     "assets": [Asset]
    *   }
-   * }
-   * }
-   * <br><br>
+   * }}</pre>
+   * <br>
    * <b>  PERMISSIONS  </b><br>
    * The user must have permissions for the Device with id "deviceId". See {@link AccessUtils}
    * for definitions concerning user access.
@@ -211,38 +202,34 @@ public class AssetController extends BaseController {
    * <br><br>
    * To <b>CREATE</b> an Asset, supply the body in the following manner:
    * <br>
-   * {@code
-   * {
-   *   (required) "homeId": ...,
-   *   (required) "rfid": ...,
-   *   (optional) "name": ...,
+   * <pre>{@code    {
+   *   (required) "homeId": Device.id,
+   *   (required) "rfid": HexString,
+   *   (optional) "name": String,
    *   (optional) "status": [AVAILABLE, REPAIR],
-   *   (optional) "locationId": ...,
-   *   (optional) "deviceId": ...
-   * }
-   * }
+   *   (optional) "locationId": Location.id,
+   *   (optional) "deviceId": Device.id,
+   *   (optional) "type": String        // Ideally, "type" will be on of the Company's existing "AssetType"s
+   * }}</pre>
    * <br><br>
    * To <b>UPDATE</b> an Asset, supply the body in the following manner:
    * <br>
-   * {@code
-   * {
-   *    (required) "id": ...,
-   *    (optional) "name": ...,
-   *    (optional) "status": ...,
-   *    (optional) "homeId": ...,
-   *    (optional) "locationId": ...,
-   *    (optional) "deviceId": ...
-   * }
-   * }
+   * <pre>{@code    {
+   *    (required) "id": uuid,
+   *    (optional) "name": String,
+   *    (optional) "status": [AVAILABLE, REPAIR],
+   *    (optional) "homeId": Device.id,
+   *    (optional) "locationId": Location.id,
+   *    (optional) "deviceId": Device.id,
+   *    (optional) "type": String,      // Ideally, "type" will be on of the Company's existing "AssetType"s
+   * }}</pre>
    * <br><br>
    * <b>  RESULT:  </b><br>
-   * {@code
-   * {
+   * <pre>{@code    {
    *   "status": 200,
    *   "message": "success",
    *   "response": Asset
-   * }
-   * }
+   * }}</pre>
    * <br><br>
    * <b>  PERMISSIONS  </b><br>
    * The user must have permission for the IDs specified for any of: {homeId, locationId, deviceId}.

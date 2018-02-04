@@ -58,6 +58,7 @@ public class Messages {
    */
   public static final String ASSET_CONFLICTING_RFID = "another asset already has this RFID tag";
   public static final String ASSET_BAD_ID = "one or more of the IDs you've specified do not reference proper locations or devices. check your input";
+  public static final String ASSET_CANNOT_CREATE_NEW_ASSET_TYPE = "only admins can specify new asset types";
 
   /*
    * Authentication messages

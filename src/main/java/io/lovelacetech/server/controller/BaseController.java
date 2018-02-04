@@ -9,14 +9,14 @@ import org.springframework.security.access.AccessDeniedException;
 
 public class BaseController {
 
-  protected void checkAccess(ApiUser user, AccessLevel accessLevel) {
+  protected void checkAccessIsAtLeast(ApiUser user, AccessLevel accessLevel) {
     if (user.getAccessLevel().toInt() < accessLevel.toInt()) {
       throw new AccessDeniedException(Messages.ACCESS_DENIED);
     }
   }
 
   protected void checkIsSuper(ApiUser user) {
-    checkAccess(user, AccessLevel.SUPER);
+    checkAccessIsAtLeast(user, AccessLevel.SUPER);
   }
 
   protected void checkBelongsToCompany(ApiUser user) {
