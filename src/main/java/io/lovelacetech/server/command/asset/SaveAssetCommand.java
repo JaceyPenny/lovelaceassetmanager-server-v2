@@ -3,6 +3,7 @@ package io.lovelacetech.server.command.asset;
 import com.google.common.base.Strings;
 import io.lovelacetech.server.model.Asset;
 import io.lovelacetech.server.model.AssetType;
+import io.lovelacetech.server.model.Device;
 import io.lovelacetech.server.model.api.enums.AccessLevel;
 import io.lovelacetech.server.model.api.enums.AssetStatus;
 import io.lovelacetech.server.model.api.model.ApiAsset;
@@ -107,6 +108,16 @@ public class SaveAssetCommand extends AssetCommand<SaveAssetCommand> {
 
     if (!assetUpdate.toApi().isValid()) {
       return new AssetApiResponse().setInvalidBody();
+    }
+
+    if (!UUIDUtils.isValidId(assetUpdate.getDeviceId())
+        && !UUIDUtils.isValidId(assetUpdate.getLocationId())) {
+      Device parentDevice = deviceRepository.findOne(assetUpdate.getHomeId());
+      if (parentDevice == null) {
+        return new AssetApiResponse().setNotFound();
+      }
+
+      assetUpdate.setLocationId(parentDevice.getLocationId());
     }
 
     Asset existingAssetWithRFID = getAssetRepository().findOneByRfid(assetUpdate.getRfid());
