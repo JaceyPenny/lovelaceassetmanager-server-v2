@@ -8,4 +8,10 @@ public class DeviceListApiResponse extends BaseApiResponse<DeviceListApiResponse
   public DeviceListApiResponse setResponse(Iterable<Device> devices) {
     return super.setResponse(new ApiDeviceList(devices));
   }
+
+  @Override
+  public ApiDeviceList getResponse() {
+    super.getResponse().sort();
+    return super.getResponse();
+  }
 }

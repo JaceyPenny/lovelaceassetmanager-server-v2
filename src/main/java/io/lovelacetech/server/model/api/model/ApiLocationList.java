@@ -4,7 +4,9 @@ import io.lovelacetech.server.model.Location;
 import io.lovelacetech.server.util.RepositoryUtils;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class ApiLocationList extends BaseApiModel {
   private List<ApiLocation> locations;
@@ -22,6 +24,7 @@ public class ApiLocationList extends BaseApiModel {
   }
 
   public List<ApiLocation> getLocations() {
+    sort();
     return locations;
   }
 
@@ -33,5 +36,10 @@ public class ApiLocationList extends BaseApiModel {
   public ApiLocationList addLocation(ApiLocation location) {
     locations.add(location);
     return this;
+  }
+
+  public void sort() {
+    locations.forEach(ApiLocation::sort);
+    locations.sort(Comparator.comparing(ApiLocation::getName));
   }
 }

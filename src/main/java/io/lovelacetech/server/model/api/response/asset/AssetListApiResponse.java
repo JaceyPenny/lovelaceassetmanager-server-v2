@@ -8,4 +8,10 @@ public class AssetListApiResponse extends BaseApiResponse<AssetListApiResponse, 
   public AssetListApiResponse setResponse(Iterable<Asset> assets) {
     return super.setResponse(new ApiAssetList(assets));
   }
+
+  @Override
+  public ApiAssetList getResponse() {
+    super.getResponse().sort();
+    return super.getResponse();
+  }
 }

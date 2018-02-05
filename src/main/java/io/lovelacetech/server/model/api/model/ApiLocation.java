@@ -5,6 +5,7 @@ import io.lovelacetech.server.model.Location;
 import io.lovelacetech.server.util.UUIDUtils;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
 
@@ -130,5 +131,10 @@ public class ApiLocation extends BaseApiModel<Location> {
     location.setCompanyId(UUIDUtils.isValidId(companyId) ? companyId : null);
 
     return location;
+  }
+
+  public void sort() {
+    devices.forEach(ApiDevice::sort);
+    devices.sort(Comparator.comparing(ApiDevice::getName));
   }
 }

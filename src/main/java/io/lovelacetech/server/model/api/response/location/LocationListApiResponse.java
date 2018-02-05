@@ -19,4 +19,10 @@ public class LocationListApiResponse
     setResponse(new ApiLocationList(locations));
     return this;
   }
+
+  @Override
+  public ApiLocationList getResponse() {
+    super.getResponse().sort();
+    return super.getResponse();
+  }
 }

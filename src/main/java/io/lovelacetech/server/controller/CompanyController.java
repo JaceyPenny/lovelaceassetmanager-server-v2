@@ -1,16 +1,24 @@
 package io.lovelacetech.server.controller;
 
 import io.lovelacetech.server.command.company.*;
+import io.lovelacetech.server.model.Company;
+import io.lovelacetech.server.model.api.model.ApiAssetTypeList;
+import io.lovelacetech.server.model.api.model.ApiAssetTypeStringList;
 import io.lovelacetech.server.model.api.model.ApiCompany;
 import io.lovelacetech.server.model.api.model.ApiUser;
+import io.lovelacetech.server.model.api.response.asset.AssetTypeListApiResponse;
+import io.lovelacetech.server.model.api.response.asset.AssetTypeStringListApiResponse;
 import io.lovelacetech.server.model.api.response.company.CompanyApiResponse;
 import io.lovelacetech.server.model.api.response.company.CompanyListApiResponse;
 import io.lovelacetech.server.repository.*;
+import io.lovelacetech.server.util.LoaderUtils;
 import io.lovelacetech.server.util.Messages;
+import io.lovelacetech.server.util.RepositoryUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -21,21 +29,24 @@ public class CompanyController extends BaseController {
   private final CompanyRepository companyRepository;
   private final UserRepository userRepository;
   private final LocationRepository locationRepository;
-  private final AssetRepository assetRepository;
   private final DeviceRepository deviceRepository;
+  private final AssetRepository assetRepository;
+  private final AssetTypeRepository assetTypeRepository;
 
   @Autowired
   public CompanyController(
       CompanyRepository companyRepository,
       UserRepository userRepository,
       LocationRepository locationRepository,
+      DeviceRepository deviceRepository,
       AssetRepository assetRepository,
-      DeviceRepository deviceRepository) {
+      AssetTypeRepository assetTypeRepository) {
     this.companyRepository = companyRepository;
     this.userRepository = userRepository;
     this.locationRepository = locationRepository;
     this.assetRepository = assetRepository;
     this.deviceRepository = deviceRepository;
+    this.assetTypeRepository = assetTypeRepository;
   }
 
   /**
@@ -58,13 +69,25 @@ public class CompanyController extends BaseController {
    * User must be SUPER.
    */
   @RequestMapping(value = "/", method = RequestMethod.GET)
-  public CompanyListApiResponse getCompanies(@RequestAttribute ApiUser authenticatedUser) {
+  public CompanyListApiResponse getCompanies(
+      @RequestAttribute ApiUser authenticatedUser,
+      @RequestParam(name = "filled", defaultValue = "false") boolean filled) {
     checkIsSuper(authenticatedUser);
+
+    List<ApiCompany> companies = RepositoryUtils.toApiList(companyRepository.findAll());
+
+    if (filled) {
+      LoaderUtils.populateCompanies(
+          companies,
+          locationRepository,
+          deviceRepository,
+          assetRepository);
+    }
 
     return new CompanyListApiResponse()
         .setStatus(HttpStatus.OK)
         .setMessage(Messages.SUCCESS)
-        .setResponse(companyRepository.findAll());
+        .setResponse(companies);
   }
 
   /**
@@ -224,6 +247,18 @@ public class CompanyController extends BaseController {
         .setDeviceRepository(deviceRepository)
         .setAssetRepository(assetRepository)
         .execute();
+  }
+
+  @RequestMapping(value = "/assetTypes", method = RequestMethod.GET)
+  public AssetTypeStringListApiResponse getAssetTypesForCompany(
+      @RequestAttribute ApiUser authenticatedUser) {
+    checkBelongsToCompany(authenticatedUser);
+
+    ApiAssetTypeStringList assetTypeList = new ApiAssetTypeStringList(
+        assetTypeRepository.findAllByCompanyId(authenticatedUser.getCompanyId()));
+    return new AssetTypeStringListApiResponse()
+        .setSuccess()
+        .setResponse(assetTypeList);
   }
 
   /**

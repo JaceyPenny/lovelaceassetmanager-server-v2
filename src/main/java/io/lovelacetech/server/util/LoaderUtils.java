@@ -153,6 +153,16 @@ public class LoaderUtils {
     company.setLocations(locations);
   }
 
+  public static void populateCompanies(
+      List<ApiCompany> companies,
+      LocationRepository locationRepository,
+      DeviceRepository deviceRepository,
+      AssetRepository assetRepository) {
+    for (ApiCompany company : companies) {
+      populateCompany(company, locationRepository, deviceRepository, assetRepository);
+    }
+  }
+
   public static List<ApiLocation> getLocationsForUser(
       ApiUser user,
       LocationRepository locationRepository) {

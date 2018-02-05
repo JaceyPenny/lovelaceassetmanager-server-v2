@@ -4,6 +4,7 @@ import io.lovelacetech.server.model.Company;
 import io.lovelacetech.server.util.UUIDUtils;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
 
@@ -78,5 +79,10 @@ public class ApiCompany extends BaseApiModel<Company> {
     company.setPhoneNumber(phoneNumber);
 
     return company;
+  }
+
+  public void sort() {
+    locations.forEach(ApiLocation::sort);
+    locations.sort(Comparator.comparing(ApiLocation::getCity));
   }
 }

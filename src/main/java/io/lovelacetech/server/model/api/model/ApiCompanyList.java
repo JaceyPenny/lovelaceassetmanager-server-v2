@@ -4,7 +4,9 @@ import io.lovelacetech.server.model.Company;
 import io.lovelacetech.server.util.RepositoryUtils;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class ApiCompanyList extends BaseApiModel {
   private List<ApiCompany> companies;
@@ -22,6 +24,7 @@ public class ApiCompanyList extends BaseApiModel {
   }
 
   public List<ApiCompany> getCompanies() {
+    sort();
     return companies;
   }
 
@@ -33,5 +36,10 @@ public class ApiCompanyList extends BaseApiModel {
   public ApiCompanyList addCompany(ApiCompany company) {
     companies.add(company);
     return this;
+  }
+
+  public void sort() {
+    companies.forEach(ApiCompany::sort);
+    companies.sort(Comparator.comparing(ApiCompany::getName));
   }
 }

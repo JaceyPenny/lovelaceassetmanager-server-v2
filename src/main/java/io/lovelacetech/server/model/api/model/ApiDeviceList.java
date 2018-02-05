@@ -4,7 +4,9 @@ import io.lovelacetech.server.model.Device;
 import io.lovelacetech.server.util.RepositoryUtils;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class ApiDeviceList extends BaseApiModel {
   private List<ApiDevice> devices;
@@ -22,6 +24,7 @@ public class ApiDeviceList extends BaseApiModel {
   }
 
   public List<ApiDevice> getDevices() {
+    sort();
     return devices;
   }
 
@@ -33,5 +36,10 @@ public class ApiDeviceList extends BaseApiModel {
   public ApiDeviceList addDevice(ApiDevice device) {
     devices.add(device);
     return this;
+  }
+
+  public void sort() {
+    devices.forEach(ApiDevice::sort);
+    devices.sort(Comparator.comparing(ApiDevice::getName));
   }
 }

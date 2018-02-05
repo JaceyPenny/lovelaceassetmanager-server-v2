@@ -4,7 +4,9 @@ import io.lovelacetech.server.model.Asset;
 import io.lovelacetech.server.util.RepositoryUtils;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class ApiAssetList extends BaseApiModel {
   private List<ApiAsset> assets;
@@ -22,6 +24,7 @@ public class ApiAssetList extends BaseApiModel {
   }
 
   public List<ApiAsset> getAssets() {
+    sort();
     return assets;
   }
 
@@ -33,5 +36,9 @@ public class ApiAssetList extends BaseApiModel {
   public ApiAssetList addAsset(ApiAsset asset) {
     assets.add(asset);
     return this;
+  }
+
+  public void sort() {
+    assets.sort(Comparator.comparing(ApiAsset::getName));
   }
 }

@@ -7,6 +7,7 @@ import io.lovelacetech.server.model.api.model.BaseApiModel;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -41,5 +42,9 @@ public class RepositoryUtils {
     }
 
     return false;
+  }
+
+  public static <T extends DatabaseModel> List<UUID> mapToIds(List<T> list) {
+    return list.stream().map(T::getId).collect(Collectors.toList());
   }
 }

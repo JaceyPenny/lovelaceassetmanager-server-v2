@@ -5,6 +5,7 @@ import io.lovelacetech.server.util.UUIDUtils;
 import org.assertj.core.util.Strings;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
 
@@ -99,5 +100,9 @@ public class ApiDevice extends BaseApiModel<Device> {
     device.setLocationId(UUIDUtils.isValidId(locationId) ? locationId : null);
 
     return device;
+  }
+
+  public void sort() {
+    assets.sort(Comparator.comparing(ApiAsset::getName));
   }
 }

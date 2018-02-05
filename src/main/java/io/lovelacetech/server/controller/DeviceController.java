@@ -1,9 +1,6 @@
 package io.lovelacetech.server.controller;
 
-import io.lovelacetech.server.command.device.ActivateDeviceCommand;
-import io.lovelacetech.server.command.device.DeviceByDeviceIdCommand;
-import io.lovelacetech.server.command.device.DeviceByLocationIdCommand;
-import io.lovelacetech.server.command.device.SaveDeviceCommand;
+import io.lovelacetech.server.command.device.*;
 import io.lovelacetech.server.model.Device;
 import io.lovelacetech.server.model.api.model.ApiDevice;
 import io.lovelacetech.server.model.api.model.ApiDeviceActivation;
@@ -11,6 +8,7 @@ import io.lovelacetech.server.model.api.model.ApiUser;
 import io.lovelacetech.server.model.api.response.device.DeviceApiResponse;
 import io.lovelacetech.server.model.api.response.device.DeviceListApiResponse;
 import io.lovelacetech.server.repository.AssetRepository;
+import io.lovelacetech.server.repository.CompanyRepository;
 import io.lovelacetech.server.repository.DeviceRepository;
 import io.lovelacetech.server.repository.LocationRepository;
 import io.lovelacetech.server.util.AccessUtils;
@@ -24,18 +22,21 @@ import java.util.UUID;
 @RequestMapping(value = "/api/secure/devices")
 public class DeviceController extends BaseController {
 
-  private final AssetRepository assetRepository;
-  private final DeviceRepository deviceRepository;
+  private final CompanyRepository companyRepository;
   private final LocationRepository locationRepository;
+  private final DeviceRepository deviceRepository;
+  private final AssetRepository assetRepository;
 
   @Autowired
   DeviceController(
-      AssetRepository assetRepository,
+      CompanyRepository companyRepository,
+      LocationRepository locationRepository,
       DeviceRepository deviceRepository,
-      LocationRepository locationRepository) {
-    this.assetRepository = assetRepository;
-    this.deviceRepository = deviceRepository;
+      AssetRepository assetRepository) {
+    this.companyRepository = companyRepository;
     this.locationRepository = locationRepository;
+    this.deviceRepository = deviceRepository;
+    this.assetRepository = assetRepository;
   }
 
   @RequestMapping(value = "/", method = RequestMethod.GET)
@@ -78,6 +79,17 @@ public class DeviceController extends BaseController {
         .setFilled(filled)
         .setAssetRepository(assetRepository)
         .setLocationRepository(locationRepository)
+        .execute();
+  }
+
+  @RequestMapping(value = "/forAuthenticated", method = RequestMethod.GET)
+  public DeviceListApiResponse getDevicesForAuthenticated(
+      @RequestAttribute ApiUser authenticatedUser) {
+    return new DevicesForUserCommand()
+        .setDeviceRepository(deviceRepository)
+        .setLocationRepository(locationRepository)
+        .setCompanyRepository(companyRepository)
+        .setUser(authenticatedUser)
         .execute();
   }
 
