@@ -1,5 +1,6 @@
 package io.lovelacetech.server.controller;
 
+import io.lovelacetech.server.command.user.DeleteUserCommand;
 import io.lovelacetech.server.command.user.UpdateUserCommand;
 import io.lovelacetech.server.command.user.UsersForAdminCommand;
 import io.lovelacetech.server.model.api.enums.AccessLevel;
@@ -9,6 +10,8 @@ import io.lovelacetech.server.model.api.response.user.UserListApiResponse;
 import io.lovelacetech.server.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.UUID;
 
 @RestController
 @CrossOrigin
@@ -130,6 +133,33 @@ public class UserController extends BaseController {
     return new UsersForAdminCommand()
         .setUserRepository(userRepository)
         .setUser(authenticatedUser)
+        .execute();
+  }
+
+  /**
+   * <b>  DELETE /api/secure/users/{userId}  </b>
+   * <br><br>
+   * Deletes the user with id "userId". Only an {Admin|Super} can delete users,
+   * and if the user is Admin, they can only delete users at the same company.
+   * <br>
+   * The result body includes the deleted User object.
+   *
+   * <br><br>
+   * <b>  RESULT:  </b><br>
+   * <pre>{@code    {
+   *   "status": 200,
+   *   "message": success,
+   *   "response": User
+   * }}</pre>
+   */
+  @RequestMapping(value = "/{userId}", method = RequestMethod.DELETE)
+  public UserApiResponse deleteUser(
+      @RequestAttribute ApiUser authenticatedUser,
+      @PathVariable UUID userId) {
+    return new DeleteUserCommand()
+        .setUserRepository(userRepository)
+        .setActingUser(authenticatedUser)
+        .setUserId(userId)
         .execute();
   }
 }

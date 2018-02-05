@@ -3,11 +3,14 @@ package io.lovelacetech.server.util;
 import io.lovelacetech.server.model.Asset;
 import io.lovelacetech.server.model.Device;
 import io.lovelacetech.server.model.Location;
+import io.lovelacetech.server.model.User;
+import io.lovelacetech.server.model.api.enums.AccessLevel;
 import io.lovelacetech.server.model.api.model.ApiLocation;
 import io.lovelacetech.server.model.api.model.ApiUser;
 import io.lovelacetech.server.repository.AssetRepository;
 import io.lovelacetech.server.repository.DeviceRepository;
 import io.lovelacetech.server.repository.LocationRepository;
+import io.lovelacetech.server.repository.UserRepository;
 
 import java.util.UUID;
 
@@ -69,5 +72,19 @@ public class AccessUtils {
       DeviceRepository deviceRepository,
       LocationRepository locationRepository) {
     return userCanAccessDevice(user, asset.getHomeId(), deviceRepository, locationRepository);
+  }
+
+  public static boolean userCanAccessUser(
+      ApiUser user,
+      UUID userId,
+      UserRepository userRepository) {
+    User fetchedUser = userRepository.findOne(userId);
+    return fetchedUser != null && userCanAccessUser(user, fetchedUser);
+  }
+
+  public static boolean userCanAccessUser(ApiUser user, User otherUser) {
+    return AuthenticationUtils.userIsSuper(user)
+        || (user.getAccessLevel() == AccessLevel.ADMIN
+            && UUIDUtils.idsEqual(user.getCompanyId(), otherUser.getCompanyId()));
   }
 }
