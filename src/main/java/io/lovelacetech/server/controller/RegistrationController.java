@@ -30,6 +30,30 @@ public class RegistrationController {
     this.passwordEncoder = passwordEncoder;
   }
 
+  /**
+   * <b>  POST /api/registration/register  </b>
+   * <br><br>
+   * Registers a new user. The new user is not a part of a company until invited
+   * by an ADMIN user.
+   * <br>
+   * <b>  REQUEST BODY:  </b><br>
+   * <pre>{@code    {
+   *   (required) "email": String,
+   *   (required) "username": String,
+   *   (required) "password": String (plaintext),
+   *   (required) "firstName": String,
+   *   (required) "lastName": String
+   * }}</pre><br>
+   * <b>  RESULT:  </b><br>
+   * <pre>{@code    {
+   *   "status": 200,
+   *   "message": "success",
+   *   "response": {
+   *     "user": User,
+   *     "token": JWT
+   *    }
+   * }}</pre>
+   */
   @RequestMapping(value = "/register", method = RequestMethod.POST)
   public AuthenticationApiResponse register(@RequestBody ApiRegistration registration) {
     if (!registration.isValid()) {

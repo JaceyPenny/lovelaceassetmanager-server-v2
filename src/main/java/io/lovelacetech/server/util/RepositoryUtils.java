@@ -32,4 +32,14 @@ public class RepositoryUtils {
       T existingRow) {
     return !update.hasId() || !existingRow.idEquals(update.getId());
   }
+
+  public static <T extends DatabaseModel> boolean listContainsRow(List<T> list, T row) {
+    for (T item : list) {
+      if (UUIDUtils.idsEqual(item.getId(), row.getId())) {
+        return true;
+      }
+    }
+
+    return false;
+  }
 }

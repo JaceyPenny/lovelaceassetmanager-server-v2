@@ -38,7 +38,7 @@ public class DeleteUserCommand extends UserCommand<DeleteUserCommand> {
       return new UserApiResponse().setDefault();
     }
 
-    if (AuthenticationUtils.userIsAtLeast(actingUser, AccessLevel.ADMIN)) {
+    if (!AuthenticationUtils.userIsAtLeast(actingUser, AccessLevel.ADMIN)) {
       return new UserApiResponse().setAccessDenied();
     }
 

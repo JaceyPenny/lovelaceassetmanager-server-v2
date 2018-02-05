@@ -27,6 +27,7 @@ public class Messages {
   /*
    * User response messages
    */
+  public static final String USER_ALREADY_HAS_LOCATION = "this user already has permissions for this location";
   public static final String NO_USERS_FOUND = "no users found";
   public static final String NO_USER_FOUND_BY_ID = "no users found with this id";
   public static String NO_USER_FOUND_BY_EMAIL(String email) {
