@@ -1,7 +1,6 @@
 package io.lovelacetech.server.model.api.model;
 
 import io.lovelacetech.server.model.Log;
-import io.lovelacetech.server.util.UUIDUtils;
 
 import java.time.LocalDateTime;
 import java.util.UUID;

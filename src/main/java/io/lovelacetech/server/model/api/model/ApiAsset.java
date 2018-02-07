@@ -34,7 +34,7 @@ public class ApiAsset extends BaseApiModel<Asset> {
     this.name = asset.getName();
     this.rfid = asset.getRfid();
     this.status = asset.getStatus();
-    this.homeId=  asset.getHomeId();
+    this.homeId = asset.getHomeId();
     this.locationId = asset.getLocationId();
     this.deviceId = asset.getDeviceId();
     this.assetType = new ApiAssetType(asset.getAssetType());

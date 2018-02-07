@@ -17,7 +17,7 @@ public class LoaderUtils {
    * <br>
    * Generates 1 PostgreSQL query.
    *
-   * @param device the device to populate
+   * @param device          the device to populate
    * @param assetRepository the AssetRepository resource
    */
   public static void populateDevice(ApiDevice device, AssetRepository assetRepository) {
@@ -30,7 +30,7 @@ public class LoaderUtils {
    * <br>
    * Generates 1 PostgreSQL query.
    *
-   * @param devices the list of devices to populate
+   * @param devices         the list of devices to populate
    * @param assetRepository the AssetRepository resource
    */
   public static void populateDevices(List<ApiDevice> devices, AssetRepository assetRepository) {
@@ -60,9 +60,9 @@ public class LoaderUtils {
    * <br>
    * Generates 2 PostgreSQL queries.
    *
-   * @param location the location to populate
+   * @param location         the location to populate
    * @param deviceRepository the DeviceRepository resource
-   * @param assetRepository the AssetRepository resource
+   * @param assetRepository  the AssetRepository resource
    */
   public static void populateLocation(
       ApiLocation location,
@@ -80,9 +80,9 @@ public class LoaderUtils {
    * <br>
    * Generates 2 PostgreSQL queries.
    *
-   * @param locations the list of locations to populate
+   * @param locations        the list of locations to populate
    * @param deviceRepository the DeviceRepository resource
-   * @param assetRepository the AssetRepository resource
+   * @param assetRepository  the AssetRepository resource
    */
   public static void populateLocations(
       List<ApiLocation> locations,
@@ -137,10 +137,10 @@ public class LoaderUtils {
    * <br>
    * Generates 3 PostgreSQL queries.
    *
-   * @param company the company to populate
+   * @param company            the company to populate
    * @param locationRepository the LocationRepository resource
-   * @param deviceRepository the DeviceRepository resource
-   * @param assetRepository the AssetRepository resource
+   * @param deviceRepository   the DeviceRepository resource
+   * @param assetRepository    the AssetRepository resource
    */
   public static void populateCompany(
       ApiCompany company,

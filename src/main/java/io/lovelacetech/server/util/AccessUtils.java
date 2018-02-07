@@ -1,18 +1,15 @@
 package io.lovelacetech.server.util;
 
-import io.lovelacetech.server.model.Asset;
-import io.lovelacetech.server.model.Device;
-import io.lovelacetech.server.model.Location;
-import io.lovelacetech.server.model.User;
+import com.google.common.collect.Lists;
+import io.lovelacetech.server.model.*;
 import io.lovelacetech.server.model.api.enums.AccessLevel;
 import io.lovelacetech.server.model.api.model.ApiLocation;
 import io.lovelacetech.server.model.api.model.ApiUser;
-import io.lovelacetech.server.repository.AssetRepository;
-import io.lovelacetech.server.repository.DeviceRepository;
-import io.lovelacetech.server.repository.LocationRepository;
-import io.lovelacetech.server.repository.UserRepository;
+import io.lovelacetech.server.repository.*;
 
+import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 public class AccessUtils {
   public static boolean userCanAccessLocation(
@@ -26,7 +23,7 @@ public class AccessUtils {
   public static boolean userCanAccessLocation(ApiUser user, Location location) {
     if (AuthenticationUtils.userIsSuper(user)
         || (AuthenticationUtils.userIsAdmin(user)
-            && location.getCompanyId().equals(user.getCompanyId()))) {
+        && location.getCompanyId().equals(user.getCompanyId()))) {
       return true;
     }
 
@@ -39,13 +36,17 @@ public class AccessUtils {
     return false;
   }
 
+  public static boolean userCanAccessLocations(ApiUser user, List<Location> locations) {
+    return locations.stream().allMatch(location -> userCanAccessLocation(user, location));
+  }
+
   public static boolean userCanAccessDevice(
       ApiUser user,
       UUID deviceId,
       DeviceRepository deviceRepository,
       LocationRepository locationRepository) {
     Device fetchedDevice = deviceRepository.findOne(deviceId);
-    return deviceId != null && userCanAccessDevice(user, fetchedDevice, locationRepository);
+    return fetchedDevice != null && userCanAccessDevice(user, fetchedDevice, locationRepository);
   }
 
   public static boolean userCanAccessDevice(
@@ -53,6 +54,12 @@ public class AccessUtils {
       Device device,
       LocationRepository locationRepository) {
     return userCanAccessLocation(user, device.getLocationId(), locationRepository);
+  }
+
+  public static boolean userCanAccessDevices(ApiUser user, List<Device> devices, LocationRepository locationRepository) {
+    List<UUID> locationIds = devices.stream().map(Device::getLocationId).collect(Collectors.toList());
+    List<Location> locations = Lists.newArrayList(locationRepository.findAll(locationIds));
+    return userCanAccessLocations(user, locations);
   }
 
   public static boolean userCanAccessAsset(
@@ -85,6 +92,24 @@ public class AccessUtils {
   public static boolean userCanAccessUser(ApiUser user, User otherUser) {
     return AuthenticationUtils.userIsSuper(user)
         || (user.getAccessLevel() == AccessLevel.ADMIN
-            && UUIDUtils.idsEqual(user.getCompanyId(), otherUser.getCompanyId()));
+        && UUIDUtils.idsEqual(user.getCompanyId(), otherUser.getCompanyId()));
+  }
+
+  public static boolean userCanAccessNotification(
+      ApiUser user,
+      UUID notificationId,
+      NotificationRepository notificationRepository,
+      UserRepository userRepository) {
+    Notification notification = notificationRepository.findOne(notificationId);
+    return notification != null && userCanAccessNotification(user, notification, userRepository);
+  }
+
+  public static boolean userCanAccessNotification(
+      ApiUser user,
+      Notification notification,
+      UserRepository userRepository) {
+    return AuthenticationUtils.userIsSuper(user)
+        || UUIDUtils.idsEqual(user.getId(), notification.getUserId())
+        || (AuthenticationUtils.userIsAdmin(user) && userCanAccessUser(user, notification.getUserId(), userRepository));
   }
 }

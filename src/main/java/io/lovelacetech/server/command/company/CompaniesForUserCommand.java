@@ -52,7 +52,7 @@ public class CompaniesForUserCommand extends CompanyCommand<CompaniesForUserComm
     return super.checkCommand()
         && user != null
         && (!filled
-            || (locationRepository != null && deviceRepository != null && assetRepository != null));
+        || (locationRepository != null && deviceRepository != null && assetRepository != null));
   }
 
   @Override

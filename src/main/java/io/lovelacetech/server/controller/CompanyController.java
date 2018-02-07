@@ -1,12 +1,9 @@
 package io.lovelacetech.server.controller;
 
 import io.lovelacetech.server.command.company.*;
-import io.lovelacetech.server.model.Company;
-import io.lovelacetech.server.model.api.model.ApiAssetTypeList;
 import io.lovelacetech.server.model.api.model.ApiAssetTypeStringList;
 import io.lovelacetech.server.model.api.model.ApiCompany;
 import io.lovelacetech.server.model.api.model.ApiUser;
-import io.lovelacetech.server.model.api.response.asset.AssetTypeListApiResponse;
 import io.lovelacetech.server.model.api.response.asset.AssetTypeStringListApiResponse;
 import io.lovelacetech.server.model.api.response.company.CompanyApiResponse;
 import io.lovelacetech.server.model.api.response.company.CompanyListApiResponse;
@@ -57,11 +54,11 @@ public class CompanyController extends BaseController {
    * <b>  RESULT:  </b><br>
    * {@code
    * {
-   *   "status": 200,
-   *   "message": "success",
-   *   "response": {
-   *     "companies": [Company]
-   *   }
+   * "status": 200,
+   * "message": "success",
+   * "response": {
+   * "companies": [Company]
+   * }
    * }
    * }
    * <br><br>
@@ -98,16 +95,15 @@ public class CompanyController extends BaseController {
    * <b>  RESULT:  </b><br>
    * {@code
    * {
-   *   "status": 200,
-   *   "message": "success",
-   *   "response": Company
+   * "status": 200,
+   * "message": "success",
+   * "response": Company
    * }
    * }
    * <br><br>
    * <b>  PERMISSIONS  </b><br>
    * User must either be SUPER, or must be a member of the Company with id "companyId"; That is to
    * say, the user's companyId must match the "companyId" from the query.
-   *
    */
   @RequestMapping(value = "/byCompanyId/{companyId}", method = RequestMethod.GET)
   public CompanyApiResponse getCompanyByCompanyId(
@@ -133,9 +129,9 @@ public class CompanyController extends BaseController {
    * <b>  RESULT:  </b><br>
    * {@code
    * {
-   *   "status": 200,
-   *   "message": "success",
-   *   "response": Company
+   * "status": 200,
+   * "message": "success",
+   * "response": Company
    * }
    * }
    * <br><br>
@@ -162,11 +158,11 @@ public class CompanyController extends BaseController {
    * <b>  RESULT:  </b><br>
    * {@code
    * {
-   *   "status": 200,
-   *   "message": "success",
-   *   "response": {
-   *     "companies": [Company]
-   *   }
+   * "status": 200,
+   * "message": "success",
+   * "response": {
+   * "companies": [Company]
+   * }
    * }
    * }
    * <br><br>
@@ -195,9 +191,9 @@ public class CompanyController extends BaseController {
    * <b>  RESULT:  </b><br>
    * {@code
    * {
-   *   "status": 200,
-   *   "message": "success",
-   *   "response": Company
+   * "status": 200,
+   * "message": "success",
+   * "response": Company
    * }
    * }
    * <br><br>
@@ -227,9 +223,9 @@ public class CompanyController extends BaseController {
    * <b>  RESULT:  </b><br>
    * {@code
    * {
-   *   "status": 200,
-   *   "message": "success",
-   *   "response": Company
+   * "status": 200,
+   * "message": "success",
+   * "response": Company
    * }
    * }
    */
@@ -249,6 +245,19 @@ public class CompanyController extends BaseController {
         .execute();
   }
 
+  /**
+   * <b>  GET /api/secure/companies/assetTypes  </b><br><br>
+   * Returns a list of the Asset Types registered with this company. These asset types are created
+   * by Admin users.<br><br>
+   * <b>  RESPONSE:  </b><br>
+   * <pre>{@code    {
+   *   "status": 200,
+   *   "message": "success",
+   *   "response": {
+   *     "assetTypes": [String, String, ...]
+   *   }
+   * }}</pre>
+   */
   @RequestMapping(value = "/assetTypes", method = RequestMethod.GET)
   public AssetTypeStringListApiResponse getAssetTypesForCompany(
       @RequestAttribute ApiUser authenticatedUser) {
@@ -294,7 +303,7 @@ public class CompanyController extends BaseController {
    * If the calling user is updating a Company, they must be the ADMIN for that Company. Any user
    * is allowed to create a Company.
    */
-  @RequestMapping(value="/forAuthenticated", method=RequestMethod.POST)
+  @RequestMapping(value = "/forAuthenticated", method = RequestMethod.POST)
   public CompanyApiResponse putCompanyForAuthenticatedUser(
       @RequestAttribute ApiUser authenticatedUser,
       @RequestBody ApiCompany company) {

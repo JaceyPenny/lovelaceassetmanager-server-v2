@@ -86,7 +86,7 @@ public class SaveDeviceCommand extends DeviceCommand<SaveDeviceCommand> {
     Device existingDeviceWithDeviceCode =
         getDeviceRepository().findOneByDeviceCode(deviceUpdate.getDeviceCode());
     if (existingDeviceWithDeviceCode != null
-      && RepositoryUtils.updateConflictsWithExistingRow(deviceUpdate, existingDeviceWithDeviceCode)) {
+        && RepositoryUtils.updateConflictsWithExistingRow(deviceUpdate, existingDeviceWithDeviceCode)) {
       return new DeviceApiResponse()
           .setConflict()
           .setMessage(Messages.DEVICE_CONFLICTING_DEVICE_CODE);

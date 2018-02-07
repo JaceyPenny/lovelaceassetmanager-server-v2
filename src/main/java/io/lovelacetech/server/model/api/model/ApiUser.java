@@ -33,7 +33,7 @@ public class ApiUser extends BaseApiModel<User> {
     this.lastName = "";
     this.locations = new ArrayList<>();
   }
-  
+
   public ApiUser(User user) {
     this.id = user.getId();
     this.email = user.getEmail();
@@ -119,7 +119,7 @@ public class ApiUser extends BaseApiModel<User> {
 
   public static ApiUser fromClaims(LinkedHashMap<String, Object> user) {
     ApiUser result = new ApiUser()
-        .setId(UUID.fromString((String)user.get("id")))
+        .setId(UUID.fromString((String) user.get("id")))
         .setAccessLevel(AccessLevel.valueOf((String) user.get("accessLevel")))
         .setEmail((String) user.get("email"))
         .setUsername((String) user.get("username"))

@@ -42,9 +42,9 @@ public class User implements DatabaseModel<User>, ApiModelConvertible<ApiUser> {
 
   @ManyToMany(fetch = FetchType.EAGER)
   @JoinTable(name = "users_locations", schema = "lovelace",
-      joinColumns = { @JoinColumn(name = "user_id", nullable = false, updatable = false) },
+      joinColumns = {@JoinColumn(name = "user_id", nullable = false, updatable = false)},
       inverseJoinColumns = {
-      @JoinColumn(name = "location_id", nullable = false, updatable = false) })
+          @JoinColumn(name = "location_id", nullable = false, updatable = false)})
   private List<Location> locations;
 
   @Override

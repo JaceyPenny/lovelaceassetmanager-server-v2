@@ -1,19 +1,13 @@
 package io.lovelacetech.server.command.location;
 
-import io.lovelacetech.server.model.Location;
-import io.lovelacetech.server.model.api.enums.AccessLevel;
 import io.lovelacetech.server.model.api.model.ApiLocation;
 import io.lovelacetech.server.model.api.model.ApiLocationList;
 import io.lovelacetech.server.model.api.model.ApiUser;
-import io.lovelacetech.server.model.api.response.authentication.AuthenticationApiResponse;
 import io.lovelacetech.server.model.api.response.location.LocationListApiResponse;
 import io.lovelacetech.server.repository.AssetRepository;
 import io.lovelacetech.server.repository.DeviceRepository;
-import io.lovelacetech.server.util.AuthenticationUtils;
 import io.lovelacetech.server.util.LoaderUtils;
-import io.lovelacetech.server.util.RepositoryUtils;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class LocationsForUserCommand extends LocationCommand<LocationsForUserCommand> {

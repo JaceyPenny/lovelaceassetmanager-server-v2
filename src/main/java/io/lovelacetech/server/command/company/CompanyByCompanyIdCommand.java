@@ -58,7 +58,7 @@ public class CompanyByCompanyIdCommand extends CompanyCommand<CompanyByCompanyId
         && user != null
         && UUIDUtils.isValidId(companyId)
         && (!filled
-            || (locationRepository != null && deviceRepository != null && assetRepository != null));
+        || (locationRepository != null && deviceRepository != null && assetRepository != null));
   }
 
   @Override

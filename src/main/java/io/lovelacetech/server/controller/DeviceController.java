@@ -1,7 +1,6 @@
 package io.lovelacetech.server.controller;
 
 import io.lovelacetech.server.command.device.*;
-import io.lovelacetech.server.model.Device;
 import io.lovelacetech.server.model.api.model.ApiDevice;
 import io.lovelacetech.server.model.api.model.ApiDeviceActivation;
 import io.lovelacetech.server.model.api.model.ApiUser;
@@ -11,7 +10,6 @@ import io.lovelacetech.server.repository.AssetRepository;
 import io.lovelacetech.server.repository.CompanyRepository;
 import io.lovelacetech.server.repository.DeviceRepository;
 import io.lovelacetech.server.repository.LocationRepository;
-import io.lovelacetech.server.util.AccessUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 

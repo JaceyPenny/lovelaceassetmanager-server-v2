@@ -34,14 +34,14 @@ public class Notification implements DatabaseModel<Notification>, ApiModelConver
 
   @ManyToMany(fetch = FetchType.EAGER)
   @JoinTable(name = "notification_items", schema = "lovelace",
-      joinColumns = { @JoinColumn(name = "notification_id", nullable = false, updatable = false) },
-      inverseJoinColumns = { @JoinColumn(name = "location_id", nullable = false, updatable = false) })
+      joinColumns = {@JoinColumn(name = "notification_id", nullable = false, updatable = false)},
+      inverseJoinColumns = {@JoinColumn(name = "location_id", nullable = false, updatable = false)})
   private List<Location> locations;
 
   @ManyToMany(fetch = FetchType.EAGER)
   @JoinTable(name = "notification_items", schema = "lovelace",
-      joinColumns = { @JoinColumn(name = "notification_id", nullable = false, updatable = false) },
-      inverseJoinColumns = { @JoinColumn(name = "device_id", nullable = false, updatable = false) })
+      joinColumns = {@JoinColumn(name = "notification_id", nullable = false, updatable = false)},
+      inverseJoinColumns = {@JoinColumn(name = "device_id", nullable = false, updatable = false)})
   private List<Device> devices;
 
   @Override
@@ -66,14 +66,6 @@ public class Notification implements DatabaseModel<Notification>, ApiModelConver
   public void applyUpdate(Notification other) {
     if (other.notificationType != null) {
       notificationType = other.notificationType;
-    }
-
-    if (other.time != null) {
-      time = other.time;
-    }
-
-    if (UUIDUtils.isValidId(other.userId)) {
-      userId = other.userId;
     }
 
     if (other.active != null) {

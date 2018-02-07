@@ -7,11 +7,13 @@ public enum AssetStatus {
   REPAIR("repair");
 
   private String value;
+
   AssetStatus(String value) {
-    this.value= value;
+    this.value = value;
   }
 
   private static HashMap<String, AssetStatus> valueToEnumMap;
+
   public static AssetStatus fromString(String value) {
     if (valueToEnumMap == null) {
       valueToEnumMap = new HashMap<>();

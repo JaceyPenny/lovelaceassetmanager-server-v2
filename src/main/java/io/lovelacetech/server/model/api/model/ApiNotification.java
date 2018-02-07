@@ -1,21 +1,28 @@
 package io.lovelacetech.server.model.api.model;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import io.lovelacetech.server.model.Notification;
 import io.lovelacetech.server.model.api.enums.NotificationType;
+import io.lovelacetech.server.model.api.serializer.ApiNotificationDeserializer;
 import io.lovelacetech.server.util.RepositoryUtils;
 import io.lovelacetech.server.util.UUIDUtils;
 
+import java.beans.Transient;
 import java.sql.Time;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+@JsonDeserialize(using = ApiNotificationDeserializer.class)
 public class ApiNotification extends BaseApiModel<Notification> {
   private UUID id;
   private NotificationType notificationType;
   private Time time;
   private UUID userId;
   private boolean active;
+
+  private List<UUID> locationIds;
+  private List<UUID> deviceIds;
 
   private List<ApiLocation> locations;
   private List<ApiDevice> devices;
@@ -27,6 +34,9 @@ public class ApiNotification extends BaseApiModel<Notification> {
     this.userId = UUIDUtils.empty();
     this.active = false;
 
+    locationIds = new ArrayList<>();
+    deviceIds = new ArrayList<>();
+
     locations = new ArrayList<>();
     devices = new ArrayList<>();
   }
@@ -37,6 +47,12 @@ public class ApiNotification extends BaseApiModel<Notification> {
     time = notification.getTime();
     userId = notification.getUserId();
     active = notification.isActive();
+
+    locationIds = new ArrayList<>();
+    deviceIds = new ArrayList<>();
+//    locationIds = RepositoryUtils.mapToIds(notification.getLocations());
+//    deviceIds = RepositoryUtils.mapToIds(notification.getDevices());
+
     locations = RepositoryUtils.toApiList(notification.getLocations());
     devices = RepositoryUtils.toApiList(notification.getDevices());
   }
@@ -86,6 +102,36 @@ public class ApiNotification extends BaseApiModel<Notification> {
     return this;
   }
 
+  @Transient
+  public List<UUID> getLocationIds() {
+    return locationIds;
+  }
+
+  public ApiNotification setLocationIds(List<UUID> locationIds) {
+    this.locationIds = locationIds;
+    return this;
+  }
+
+  public ApiNotification addLocationId(UUID locationId) {
+    this.locationIds.add(locationId);
+    return this;
+  }
+
+  @Transient
+  public List<UUID> getDeviceIds() {
+    return deviceIds;
+  }
+
+  public ApiNotification setDeviceIds(List<UUID> deviceIds) {
+    this.deviceIds = deviceIds;
+    return this;
+  }
+
+  public ApiNotification addDeviceId(UUID deviceId) {
+    this.deviceIds.add(deviceId);
+    return this;
+  }
+
   public List<ApiLocation> getLocations() {
     return locations;
   }
@@ -116,10 +162,11 @@ public class ApiNotification extends BaseApiModel<Notification> {
 
   @Override
   public boolean isValid() {
-    return UUIDUtils.isValidId(id)
-        && UUIDUtils.isValidId(userId)
+    System.out.println(this);
+    return UUIDUtils.isValidId(userId)
         && time != null
-        && notificationType != null;
+        && notificationType != null
+        && (!locations.isEmpty() || !devices.isEmpty());
   }
 
   @Override

@@ -3,13 +3,11 @@ package io.lovelacetech.server.command.device;
 import io.lovelacetech.server.model.Company;
 import io.lovelacetech.server.model.Device;
 import io.lovelacetech.server.model.Location;
-import io.lovelacetech.server.model.api.model.ApiLocation;
 import io.lovelacetech.server.model.api.model.ApiUser;
 import io.lovelacetech.server.model.api.response.device.DeviceListApiResponse;
 import io.lovelacetech.server.repository.CompanyRepository;
 import io.lovelacetech.server.repository.LocationRepository;
 import io.lovelacetech.server.util.AuthenticationUtils;
-import io.lovelacetech.server.util.LoaderUtils;
 import io.lovelacetech.server.util.RepositoryUtils;
 
 import java.util.List;

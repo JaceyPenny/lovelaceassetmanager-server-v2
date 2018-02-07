@@ -3,7 +3,6 @@ package io.lovelacetech.server.command.asset;
 import io.lovelacetech.server.model.api.model.ApiAsset;
 import io.lovelacetech.server.model.api.model.ApiAssetList;
 import io.lovelacetech.server.model.api.model.ApiUser;
-import io.lovelacetech.server.model.api.response.BaseApiResponse;
 import io.lovelacetech.server.model.api.response.asset.AssetListApiResponse;
 import io.lovelacetech.server.repository.LocationRepository;
 import io.lovelacetech.server.util.AccessUtils;

@@ -9,11 +9,13 @@ public enum AccessLevel {
   SUPER(3);
 
   private int value;
+
   AccessLevel(int value) {
     this.value = value;
   }
 
   private static HashMap<Integer, AccessLevel> valueToEnumMap;
+
   public static AccessLevel fromInt(int value) {
     if (valueToEnumMap == null) {
       valueToEnumMap = new HashMap<>();

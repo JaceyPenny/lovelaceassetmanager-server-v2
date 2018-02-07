@@ -323,7 +323,7 @@ public class UserController extends BaseController {
    * and if the user is Admin, they can only delete users at the same company.
    * <br>
    * The result body includes the deleted User object.
-   *
+   * <p>
    * <br><br>
    * <b>  RESULT:  </b><br>
    * <pre>{@code    {

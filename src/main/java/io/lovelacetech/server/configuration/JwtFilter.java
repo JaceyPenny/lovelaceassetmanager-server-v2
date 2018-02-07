@@ -5,12 +5,9 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureException;
 import io.lovelacetech.server.model.User;
 import io.lovelacetech.server.model.api.model.ApiUser;
-import io.lovelacetech.server.model.api.response.user.UserApiResponse;
 import io.lovelacetech.server.repository.UserRepository;
 import io.lovelacetech.server.util.AuthenticationUtils;
 import io.lovelacetech.server.util.Messages;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.web.filter.GenericFilterBean;
 
 import javax.servlet.FilterChain;

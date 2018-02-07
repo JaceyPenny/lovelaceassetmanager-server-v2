@@ -1,7 +1,6 @@
 package io.lovelacetech.server.controller;
 
 import io.lovelacetech.server.command.asset.*;
-import io.lovelacetech.server.model.api.enums.AccessLevel;
 import io.lovelacetech.server.model.api.model.ApiAsset;
 import io.lovelacetech.server.model.api.model.ApiUser;
 import io.lovelacetech.server.model.api.response.asset.AssetApiResponse;
@@ -54,7 +53,6 @@ public class AssetController extends BaseController {
    * <br>
    * <b>  PERMISSIONS  </b><br>
    * User must be SUPER to access this endpoint.
-   *
    */
   @RequestMapping(value = "/", method = RequestMethod.GET)
   public AssetListApiResponse getAssets(@RequestAttribute ApiUser authenticatedUser) {

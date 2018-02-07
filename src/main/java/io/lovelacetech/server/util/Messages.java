@@ -17,9 +17,11 @@ public class Messages {
    */
   public static final String NO_COMPANIES_FOUND = "no companies found";
   public static final String COMPANY_CONFLICTING_NAME = "another company already has this name";
+
   public static String NO_COMPANY_FOUND_BY_NAME(String name) {
     return "no company found with name: " + name;
   }
+
   public static String NO_COMPANY_FOUND_BY_PHONE_NUMBER(String phoneNumber) {
     return "no company found with phone number: " + phoneNumber;
   }
@@ -30,9 +32,11 @@ public class Messages {
   public static final String USER_ALREADY_HAS_LOCATION = "this user already has permissions for this location";
   public static final String NO_USERS_FOUND = "no users found";
   public static final String NO_USER_FOUND_BY_ID = "no users found with this id";
+
   public static String NO_USER_FOUND_BY_EMAIL(String email) {
     return "no user found with email: " + email;
   }
+
   public static String NO_USER_FOUND_BY_EMAIL_PASSWORD(String email) {
     return "no user found email and password: " + email;
   }

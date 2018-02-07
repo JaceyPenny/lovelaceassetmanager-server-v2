@@ -14,7 +14,7 @@ public class Company implements DatabaseModel<Company>, ApiModelConvertible<ApiC
   @Column(name = "id", unique = true, nullable = false, updatable = false)
   private UUID id;
 
-  @Column(name="name", unique = true, nullable = false)
+  @Column(name = "name", unique = true, nullable = false)
   private String name;
 
   @Column(name = "phone_number", unique = true, nullable = false)

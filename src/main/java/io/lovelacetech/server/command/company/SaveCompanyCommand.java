@@ -37,7 +37,7 @@ public class SaveCompanyCommand extends CompanyCommand<SaveCompanyCommand> {
     return super.checkCommand()
         && this.company != null
         && ((user == null && userRepository == null)
-            || (user != null && userRepository != null));
+        || (user != null && userRepository != null));
   }
 
   @Override

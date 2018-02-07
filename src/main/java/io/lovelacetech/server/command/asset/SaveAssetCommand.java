@@ -10,7 +10,6 @@ import io.lovelacetech.server.model.api.model.ApiAsset;
 import io.lovelacetech.server.model.api.model.ApiAssetType;
 import io.lovelacetech.server.model.api.model.ApiUser;
 import io.lovelacetech.server.model.api.response.asset.AssetApiResponse;
-import io.lovelacetech.server.repository.AssetRepository;
 import io.lovelacetech.server.repository.AssetTypeRepository;
 import io.lovelacetech.server.repository.DeviceRepository;
 import io.lovelacetech.server.repository.LocationRepository;
@@ -18,9 +17,6 @@ import io.lovelacetech.server.util.AccessUtils;
 import io.lovelacetech.server.util.Messages;
 import io.lovelacetech.server.util.RepositoryUtils;
 import io.lovelacetech.server.util.UUIDUtils;
-import org.h2.util.StringUtils;
-import org.hibernate.exception.ConstraintViolationException;
-import org.postgresql.util.PSQLException;
 import org.springframework.dao.DataIntegrityViolationException;
 
 public class SaveAssetCommand extends AssetCommand<SaveAssetCommand> {
@@ -122,7 +118,7 @@ public class SaveAssetCommand extends AssetCommand<SaveAssetCommand> {
 
     Asset existingAssetWithRFID = getAssetRepository().findOneByRfid(assetUpdate.getRfid());
     if (existingAssetWithRFID != null
-      && RepositoryUtils.updateConflictsWithExistingRow(assetUpdate, existingAssetWithRFID)) {
+        && RepositoryUtils.updateConflictsWithExistingRow(assetUpdate, existingAssetWithRFID)) {
       return new AssetApiResponse()
           .setConflict()
           .setMessage(Messages.ASSET_CONFLICTING_RFID);

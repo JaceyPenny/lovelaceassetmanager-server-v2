@@ -6,7 +6,7 @@ import org.springframework.http.HttpStatus;
 
 import java.beans.Transient;
 
-public abstract class BaseApiResponse<T extends BaseApiResponse, S extends BaseApiModel> {
+public abstract class BaseApiResponse<T extends BaseApiResponse, S> {
   private int status;
   private String message;
   private S response;
@@ -86,6 +86,7 @@ public abstract class BaseApiResponse<T extends BaseApiResponse, S extends BaseA
     this.response = response;
     return (T) this;
   }
+
   public S getResponse() {
     return response;
   }

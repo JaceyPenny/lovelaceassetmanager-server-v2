@@ -28,7 +28,8 @@ public class CompanyByPhoneNumberCommand
     ApiCompany apiCompany = null;
     try {
       apiCompany = getCompanyRepository().findByPhoneNumber(phoneNumber).toApi();
-    } catch (NullPointerException ignored) {}
+    } catch (NullPointerException ignored) {
+    }
 
     if (apiCompany == null) {
       return new CompanyApiResponse().setNotFoundByPhoneNumber(phoneNumber);

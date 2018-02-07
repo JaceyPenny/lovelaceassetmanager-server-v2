@@ -73,8 +73,8 @@ public class SaveLocationCommand extends LocationCommand<SaveLocationCommand> {
         .findByCompanyIdAndName(locationUpdate.getCompanyId(), locationUpdate.getName());
     if (existingLocationWithInfo != null
         && RepositoryUtils.updateConflictsWithExistingRow(
-            locationUpdate,
-            existingLocationWithInfo)) {
+        locationUpdate,
+        existingLocationWithInfo)) {
       return new LocationApiResponse()
           .setConflict()
           .setMessage(Messages.LOCATION_CONFLICTING_NAME);

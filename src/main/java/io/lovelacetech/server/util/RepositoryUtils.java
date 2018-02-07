@@ -18,7 +18,7 @@ public class RepositoryUtils {
   }
 
   public static <R extends ApiModelConvertible<T>, T extends BaseApiModel<R>>
-      List<R> toDatabaseList(Iterable<T> iterable) {
+  List<R> toDatabaseList(Iterable<T> iterable) {
     return mapIterable(iterable, BaseApiModel::toDatabase);
   }
 
