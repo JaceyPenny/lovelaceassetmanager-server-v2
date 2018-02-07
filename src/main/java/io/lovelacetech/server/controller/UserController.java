@@ -11,6 +11,7 @@ import io.lovelacetech.server.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collections;
 import java.util.UUID;
 
 @RestController
@@ -162,21 +163,21 @@ public class UserController extends BaseController {
       @RequestAttribute ApiUser authenticatedUser,
       @PathVariable UUID userId,
       @PathVariable UUID locationId) {
-    return new AddUserToLocationCommand()
-        .setLocationId(locationId)
+    return new AddUserToLocationsCommand()
         .setUserRepository(userRepository)
         .setLocationRepository(locationRepository)
         .setActingUser(authenticatedUser)
         .setUserId(userId)
+        .setLocationIds(Collections.singletonList(locationId))
         .execute();
   }
 
   /**
-   * <b>  POST /api/secure/users/addToLocation/{userId}/{locationId}  </b>
+   * <b>  POST /api/secure/users/addToLocations/{userId}  </b>
    * <br><br>
    * Adds a User to multiple location. That is to say, this endpoint gives the User with
-   * "userId" permission to access the Locations with ids in the body array "locationIds". This endpoint
-   * is accessible only to SUPER and ADMIN users. If the calling user does not
+   * "userId" permission to access the Locations with ids in the body array "locationIds". This
+   * endpoint is accessible only to SUPER and ADMIN users. If the calling user does not
    * have access to either the User or Location identified by userId and locationId
    * respectively, "ACCESS_DENIED" will be thrown.
    * <br><br>
@@ -200,6 +201,113 @@ public class UserController extends BaseController {
       @PathVariable UUID userId,
       @RequestBody ApiLocationIdList locationIdList) {
     return new AddUserToLocationsCommand()
+        .setUserRepository(userRepository)
+        .setLocationRepository(locationRepository)
+        .setActingUser(authenticatedUser)
+        .setUserId(userId)
+        .setLocationIds(locationIdList.getLocationIds())
+        .execute();
+  }
+
+  /**
+   * <b>  GET /api/secure/users/removeFromLocation/{userId}/{locationId}  </b>
+   * <br><br>
+   * Adds a User to a location. That is to say, this endpoint removes the User with
+   * "userId" permissions to access the Location with "locationId". This endpoint
+   * is accessible only to SUPER and ADMIN users. If the calling user does not
+   * have access to either the User or Location identified by userId and locationId
+   * respectively, "ACCESS_DENIED" will be thrown.
+   * <br><br>
+   * <b>  RESULT:  </b><br>
+   * <pre>{@code    {
+   *   "status": 200,
+   *   "message": "success",
+   *   "response": User
+   * }}</pre>
+   * <br>
+   * <b>  PERMISSIONS  </b><br>
+   * User must be ADMIN or above to access this endpoint.
+   */
+  @RequestMapping(value = "/removeFromLocation/{userId}/{locationId}", method = RequestMethod.GET)
+  public UserApiResponse removeUserFromLocation(
+      @RequestAttribute ApiUser authenticatedUser,
+      @PathVariable UUID userId,
+      @PathVariable UUID locationId) {
+    return new RemoveUserFromLocationsCommand()
+        .setUserRepository(userRepository)
+        .setLocationRepository(locationRepository)
+        .setActingUser(authenticatedUser)
+        .setUserId(userId)
+        .setLocationIds(Collections.singletonList(locationId))
+        .execute();
+  }
+
+  /**
+   * <b>  POST /api/secure/users/removeFromLocations/{userId}  </b>
+   * <br><br>
+   * Removes a User to multiple location. That is to say, this endpoint removes the User with
+   * "userId" permissions to access the Locations with ids in the body array "locationIds". This
+   * endpoint is accessible only to SUPER and ADMIN users. If the calling user does not
+   * have access to either the User or Location identified by userId and locationId
+   * respectively, "ACCESS_DENIED" will be thrown.
+   * <br><br>
+   * <b>  REQUEST BODY:  </b>
+   * <pre>{@code    {
+   *   "locationIds": [ locationId1, locationId2, ... ]
+   * }}</pre>
+   * <b>  RESULT:  </b><br>
+   * <pre>{@code    {
+   *   "status": 200,
+   *   "message": "success",
+   *   "response": User
+   * }}</pre>
+   * <br>
+   * <b>  PERMISSIONS  </b><br>
+   * User must be ADMIN or above to access this endpoint.
+   */
+  @RequestMapping(value = "/removeFromLocations/{userId}", method = RequestMethod.POST)
+  public UserApiResponse removeUserFromLocations(
+      @RequestAttribute ApiUser authenticatedUser,
+      @PathVariable UUID userId,
+      @RequestBody ApiLocationIdList locationIdList) {
+    return new RemoveUserFromLocationsCommand()
+        .setUserRepository(userRepository)
+        .setLocationRepository(locationRepository)
+        .setActingUser(authenticatedUser)
+        .setUserId(userId)
+        .setLocationIds(locationIdList.getLocationIds())
+        .execute();
+  }
+
+  /**
+   * <b>  POST /api/secure/users/setToLocations/{userId}  </b>
+   * <br><br>
+   * Sets a User to multiple location. That is to say, this endpoint set the User with
+   * "userId" permissions to access the only the Locations with ids in the body array "locationIds".
+   * This endpoint is accessible only to SUPER and ADMIN users. If the calling user does not
+   * have access to either the User or Location identified by userId and locationId
+   * respectively, "ACCESS_DENIED" will be thrown.
+   * <br><br>
+   * <b>  REQUEST BODY:  </b>
+   * <pre>{@code    {
+   *   "locationIds": [ locationId1, locationId2, ... ]
+   * }}</pre>
+   * <b>  RESULT:  </b><br>
+   * <pre>{@code    {
+   *   "status": 200,
+   *   "message": "success",
+   *   "response": User
+   * }}</pre>
+   * <br>
+   * <b>  PERMISSIONS  </b><br>
+   * User must be ADMIN or above to access this endpoint.
+   */
+  @RequestMapping(value = "/setToLocations/{userId}", method = RequestMethod.POST)
+  public UserApiResponse setUserToLocations(
+      @RequestAttribute ApiUser authenticatedUser,
+      @PathVariable UUID userId,
+      @RequestBody ApiLocationIdList locationIdList) {
+    return new SetUserToLocationsCommand()
         .setUserRepository(userRepository)
         .setLocationRepository(locationRepository)
         .setActingUser(authenticatedUser)
