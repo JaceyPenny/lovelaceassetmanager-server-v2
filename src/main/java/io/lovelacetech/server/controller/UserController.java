@@ -1,10 +1,8 @@
 package io.lovelacetech.server.controller;
 
-import io.lovelacetech.server.command.user.AddUserToLocationCommand;
-import io.lovelacetech.server.command.user.DeleteUserCommand;
-import io.lovelacetech.server.command.user.UpdateUserCommand;
-import io.lovelacetech.server.command.user.UsersForAdminCommand;
+import io.lovelacetech.server.command.user.*;
 import io.lovelacetech.server.model.api.enums.AccessLevel;
+import io.lovelacetech.server.model.api.model.ApiLocationIdList;
 import io.lovelacetech.server.model.api.model.ApiUser;
 import io.lovelacetech.server.model.api.response.user.UserApiResponse;
 import io.lovelacetech.server.model.api.response.user.UserListApiResponse;
@@ -144,7 +142,7 @@ public class UserController extends BaseController {
    * <b>  GET /api/secure/users/addToLocation/{userId}/{locationId}  </b>
    * <br><br>
    * Adds a User to a location. That is to say, this endpoint gives the User with
-   * "userId" permission to access the Location with "locationId. This endpoint
+   * "userId" permission to access the Location with "locationId". This endpoint
    * is accessible only to SUPER and ADMIN users. If the calling user does not
    * have access to either the User or Location identified by userId and locationId
    * respectively, "ACCESS_DENIED" will be thrown.
@@ -165,11 +163,48 @@ public class UserController extends BaseController {
       @PathVariable UUID userId,
       @PathVariable UUID locationId) {
     return new AddUserToLocationCommand()
+        .setLocationId(locationId)
         .setUserRepository(userRepository)
         .setLocationRepository(locationRepository)
         .setActingUser(authenticatedUser)
         .setUserId(userId)
-        .setLocationId(locationId)
+        .execute();
+  }
+
+  /**
+   * <b>  POST /api/secure/users/addToLocation/{userId}/{locationId}  </b>
+   * <br><br>
+   * Adds a User to multiple location. That is to say, this endpoint gives the User with
+   * "userId" permission to access the Locations with ids in the body array "locationIds". This endpoint
+   * is accessible only to SUPER and ADMIN users. If the calling user does not
+   * have access to either the User or Location identified by userId and locationId
+   * respectively, "ACCESS_DENIED" will be thrown.
+   * <br><br>
+   * <b>  REQUEST BODY:  </b>
+   * <pre>{@code    {
+   *   "locationIds": [ locationId1, locationId2, ... ]
+   * }}</pre>
+   * <b>  RESULT:  </b><br>
+   * <pre>{@code    {
+   *   "status": 200,
+   *   "message": "success",
+   *   "response": User
+   * }}</pre>
+   * <br>
+   * <b>  PERMISSIONS  </b><br>
+   * User must be ADMIN or above to access this endpoint.
+   */
+  @RequestMapping(value = "/addToLocations/{userId}", method = RequestMethod.POST)
+  public UserApiResponse addUserToLocations(
+      @RequestAttribute ApiUser authenticatedUser,
+      @PathVariable UUID userId,
+      @RequestBody ApiLocationIdList locationIdList) {
+    return new AddUserToLocationsCommand()
+        .setUserRepository(userRepository)
+        .setLocationRepository(locationRepository)
+        .setActingUser(authenticatedUser)
+        .setUserId(userId)
+        .setLocationIds(locationIdList.getLocationIds())
         .execute();
   }
 
