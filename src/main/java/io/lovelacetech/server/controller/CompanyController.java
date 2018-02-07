@@ -52,15 +52,13 @@ public class CompanyController extends BaseController {
    * Gets all the Companies in the database and returns in a list.
    * <br><br>
    * <b>  RESULT:  </b><br>
-   * {@code
-   * {
-   * "status": 200,
-   * "message": "success",
-   * "response": {
-   * "companies": [Company]
-   * }
-   * }
-   * }
+   * <pre>{@code    {
+   *     "status": 200,
+   *     "message": "success",
+   *     "response": {
+   *         "companies": [Company]
+   *     }
+   * }}</pre>
    * <br><br>
    * <b>  PERMISSIONS  </b><br>
    * User must be SUPER.
@@ -93,13 +91,11 @@ public class CompanyController extends BaseController {
    * Gets the Company with id "companyId"
    * <br><br>
    * <b>  RESULT:  </b><br>
-   * {@code
-   * {
-   * "status": 200,
-   * "message": "success",
-   * "response": Company
-   * }
-   * }
+   * <pre>{@code    {
+   *     "status": 200,
+   *     "message": "success",
+   *     "response": Company
+   * }}</pre>
    * <br><br>
    * <b>  PERMISSIONS  </b><br>
    * User must either be SUPER, or must be a member of the Company with id "companyId"; That is to
@@ -127,13 +123,11 @@ public class CompanyController extends BaseController {
    * Gets the Company with name "name"
    * <br><br>
    * <b>  RESULT:  </b><br>
-   * {@code
-   * {
-   * "status": 200,
-   * "message": "success",
-   * "response": Company
-   * }
-   * }
+   * <pre>{@code    {
+   *     "status": 200,
+   *     "message": "success",
+   *     "response": Company
+   * }}</pre>
    * <br><br>
    * <b>  PERMISSIONS  </b><br>
    * User must be SUPER.
@@ -156,15 +150,13 @@ public class CompanyController extends BaseController {
    * Gets any Companies whose names or phone numbers match those from the query.
    * <br><br>
    * <b>  RESULT:  </b><br>
-   * {@code
-   * {
-   * "status": 200,
-   * "message": "success",
-   * "response": {
-   * "companies": [Company]
-   * }
-   * }
-   * }
+   * <pre>{@code    {
+   *     "status": 200,
+   *     "message": "success",
+   *     "response": {
+   *         "companies": [Company]
+   *     }
+   * }}</pre>
    * <br><br>
    * <b>  PERMISSIONS  </b><br>
    * User must be SUPER.
@@ -189,13 +181,11 @@ public class CompanyController extends BaseController {
    * Gets the Company with phoneNumber "phoneNumber"
    * <br><br>
    * <b>  RESULT:  </b><br>
-   * {@code
-   * {
-   * "status": 200,
-   * "message": "success",
-   * "response": Company
-   * }
-   * }
+   * <pre>{@code    {
+   *     "status": 200,
+   *     "message": "success",
+   *     "response": Company
+   * }}</pre>
    * <br><br>
    * <b>  PERMISSIONS  </b><br>
    * User must be SUPER.
@@ -221,13 +211,11 @@ public class CompanyController extends BaseController {
    * recursive. See {@link io.lovelacetech.server.util.LoaderUtils}.
    * <br><br>
    * <b>  RESULT:  </b><br>
-   * {@code
-   * {
-   * "status": 200,
-   * "message": "success",
-   * "response": Company
-   * }
-   * }
+   * <pre>{@code    {
+   *     "status": 200,
+   *     "message": "success",
+   *     "response": Company
+   * }}</pre>
    */
   @RequestMapping(value = "/forAuthenticated", method = RequestMethod.GET)
   public CompanyApiResponse getCompanyForAuthenticatedUserFilled(
@@ -280,8 +268,7 @@ public class CompanyController extends BaseController {
    * <pre>{@code    {
    *   (required) "name": ...,
    *   (required) "phoneNumber": ...
-   * }}
-   * </pre>
+   * }}</pre>
    * Once the Company is created, the calling user has their "companyId" set to the newly created
    * Company's id, and their "accessLevel" set to ADMIN.
    * <br><br>
@@ -290,16 +277,14 @@ public class CompanyController extends BaseController {
    *   (required) "id": ...,
    *   (optional) "name": ...,
    *   (optional) "phoneNumber": ...
-   * }}
-   * </pre>
-   * <b>  RESULT:  </b>
+   * }}</pre>
+   * <br><b>  RESULT:  </b>
    * <pre>{@code    {
    *   "status": 200,
    *   "message": "success",
    *   "response": Company
-   * }}
-   * </pre>
-   * <b>  PERMISSIONS  </b><br>
+   * }}</pre>
+   * <br><b>  PERMISSIONS  </b><br>
    * If the calling user is updating a Company, they must be the ADMIN for that Company. Any user
    * is allowed to create a Company.
    */

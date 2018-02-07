@@ -47,7 +47,9 @@ public class NotificationController extends BaseController {
    * <pre>{@code    {
    *   "status": 200,
    *   "message": "success",
-   *   "response": [Notification]
+   *   "response": {
+   *     "notifications": [Notification]
+   *   }
    * }}</pre>
    * <br><br><b>  PERMISSIONS:  </b><br>
    * This method is only accessible to SUPER users.
@@ -68,7 +70,9 @@ public class NotificationController extends BaseController {
    * <pre>{@code    {
    *   "status": 200,
    *   "message": "success",
-   *   "response": [Notification]
+   *   "response": {
+   *     "notifications": [Notification]
+   *   }
    * }}</pre>
    * <br><br><b>  PERMISSIONS:  </b><br>
    * Must be an authenticated User.

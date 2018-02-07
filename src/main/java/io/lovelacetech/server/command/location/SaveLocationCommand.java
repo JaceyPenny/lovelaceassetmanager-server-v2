@@ -1,6 +1,7 @@
 package io.lovelacetech.server.command.location;
 
 import io.lovelacetech.server.model.Location;
+import io.lovelacetech.server.model.api.enums.AccessLevel;
 import io.lovelacetech.server.model.api.model.ApiLocation;
 import io.lovelacetech.server.model.api.model.ApiUser;
 import io.lovelacetech.server.model.api.response.location.LocationApiResponse;
@@ -35,6 +36,10 @@ public class SaveLocationCommand extends LocationCommand<SaveLocationCommand> {
       return new LocationApiResponse().setDefault();
     }
 
+    if (user.getAccessLevel() == AccessLevel.USER) {
+      return new LocationApiResponse().setAccessDenied();
+    }
+
     // If the user supplied "id" with their request, fetch the existing Location
     // for that ID. Otherwise, throw "Not Found"
     Location locationUpdate = location.toDatabase();
@@ -46,7 +51,7 @@ public class SaveLocationCommand extends LocationCommand<SaveLocationCommand> {
       }
 
       // If the user cannot access this location due to being:
-      //   1. AccessLevel USER without permissions for this location
+      //   1. AccessLevel USER
       //   2. AccessLevel ADMIN trying to modify a location from another company
       // then return FORBIDDEN
       if (!AccessUtils.userCanAccessLocation(user, existingLocation)) {

@@ -37,6 +37,20 @@ public class DeviceController extends BaseController {
     this.assetRepository = assetRepository;
   }
 
+  /**
+   * <b> GET /api/secure/devices/ </b>
+   * <br> Gets all the devices in the database.
+   * <br><br><b>  RESPONSE:  </b>
+   * <pre>{@code    {
+   *   "status": 200,
+   *   "message": "success",
+   *   "response": {
+   *     "devices": [Device]
+   *   }
+   * }}</pre><br><br>
+   * <b> PERMISSIONS: </b><br>
+   * The user must be a SUPER.
+   */
   @RequestMapping(value = "/", method = RequestMethod.GET)
   public DeviceListApiResponse getDevices(@RequestAttribute ApiUser authenticatedUser) {
     checkIsSuper(authenticatedUser);
@@ -46,6 +60,23 @@ public class DeviceController extends BaseController {
         .setResponse(deviceRepository.findAll());
   }
 
+  /**
+   * <b> GET /api/secure/devices/byDeviceId/{deviceId}?filled={true|false} </b>
+   * <br>Gets a single Device by "deviceId".
+   * <br><br><b>  RESPONSE:  </b>
+   * <pre>{@code    {
+   *   "status": 200,
+   *   "message": "success",
+   *   "response": Device
+   * }}</pre><br><br>
+   * <b>  PERMISSIONS:  </b>
+   * The user must have permissions for this Device. They must either:
+   * <ul>
+   *   <li>Be a SUPER</li>
+   *   <li>Be an ADMIN of the company that this Device belongs to</li>
+   *   <li>Be a USER with permissions for the Location this Device belongs to.</li>
+   * </ul>
+   */
   @RequestMapping(value = "/byDeviceId/{deviceId}", method = RequestMethod.GET)
   public DeviceApiResponse getDeviceByDeviceId(
       @RequestAttribute ApiUser authenticatedUser,
@@ -63,6 +94,25 @@ public class DeviceController extends BaseController {
         .execute();
   }
 
+  /**
+   * <b> GET /api/secure/devices/byLocationId/{locationId}?filled={true|false} </b><br>
+   * Gets the Devices at the Location with "locationId".<br><br>
+   * <b>  RESPONSE:  </b>
+   * <pre>{@code    {
+   *   "status": 200,
+   *   "message": "success",
+   *   "response": {
+   *     "devices": [Device]
+   *   }
+   * }}</pre><br><br>
+   * <b>  PERMISSIONS:  </b><br>
+   * The user must have permissions for the Location with "locationId". The user must either:
+   * <ul>
+   *   <li>Be a SUPER</li>
+   *   <li>Be an ADMIN of the company that the Location belongs to</li>
+   *   <li>Be a user with permissions for the Location with "locationId"</li>
+   * </ul>
+   */
   @RequestMapping(value = "/byLocationId/{locationId}", method = RequestMethod.GET)
   public DeviceListApiResponse getDevicesByLocationId(
       @RequestAttribute ApiUser authenticatedUser,
@@ -80,17 +130,62 @@ public class DeviceController extends BaseController {
         .execute();
   }
 
+  /**
+   * <b> GET /api/secure/devices/forAuthenticated?filled={true|false}</b>
+   * <br>Gets all the devices belonging to the authenticated user. Specify the "filled" parameter
+   * to have the device populated with its children Assets.
+   * <br><br><b>  RESPONSE:  </b>
+   * <pre>{@code    {
+   *   "status": 200,
+   *   "message": "success",
+   *   "response": {
+   *     "devices": [Device]
+   *   }
+   * }}</pre><br><br>
+   * <b>  PERMISSIONS:  </b>
+   * User must be authenticated.
+   */
   @RequestMapping(value = "/forAuthenticated", method = RequestMethod.GET)
   public DeviceListApiResponse getDevicesForAuthenticated(
-      @RequestAttribute ApiUser authenticatedUser) {
+      @RequestAttribute ApiUser authenticatedUser,
+      @RequestParam(defaultValue = "false") boolean filled) {
     return new DevicesForUserCommand()
         .setDeviceRepository(deviceRepository)
         .setLocationRepository(locationRepository)
         .setCompanyRepository(companyRepository)
+        .setFilled(filled)
         .setUser(authenticatedUser)
         .execute();
   }
 
+  /**
+   * <b> POST /api/secure/devices/forAuthenticated </b>
+   * <br>Creates or updates a Device in the database.<br><br>
+   * <b>  REQUEST BODY (CREATE):</b>
+   * <pre>{@code    {
+   *   (required) "deviceCode": String,
+   *   (required) "name": String,
+   *   (optional) "locationId": UUID
+   * }}</pre>
+   * This method should really only be used by Lovelace employees to register
+   * a manufactured device.
+   * <br><br><b>  REQUEST BODY (UPDATE):  </b>
+   * <pre>{@code    {
+   *   (required) "id": UUID,
+   *   (optional) "name": String,
+   *   (optional) "locationId": UUID
+   * }}</pre>
+   * <br><br>
+   * <b>  RESPONSE:  </b>
+   * <pre>{@code    {
+   *   "status": 200,
+   *   "message": "success",
+   *   "response": Device
+   * }}</pre><br>
+   * <b>  PERMISSIONS:  </b>
+   * To create, user must be SUPER. To update, user must have permissions
+   * on the Location for this Device.
+   */
   @RequestMapping(value = "/forAuthenticated", method = RequestMethod.POST)
   public DeviceApiResponse putDeviceForAuthenticated(
       @RequestAttribute ApiUser authenticatedUser,
@@ -105,6 +200,25 @@ public class DeviceController extends BaseController {
         .execute();
   }
 
+  /**
+   * <b> POST /api/secure/devices/activateDevice </b><br>
+   * Activates a new Device by device code, adding it to the location identified
+   * by "locationId".<br><br>
+   * <b>  REQUEST BODY:  </b>
+   * <pre>{@code    {
+   *   (required) "deviceCode": String,
+   *   (required) "locationId": UUID
+   * }}</pre><br><br>
+   * <b>  RESPONSE:  </b>
+   * <pre>{@code    {
+   *   "status": 200,
+   *   "message": "success",
+   *   "response": Device
+   * }}</pre>
+   * <br><b>  PERMISSIONS:  </b>
+   * <br>The user must be an ADMIN for the Company where they're trying to activate
+   * this new Device.
+   */
   @RequestMapping(value = "/activateDevice", method = RequestMethod.POST)
   public DeviceApiResponse activateDeviceWithCode(
       @RequestAttribute ApiUser authenticatedUser,

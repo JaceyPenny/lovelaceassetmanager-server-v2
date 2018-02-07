@@ -35,6 +35,20 @@ public class LocationController extends BaseController {
     this.deviceRepository = deviceRepository;
   }
 
+  /**
+   * <b>  GET /api/secure/locations/ </b><br>
+   * Gets all Locations in the database.<br><br>
+   * <b>  RESPONSE:  </b>
+   * <pre>{@code    {
+   *   "status": 200,
+   *   "message": "success",
+   *   "response": {
+   *     "locations": [Location]
+   *   }
+   * }}</pre>
+   * <br><b>  PERMISSIONS:  </b>
+   * <br>The user must be SUPER
+   */
   @RequestMapping(value = "/", method = RequestMethod.GET)
   public LocationListApiResponse getLocations(@RequestAttribute ApiUser authenticatedUser) {
     checkIsSuper(authenticatedUser);
@@ -44,6 +58,25 @@ public class LocationController extends BaseController {
         .setResponse(locationRepository.findAll());
   }
 
+  /**
+   * <b>  GET /api/secure/locations/byLocationId/{locationId}?filled="{true|false}  </b>
+   * <br>Gets a location by the supplied "locationId". You can specify that you want the Location
+   * filled with its children Devices and Assets by setting the request parameter "filled" to
+   * "true".
+   * <br><br><b>  RESPONSE:  </b>
+   * <pre>{@code    {
+   *   "status": 200,
+   *   "message": "success",
+   *   "response": Location
+   * }}</pre>
+   * <br><b>  PERMISSIONS:  </b>
+   * <br>The calling user must either:
+   * <ul>
+   *   <li>Be SUPER</li>
+   *   <li>Be ADMIN of the Company possessing the Location with "locationId"</li>
+   *   <li>Be USER that has been granted access to the Location with "locationId"</li>
+   * </ul>
+   */
   @RequestMapping(value = "/byLocationId/{locationId}", method = RequestMethod.GET)
   public LocationApiResponse getLocationByLocationId(
       @RequestAttribute ApiUser authenticatedUser,
@@ -61,6 +94,20 @@ public class LocationController extends BaseController {
         .execute();
   }
 
+  /**
+   * <b>  GET /api/secure/locations/forAuthenticated?filled={true|false}</b>
+   * <br>Gets all the Locations for the authenticated user's company, or the Locations the User
+   * has been granted access to, if they are a USER. If you want each Location's children populated
+   * in the response, specify "?filled=true" at the end of the URL.<br><br>
+   * <b>  RESPONSE:  </b>
+   * <pre>{@code    {
+   *   "status": 200,
+   *   "message": "success",
+   *   "response": {
+   *     "locations": [Location]
+   *   }
+   * }}</pre>
+   */
   @RequestMapping(value = "/forAuthenticated", method = RequestMethod.GET)
   public LocationListApiResponse getLocationsForAuthenticatedUserFilled(
       @RequestAttribute ApiUser authenticatedUser,
@@ -76,6 +123,20 @@ public class LocationController extends BaseController {
         .execute();
   }
 
+  /**
+   * <b>  GET /api/secure/locations/byCompanyId/{companyId}  </b>
+   * <br> Gets all the locations in the Company identified by "companyId".
+   * <br><br><b>  RESPONSE:  </b>
+   * <pre>{@code    {
+   *   "status": 200,
+   *   "message": "success",
+   *   "response" {
+   *     "locations": [Location]
+   *   }
+   * }}</pre>
+   * <br><b>  PERMISSIONS:  </b><br>
+   * The user must be SUPER.
+   */
   @RequestMapping(value = "/byCompanyId/{companyId}", method = RequestMethod.GET)
   public LocationListApiResponse getLocationsByCompanyId(
       @RequestAttribute ApiUser authenticatedUser,
@@ -93,6 +154,32 @@ public class LocationController extends BaseController {
         .execute();
   }
 
+  /**
+   * <b>  POST /api/secure/locations/forAuthenticated </b><br>
+   * Adds a new location to the database for the authenticated user.
+   * <br><br><b>  REQUEST BODY (CREATE):  </b>
+   * <pre>{@code    {
+   *   (required) "name": String,
+   *   (required) "city": String,
+   *   (required) "state" String(2),  // e.g. "AR", "CA", ...
+   * }}</pre>
+   * <br><br>
+   * <b>  REQUEST BODY (UPDATE):  </b>
+   * <pre>{@code    {
+   *   (required) "id": UUID,
+   *   (optional) "name": String
+   *   (optional) "city": String,
+   *   (optional) "state": String(2),
+   * }}</pre><br><br>
+   * <b>  RESPONSE:  </b>
+   * <pre>{@code    {
+   *   "status": 200,
+   *   "message": "success",
+   *   "response": Location
+   * }}</pre><br><br>
+   * <b>  PERMISSIONS:  </b>
+   * <br>The user must be an ADMIN at their company or a SUPER.
+   */
   @RequestMapping(value = "/forAuthenticated", method = RequestMethod.POST)
   public LocationApiResponse putLocationForAuthenticatedAdmin(
       @RequestAttribute ApiUser authenticatedUser,

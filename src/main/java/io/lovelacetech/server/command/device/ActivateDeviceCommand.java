@@ -47,6 +47,11 @@ public class ActivateDeviceCommand extends DeviceCommand<ActivateDeviceCommand> 
       return new DeviceApiResponse().setDefault();
     }
 
+    if (!AuthenticationUtils.userIsAtLeast(user, AccessLevel.ADMIN)) {
+      return new DeviceApiResponse()
+          .setAccessDenied();
+    }
+
     String deviceCode = deviceActivation.getDeviceCode();
     UUID locationId = deviceActivation.getLocationId();
     Device existingDeviceWithCode = getDeviceRepository().findOneByDeviceCode(deviceCode);
@@ -72,11 +77,6 @@ public class ActivateDeviceCommand extends DeviceCommand<ActivateDeviceCommand> 
     }
 
     if (!UUIDUtils.idsEqual(targetLocation.getCompanyId(), user.getCompanyId())) {
-      return new DeviceApiResponse()
-          .setAccessDenied();
-    }
-
-    if (!AuthenticationUtils.userIsAtLeast(user, AccessLevel.ADMIN)) {
       return new DeviceApiResponse()
           .setAccessDenied();
     }

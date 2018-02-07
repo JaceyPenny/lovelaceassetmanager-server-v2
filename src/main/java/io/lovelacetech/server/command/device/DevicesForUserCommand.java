@@ -3,11 +3,15 @@ package io.lovelacetech.server.command.device;
 import io.lovelacetech.server.model.Company;
 import io.lovelacetech.server.model.Device;
 import io.lovelacetech.server.model.Location;
+import io.lovelacetech.server.model.api.model.ApiDevice;
+import io.lovelacetech.server.model.api.model.ApiDeviceList;
 import io.lovelacetech.server.model.api.model.ApiUser;
 import io.lovelacetech.server.model.api.response.device.DeviceListApiResponse;
+import io.lovelacetech.server.repository.AssetRepository;
 import io.lovelacetech.server.repository.CompanyRepository;
 import io.lovelacetech.server.repository.LocationRepository;
 import io.lovelacetech.server.util.AuthenticationUtils;
+import io.lovelacetech.server.util.LoaderUtils;
 import io.lovelacetech.server.util.RepositoryUtils;
 
 import java.util.List;
@@ -15,11 +19,18 @@ import java.util.UUID;
 
 public class DevicesForUserCommand extends DeviceCommand<DevicesForUserCommand> {
   private ApiUser user;
+  private boolean filled;
   private CompanyRepository companyRepository;
   private LocationRepository locationRepository;
+  private AssetRepository assetRepository;
 
   public DevicesForUserCommand setUser(ApiUser user) {
     this.user = user;
+    return this;
+  }
+
+  public DevicesForUserCommand setFilled(boolean filled) {
+    this.filled = filled;
     return this;
   }
 
@@ -30,6 +41,11 @@ public class DevicesForUserCommand extends DeviceCommand<DevicesForUserCommand> 
 
   public DevicesForUserCommand setLocationRepository(LocationRepository locationRepository) {
     this.locationRepository = locationRepository;
+    return this;
+  }
+
+  public DevicesForUserCommand setAssetRepository(AssetRepository assetRepository) {
+    this.assetRepository = assetRepository;
     return this;
   }
 
@@ -78,8 +94,14 @@ public class DevicesForUserCommand extends DeviceCommand<DevicesForUserCommand> 
       return new DeviceListApiResponse().setNotFound();
     }
 
+    List<ApiDevice> apiDevices = RepositoryUtils.toApiList(devices);
+
+    if (filled) {
+      LoaderUtils.populateDevices(apiDevices, assetRepository);
+    }
+
     return new DeviceListApiResponse()
         .setSuccess()
-        .setResponse(devices);
+        .setResponse(new ApiDeviceList(apiDevices));
   }
 }
