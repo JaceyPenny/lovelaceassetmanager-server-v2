@@ -173,4 +173,11 @@ public class LoaderUtils {
 
     return user.getLocations();
   }
+
+  public static List<ApiAsset> filterByRfidIn(List<ApiAsset> assets, List<String> rfids) {
+    return assets
+        .stream()
+        .filter((asset) -> rfids.contains(asset.getRfid()))
+        .collect(Collectors.toList());
+  }
 }
