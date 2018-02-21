@@ -42,6 +42,7 @@ public class LoaderUtils {
         assetRepository.findAllByDeviceIdIn(deviceIds));
 
     populateDevices(deviceMap, assets);
+    fillAssetCounts(devices, assetRepository);
   }
 
   public static void populateDevices(Map<UUID, ApiDevice> deviceMap, List<ApiAsset> assets) {
@@ -161,6 +162,20 @@ public class LoaderUtils {
     for (ApiCompany company : companies) {
       populateCompany(company, locationRepository, deviceRepository, assetRepository);
     }
+  }
+
+  public static void fillAssetCounts(List<ApiDevice> devices, AssetRepository assetRepository) {
+    for (ApiDevice device : devices) {
+      fillAssetCounts(device, assetRepository);
+    }
+  }
+
+  public static void fillAssetCounts(ApiDevice device, AssetRepository assetRepository) {
+    int assetsInDevice = assetRepository.countAllByDeviceId(device.getId());
+    int assetsWithHomeId = assetRepository.countAllByHomeId(device.getId());
+
+    device.setAssetsInDevice(assetsInDevice);
+    device.setAssetsWithHome(assetsWithHomeId);
   }
 
   public static List<ApiLocation> getLocationsForUser(

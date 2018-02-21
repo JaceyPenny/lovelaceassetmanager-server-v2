@@ -193,8 +193,9 @@ public class DeviceController extends BaseController {
     checkBelongsToCompany(authenticatedUser);
 
     return new SaveDeviceCommand()
-        .setDeviceRepository(deviceRepository)
         .setLocationRepository(locationRepository)
+        .setDeviceRepository(deviceRepository)
+        .setAssetRepository(assetRepository)
         .setUser(authenticatedUser)
         .setDevice(device)
         .execute();
@@ -226,8 +227,9 @@ public class DeviceController extends BaseController {
     checkBelongsToCompany(authenticatedUser);
 
     return new ActivateDeviceCommand()
-        .setDeviceRepository(deviceRepository)
         .setLocationRepository(locationRepository)
+        .setDeviceRepository(deviceRepository)
+        .setAssetRepository(assetRepository)
         .setUser(authenticatedUser)
         .setDeviceActivation(deviceActivation)
         .execute();

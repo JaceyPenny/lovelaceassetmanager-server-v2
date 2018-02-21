@@ -5,11 +5,9 @@ import io.lovelacetech.server.model.Device;
 import io.lovelacetech.server.model.api.model.ApiDevice;
 import io.lovelacetech.server.model.api.model.ApiUser;
 import io.lovelacetech.server.model.api.response.device.DeviceApiResponse;
+import io.lovelacetech.server.repository.AssetRepository;
 import io.lovelacetech.server.repository.LocationRepository;
-import io.lovelacetech.server.util.AccessUtils;
-import io.lovelacetech.server.util.AuthenticationUtils;
-import io.lovelacetech.server.util.Messages;
-import io.lovelacetech.server.util.RepositoryUtils;
+import io.lovelacetech.server.util.*;
 import org.h2.util.StringUtils;
 import org.springframework.dao.DataIntegrityViolationException;
 
@@ -17,6 +15,7 @@ public class SaveDeviceCommand extends DeviceCommand<SaveDeviceCommand> {
   private ApiDevice device;
   private ApiUser user;
   private LocationRepository locationRepository;
+  private AssetRepository assetRepository;
 
   public SaveDeviceCommand setDevice(ApiDevice device) {
     this.device = device;
@@ -33,11 +32,17 @@ public class SaveDeviceCommand extends DeviceCommand<SaveDeviceCommand> {
     return this;
   }
 
+  public SaveDeviceCommand setAssetRepository(AssetRepository assetRepository) {
+    this.assetRepository = assetRepository;
+    return this;
+  }
+
   @Override
   public boolean checkCommand() {
     return super.checkCommand()
         && device != null
-        && user != null;
+        && user != null
+        && assetRepository != null;
   }
 
   @Override
@@ -98,8 +103,11 @@ public class SaveDeviceCommand extends DeviceCommand<SaveDeviceCommand> {
       return new DeviceApiResponse().setBadId();
     }
 
+    ApiDevice apiDeviceUpdate = deviceUpdate.toApi();
+    LoaderUtils.fillAssetCounts(apiDeviceUpdate, assetRepository);
+
     return new DeviceApiResponse()
         .setSuccess()
-        .setResponse(deviceUpdate.toApi());
+        .setResponse(apiDeviceUpdate);
   }
 }
