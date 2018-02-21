@@ -14,4 +14,6 @@ public interface DeviceRepository extends CrudRepository<Device, UUID> {
   List<Device> findAllByLocationId(UUID locationId);
 
   List<Device> findAllByLocationIdIn(List<UUID> locationIds);
+
+  int countAllByLocationId(UUID locationId);
 }

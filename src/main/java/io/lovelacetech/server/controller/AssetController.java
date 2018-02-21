@@ -248,4 +248,29 @@ public class AssetController extends BaseController {
         .setAsset(asset)
         .execute();
   }
+
+  /**
+   * <b>  DELETE /api/secure/assets/{assetId}</b><br>
+   * Deletes an Asset by id. Returns the deleted Asset in the response body.
+   * <br><br><b>  RESPONSE:  </b><br>
+   * <pre>{@code    {
+   *   "status": 200,
+   *   "message": "success",
+   *   "response": Asset
+   * }}</pre>
+   * <br><b>  PERMISSIONS:  </b><br>
+   * The authenticated user must have access to the Asset in order to delete it.
+   */
+  @RequestMapping(value = "/{assetId}", method = RequestMethod.DELETE)
+  public AssetApiResponse deleteAssetById(
+      @RequestAttribute ApiUser authenticatedUser,
+      @PathVariable UUID assetId) {
+    return new DeleteAssetCommand()
+        .setUser(authenticatedUser)
+        .setLocationRepository(locationRepository)
+        .setDeviceRepository(deviceRepository)
+        .setAssetRepository(assetRepository)
+        .setAssetId(assetId)
+        .execute();
+  }
 }

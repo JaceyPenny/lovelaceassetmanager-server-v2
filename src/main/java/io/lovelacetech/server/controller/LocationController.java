@@ -1,9 +1,6 @@
 package io.lovelacetech.server.controller;
 
-import io.lovelacetech.server.command.location.LocationByLocationIdCommand;
-import io.lovelacetech.server.command.location.LocationsByCompanyIdCommand;
-import io.lovelacetech.server.command.location.LocationsForUserCommand;
-import io.lovelacetech.server.command.location.SaveLocationCommand;
+import io.lovelacetech.server.command.location.*;
 import io.lovelacetech.server.model.api.model.ApiLocation;
 import io.lovelacetech.server.model.api.model.ApiUser;
 import io.lovelacetech.server.model.api.response.location.LocationApiResponse;
@@ -11,6 +8,7 @@ import io.lovelacetech.server.model.api.response.location.LocationListApiRespons
 import io.lovelacetech.server.repository.AssetRepository;
 import io.lovelacetech.server.repository.DeviceRepository;
 import io.lovelacetech.server.repository.LocationRepository;
+import io.lovelacetech.server.repository.LogRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,17 +20,20 @@ import java.util.UUID;
 public class LocationController extends BaseController {
 
   private final LocationRepository locationRepository;
-  private final AssetRepository assetRepository;
   private final DeviceRepository deviceRepository;
+  private final AssetRepository assetRepository;
+  private final LogRepository logRepository;
 
   @Autowired
   public LocationController(
       LocationRepository locationRepository,
+      DeviceRepository deviceRepository,
       AssetRepository assetRepository,
-      DeviceRepository deviceRepository) {
+      LogRepository logRepository) {
     this.locationRepository = locationRepository;
-    this.assetRepository = assetRepository;
     this.deviceRepository = deviceRepository;
+    this.assetRepository = assetRepository;
+    this.logRepository = logRepository;
   }
 
   /**
@@ -189,6 +190,33 @@ public class LocationController extends BaseController {
     return new SaveLocationCommand()
         .setLocationRepository(locationRepository)
         .setLocation(location)
+        .setUser(authenticatedUser)
+        .execute();
+  }
+
+  /**
+   * <b> DELETE /api/secure/locations/{locationId} </b><br>
+   * Deletes a Location by id. The Location must be completely empty before total deletion.
+   * <br><br>
+   * <b>  REQUEST BODY:  </b>
+   * <pre>{@code    {
+   *   "status": 200,
+   *   "message": "success",
+   *   "response": Location
+   * }}</pre>
+   * <br><b>  PERMISSIONS:  </b>
+   * <br>The user must be an ADMIN for the company where they're trying to delete this location.
+   */
+  @RequestMapping(value = "/{locationId}", method = RequestMethod.DELETE)
+  public LocationApiResponse deleteLocationById(
+      @RequestAttribute ApiUser authenticatedUser,
+      @PathVariable UUID locationId) {
+    return new DeleteLocationCommand()
+        .setLocationRepository(locationRepository)
+        .setDeviceRepository(deviceRepository)
+        .setAssetRepository(assetRepository)
+        .setLogRepository(logRepository)
+        .setLocationId(locationId)
         .setUser(authenticatedUser)
         .execute();
   }
