@@ -26,4 +26,6 @@ public interface AssetRepository extends CrudRepository<Asset, UUID> {
   int countAllByHomeId(UUID homeId);
 
   int countAllByDeviceId(UUID deviceId);
+
+  int countAllByLocationId(UUID locationId);
 }

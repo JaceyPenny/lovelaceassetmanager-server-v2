@@ -8,6 +8,7 @@ import io.lovelacetech.server.repository.AssetRepository;
 import io.lovelacetech.server.repository.LocationRepository;
 import io.lovelacetech.server.repository.LogRepository;
 import io.lovelacetech.server.util.AccessUtils;
+import io.lovelacetech.server.util.AuthenticationUtils;
 import io.lovelacetech.server.util.LogUtil;
 import io.lovelacetech.server.util.UUIDUtils;
 
@@ -61,7 +62,7 @@ public class DeleteDeviceCommand extends DeviceCommand<DeleteDeviceCommand> {
       return new DeviceApiResponse().setDefault();
     }
 
-    if (user.getAccessLevel() == AccessLevel.USER) {
+    if (!AuthenticationUtils.userIsAtLeast(user, AccessLevel.ADMIN)) {
       return new DeviceApiResponse().setAccessDenied();
     }
 
@@ -84,7 +85,8 @@ public class DeleteDeviceCommand extends DeviceCommand<DeleteDeviceCommand> {
       return new DeviceApiResponse().setCannotModify();
     }
 
-    LogUtil.deleteDeviceAndLog(deletedDevice.toApi(), getDeviceRepository(), logRepository, false);
+    LogUtil.deleteDeviceAndLog(
+        user, deletedDevice.toApi(), getDeviceRepository(), logRepository, false);
     return new DeviceApiResponse()
         .setSuccess()
         .setResponse(deletedDevice.toApi());

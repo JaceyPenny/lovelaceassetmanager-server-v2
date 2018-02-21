@@ -3,10 +3,10 @@ package io.lovelacetech.server.util;
 import io.lovelacetech.server.model.Asset;
 import io.lovelacetech.server.model.Log;
 import io.lovelacetech.server.model.api.enums.LogType;
-import io.lovelacetech.server.model.api.model.ApiAsset;
-import io.lovelacetech.server.model.api.model.ApiDevice;
+import io.lovelacetech.server.model.api.model.*;
 import io.lovelacetech.server.repository.AssetRepository;
 import io.lovelacetech.server.repository.DeviceRepository;
+import io.lovelacetech.server.repository.LocationRepository;
 import io.lovelacetech.server.repository.LogRepository;
 
 import java.time.LocalDateTime;
@@ -85,11 +85,12 @@ public class LogUtil {
   }
 
   public static void deleteDeviceAndLog(
+      ApiUser user,
       ApiDevice device,
       DeviceRepository deviceRepository,
       LogRepository logRepository,
       boolean hardDelete) {
-    Log deleteDeviceLog = createDeleteDeviceLog(device);
+    Log deleteDeviceLog = createDeleteDeviceLog(device, user);
 
     if (hardDelete) {
       deviceRepository.delete(device.getId());
@@ -101,13 +102,37 @@ public class LogUtil {
     logRepository.save(deleteDeviceLog);
   }
 
-  private static Log createDeleteDeviceLog(ApiDevice device) {
+  private static Log createDeleteDeviceLog(ApiDevice device, ApiUser user) {
     Log newLog = new Log();
 
     newLog.setObjectId(device.getId());
+    newLog.setUserId(user.getId());
     newLog.setType(LogType.DEVICE_DELETED);
     newLog.setTimestamp(LocalDateTime.now());
     newLog.setOldData(device.toLogObject());
+
+    return newLog;
+  }
+
+  public static void deleteLocationAndLog(
+      ApiUser user,
+      ApiLocation location,
+      LocationRepository locationRepository,
+      LogRepository logRepository) {
+    locationRepository.delete(location.getId());
+
+    Log deleteLocationLog = createDeleteLocationLog(location, user);
+    logRepository.save(deleteLocationLog);
+  }
+
+  private static Log createDeleteLocationLog(ApiLocation location, ApiUser user) {
+    Log newLog = new Log();
+
+    newLog.setObjectId(location.getId());
+    newLog.setUserId(user.getId());
+    newLog.setType(LogType.LOCATION_DELETED);
+    newLog.setTimestamp(LocalDateTime.now());
+    newLog.setOldData(location.toLogObject());
 
     return newLog;
   }
