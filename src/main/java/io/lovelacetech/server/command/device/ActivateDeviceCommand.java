@@ -3,11 +3,14 @@ package io.lovelacetech.server.command.device;
 import io.lovelacetech.server.model.Device;
 import io.lovelacetech.server.model.Location;
 import io.lovelacetech.server.model.api.enums.AccessLevel;
+import io.lovelacetech.server.model.api.model.ApiDevice;
 import io.lovelacetech.server.model.api.model.ApiDeviceActivation;
 import io.lovelacetech.server.model.api.model.ApiUser;
 import io.lovelacetech.server.model.api.response.device.DeviceApiResponse;
+import io.lovelacetech.server.repository.AssetRepository;
 import io.lovelacetech.server.repository.LocationRepository;
 import io.lovelacetech.server.util.AuthenticationUtils;
+import io.lovelacetech.server.util.LoaderUtils;
 import io.lovelacetech.server.util.Messages;
 import io.lovelacetech.server.util.UUIDUtils;
 import org.assertj.core.util.Strings;
@@ -18,6 +21,8 @@ public class ActivateDeviceCommand extends DeviceCommand<ActivateDeviceCommand> 
   private ApiDeviceActivation deviceActivation;
   private LocationRepository locationRepository;
   private ApiUser user;
+
+  private AssetRepository assetRepository;
 
   public ActivateDeviceCommand setDeviceActivation(ApiDeviceActivation deviceActivation) {
     this.deviceActivation = deviceActivation;
@@ -34,11 +39,17 @@ public class ActivateDeviceCommand extends DeviceCommand<ActivateDeviceCommand> 
     return this;
   }
 
+  public ActivateDeviceCommand setAssetRepository(AssetRepository assetRepository) {
+    this.assetRepository = assetRepository;
+    return this;
+  }
+
   @Override
   public boolean checkCommand() {
     return super.checkCommand()
         && deviceActivation != null
-        && locationRepository != null;
+        && locationRepository != null
+        && assetRepository != null;
   }
 
   @Override
@@ -90,8 +101,12 @@ public class ActivateDeviceCommand extends DeviceCommand<ActivateDeviceCommand> 
     existingDeviceWithCode.setLocationId(locationId);
     existingDeviceWithCode = getDeviceRepository().save(existingDeviceWithCode);
 
+    ApiDevice existingApiDeviceWithCode = existingDeviceWithCode.toApi();
+
+    LoaderUtils.fillAssetCounts(existingApiDeviceWithCode, assetRepository);
+
     return new DeviceApiResponse()
         .setSuccess()
-        .setResponse(existingDeviceWithCode.toApi());
+        .setResponse(existingApiDeviceWithCode);
   }
 }

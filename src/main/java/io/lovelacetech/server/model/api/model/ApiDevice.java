@@ -14,6 +14,9 @@ public class ApiDevice extends BaseApiModel<Device> {
 
   private List<ApiAsset> assets;
 
+  int assetsInDevice = 0;
+  int assetsWithHome = 0;
+
   public ApiDevice() {
     this.id = UUIDUtils.empty();
     this.deviceCode = "";
@@ -78,6 +81,24 @@ public class ApiDevice extends BaseApiModel<Device> {
 
   public ApiDevice addAsset(ApiAsset asset) {
     this.assets.add(asset);
+    return this;
+  }
+
+  public int getAssetsInDevice() {
+    return assetsInDevice;
+  }
+
+  public ApiDevice setAssetsInDevice(int assetsInDevice) {
+    this.assetsInDevice = assetsInDevice;
+    return this;
+  }
+
+  public int getAssetsWithHome() {
+    return assetsWithHome;
+  }
+
+  public ApiDevice setAssetsWithHome(int assetsWithHome) {
+    this.assetsWithHome = assetsWithHome;
     return this;
   }
 

@@ -15,11 +15,19 @@ import java.util.stream.Collectors;
 public class RepositoryUtils {
   public static <R extends ApiModelConvertible<T>, T extends BaseApiModel<R>> List<T> toApiList(
       Iterable<? extends ApiModelConvertible<T>> iterable) {
+    if (iterable == null) {
+      return new ArrayList<>();
+    }
+
     return mapIterable(iterable, ApiModelConvertible::toApi);
   }
 
   public static <R extends ApiModelConvertible<T>, T extends BaseApiModel<R>>
   List<R> toDatabaseList(Iterable<T> iterable) {
+    if (iterable == null) {
+      return new ArrayList<>();
+    }
+
     return mapIterable(iterable, BaseApiModel::toDatabase);
   }
 
