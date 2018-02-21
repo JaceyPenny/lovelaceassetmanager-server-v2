@@ -9,8 +9,6 @@ import org.springframework.context.annotation.Bean;
 
 @SpringBootApplication
 public class LovelaceAssetManagerServerApplication {
-  public static final String ORIGIN_URL = "http://localhost:8080";
-
   private UserRepository userRepository;
 
   public LovelaceAssetManagerServerApplication(UserRepository userRepository) {

@@ -3,9 +3,6 @@
 /out/
 !gradle/wrapper/gradle-wrapper.jar
 
-# Temporary, to stop tracking my local database password
-application.properties
-
 ### STS ###
 .apt_generated
 .classpath
