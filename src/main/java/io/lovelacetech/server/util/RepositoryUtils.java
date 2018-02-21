@@ -1,13 +1,14 @@
 package io.lovelacetech.server.util;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.Streams;
 import io.lovelacetech.server.model.ApiModelConvertible;
 import io.lovelacetech.server.model.DatabaseModel;
 import io.lovelacetech.server.model.api.model.BaseApiModel;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.io.IOException;
+import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -46,5 +47,31 @@ public class RepositoryUtils {
 
   public static <T extends DatabaseModel> List<UUID> mapToIds(List<T> list) {
     return list.stream().map(T::getId).collect(Collectors.toList());
+  }
+
+  public static Map<String, Object> jsonStringToMap(String json) {
+    ObjectMapper mapper = new ObjectMapper();
+    Map<String, Object> map = new HashMap<>();
+
+    try {
+      map = mapper.readValue(json, new TypeReference<Map<String, String>>() {});
+    } catch (IOException e) {
+      // do nothing
+    }
+
+    return map;
+  }
+
+  public static String mapToJsonString(Map<String, Object> map) {
+    ObjectMapper mapper = new ObjectMapper();
+    String json = "";
+
+    try {
+      json = mapper.writeValueAsString(map);
+    } catch (IOException e) {
+      // do nothing
+    }
+
+    return json;
   }
 }

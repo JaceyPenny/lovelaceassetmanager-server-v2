@@ -10,7 +10,6 @@ import io.lovelacetech.server.model.api.response.notification.NotificationApiRes
 import io.lovelacetech.server.repository.DeviceRepository;
 import io.lovelacetech.server.repository.LocationRepository;
 import io.lovelacetech.server.util.AccessUtils;
-import io.lovelacetech.server.util.RepositoryUtils;
 import io.lovelacetech.server.util.UUIDUtils;
 
 import java.util.List;

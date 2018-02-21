@@ -1,32 +1,44 @@
 package io.lovelacetech.server.model.api.model;
 
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import io.lovelacetech.server.model.Log;
+import io.lovelacetech.server.model.api.enums.LogType;
 
+import java.beans.Transient;
 import java.time.LocalDateTime;
+import java.time.ZoneOffset;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
+@JsonPropertyOrder({"id", "type", "utcTime", "objectId", "userId", "oldData", "newData"})
 public class ApiLog extends BaseApiModel<Log> {
 
   private UUID id;
-  private UUID assetId;
-  private UUID fromId;
-  private UUID toId;
+  private LogType type;
   private LocalDateTime timestamp;
+  private UUID objectId;
+  private UUID userId;
+  private Map<String, Object> oldData;
+  private Map<String, Object> newData;
 
   public ApiLog() {
     id = null;
-    assetId = null;
-    fromId = null;
-    toId = null;
+    type = LogType.ASSET_MOVED;
     timestamp = LocalDateTime.now();
+    userId = null;
+    oldData = new HashMap<>();
+    newData = new HashMap<>();
   }
 
   public ApiLog(Log log) {
     id = log.getId();
-    assetId = log.getAssetId();
-    fromId = log.getFromId();
-    toId = log.getFromId();
+    type = log.getType();
     timestamp = log.getTimestamp();
+    objectId = log.getObjectId();
+    userId = log.getUserId();
+    oldData = log.getOldData();
+    newData = log.getNewData();
   }
 
   public UUID getId() {
@@ -38,39 +50,61 @@ public class ApiLog extends BaseApiModel<Log> {
     return this;
   }
 
-  public UUID getAssetId() {
-    return assetId;
+  public LogType getType() {
+    return type;
   }
 
-  public ApiLog setAssetId(UUID assetId) {
-    this.assetId = assetId;
-    return this;
+  public void setType(LogType type) {
+    this.type = type;
   }
 
-  public UUID getFromId() {
-    return fromId;
-  }
-
-  public ApiLog setFromId(UUID fromId) {
-    this.fromId = fromId;
-    return this;
-  }
-
-  public UUID getToId() {
-    return toId;
-  }
-
-  public ApiLog setToId(UUID toId) {
-    this.toId = toId;
-    return this;
-  }
-
+  @Transient
   public LocalDateTime getTimestamp() {
     return timestamp;
   }
 
+  public long getUtcTime() {
+    return timestamp.toInstant(ZoneOffset.UTC).getEpochSecond();
+  }
+
   public ApiLog setTimestamp(LocalDateTime timestamp) {
     this.timestamp = timestamp;
+    return this;
+  }
+
+  public UUID getObjectId() {
+    return objectId;
+  }
+
+  public ApiLog setObjectId(UUID objectId) {
+    this.objectId = objectId;
+    return this;
+  }
+
+  public UUID getUserId() {
+    return userId;
+  }
+
+  public ApiLog setUserId(UUID userId) {
+    this.userId = userId;
+    return this;
+  }
+
+  public Map<String, Object> getOldData() {
+    return oldData;
+  }
+
+  public ApiLog setOldData(Map<String, Object> oldData) {
+    this.oldData = oldData;
+    return this;
+  }
+
+  public Map<String, Object> getNewData() {
+    return newData;
+  }
+
+  public ApiLog setNewData(Map<String, Object> newData) {
+    this.newData = newData;
     return this;
   }
 
@@ -79,10 +113,12 @@ public class ApiLog extends BaseApiModel<Log> {
     Log log = new Log();
 
     log.setId(id);
-    log.setAssetId(assetId);
-    log.setFromId(fromId);
-    log.setToId(toId);
+    log.setType(type);
     log.setTimestamp(timestamp);
+    log.setObjectId(objectId);
+    log.setUserId(userId);
+    log.setOldData(oldData);
+    log.setNewData(newData);
 
     return log;
   }

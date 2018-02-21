@@ -1,11 +1,15 @@
 package io.lovelacetech.server.model;
 
+import io.lovelacetech.server.model.api.enums.LogType;
 import io.lovelacetech.server.model.api.model.ApiLog;
+import io.lovelacetech.server.model.converter.JsonbConverter;
 import io.lovelacetech.server.model.converter.LocalDateTimeConverter;
+import io.lovelacetech.server.model.converter.LogTypeConverter;
 import io.lovelacetech.server.util.UUIDUtils;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.Map;
 import java.util.UUID;
 
 @Entity
@@ -16,18 +20,27 @@ public class Log implements DatabaseModel<Log>, ApiModelConvertible<ApiLog> {
   @Column(name = "id", unique = true, nullable = false, updatable = false)
   private UUID id;
 
-  @Column(name = "asset_id", nullable = false)
-  private UUID assetId;
-
-  @Column(name = "from_id", nullable = false)
-  private UUID fromId;
-
-  @Column(name = "to_id", nullable = false)
-  private UUID toId;
+  @Convert(converter = LogTypeConverter.class)
+  @Column(name = "type", nullable = false, updatable = false)
+  private LogType type;
 
   @Convert(converter = LocalDateTimeConverter.class)
   @Column(name = "timestamp", nullable = false)
   private LocalDateTime timestamp;
+
+  @Column(name = "object_id", updatable = false)
+  private UUID objectId;
+
+  @Column(name = "user_id", updatable = false)
+  private UUID userId;
+
+  @Convert(converter = JsonbConverter.class)
+  @Column(name = "old_data", updatable = false)
+  private Map<String, Object> oldData;
+
+  @Convert(converter = JsonbConverter.class)
+  @Column(name = "new_data", updatable = false)
+  private Map<String, Object> newData;
 
   @Override
   public ApiLog toApi() {
@@ -57,28 +70,12 @@ public class Log implements DatabaseModel<Log>, ApiModelConvertible<ApiLog> {
     this.id = id;
   }
 
-  public UUID getAssetId() {
-    return assetId;
+  public LogType getType() {
+    return type;
   }
 
-  public void setAssetId(UUID assetId) {
-    this.assetId = assetId;
-  }
-
-  public UUID getFromId() {
-    return fromId;
-  }
-
-  public void setFromId(UUID fromId) {
-    this.fromId = fromId;
-  }
-
-  public UUID getToId() {
-    return toId;
-  }
-
-  public void setToId(UUID toId) {
-    this.toId = toId;
+  public void setType(LogType type) {
+    this.type = type;
   }
 
   public LocalDateTime getTimestamp() {
@@ -87,5 +84,37 @@ public class Log implements DatabaseModel<Log>, ApiModelConvertible<ApiLog> {
 
   public void setTimestamp(LocalDateTime timestamp) {
     this.timestamp = timestamp;
+  }
+
+  public UUID getObjectId() {
+    return objectId;
+  }
+
+  public void setObjectId(UUID objectId) {
+    this.objectId = objectId;
+  }
+
+  public UUID getUserId() {
+    return userId;
+  }
+
+  public void setUserId(UUID userId) {
+    this.userId = userId;
+  }
+
+  public Map<String, Object> getOldData() {
+    return oldData;
+  }
+
+  public void setOldData(Map<String, Object> oldData) {
+    this.oldData = oldData;
+  }
+
+  public Map<String, Object> getNewData() {
+    return newData;
+  }
+
+  public void setNewData(Map<String, Object> newData) {
+    this.newData = newData;
   }
 }

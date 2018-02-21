@@ -1,6 +1,5 @@
 package io.lovelacetech.server.model.api.response;
 
-import io.lovelacetech.server.model.api.model.BaseApiModel;
 import io.lovelacetech.server.util.Messages;
 import org.springframework.http.HttpStatus;
 
