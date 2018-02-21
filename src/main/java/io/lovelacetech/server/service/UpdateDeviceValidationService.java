@@ -5,7 +5,6 @@ import io.lovelacetech.server.util.HashUtil;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import java.time.Instant;
 import java.util.Calendar;
 
 @Service
@@ -21,16 +20,16 @@ public class UpdateDeviceValidationService {
       return UpdateDeviceResponse.SUCCESS;
     }
 
-    Instant currentInstant = Calendar.getInstance().toInstant();
+    long currentEpochSecond = Calendar.getInstance().toInstant().getEpochSecond();
 
-    if (currentInstant.minusSeconds(timestamp).getEpochSecond() > 300) { // check if timestamp is within 5 minutes
+    if (Math.abs(currentEpochSecond - timestamp) > 300) { // check if timestamp is within 5 minutes
       return UpdateDeviceResponse.INVALID_TIMESTAMP;
     }
 
-    String preHashString = url.replaceAll("/", "") + "/" + deviceCode + timestamp;
+    String preHashString = url.replaceAll("/", "") + "/" + deviceCode + updateDeviceSecret + timestamp;
     String hashedString = HashUtil.getSha256HashString(preHashString);
 
-    return hashedString.equals(hash) ?
+    return hashedString.equalsIgnoreCase(hash) ?
         UpdateDeviceResponse.SUCCESS :
         UpdateDeviceResponse.INVALID_SECRET;
   }

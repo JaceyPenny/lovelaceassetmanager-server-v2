@@ -4,5 +4,6 @@ public enum UpdateDeviceResponse {
   SUCCESS,
   BAD_DEVICE_CODE,
   INVALID_SECRET,
-  INVALID_TIMESTAMP
+  INVALID_TIMESTAMP,
+  UNKNOWN
 }

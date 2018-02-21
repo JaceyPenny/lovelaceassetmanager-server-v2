@@ -22,4 +22,8 @@ public interface AssetRepository extends CrudRepository<Asset, UUID> {
   Asset findOneByRfid(String rfid);
 
   List<Asset> findAllByRfidIn(List<String> rfids);
+
+  int countAllByHomeId(UUID homeId);
+
+  int countAllByDeviceId(UUID deviceId);
 }

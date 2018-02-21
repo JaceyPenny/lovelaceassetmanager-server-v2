@@ -4,7 +4,9 @@ import io.lovelacetech.server.model.Asset;
 import io.lovelacetech.server.model.Log;
 import io.lovelacetech.server.model.api.enums.LogType;
 import io.lovelacetech.server.model.api.model.ApiAsset;
+import io.lovelacetech.server.model.api.model.ApiDevice;
 import io.lovelacetech.server.repository.AssetRepository;
+import io.lovelacetech.server.repository.DeviceRepository;
 import io.lovelacetech.server.repository.LogRepository;
 
 import java.time.LocalDateTime;
@@ -78,6 +80,34 @@ public class LogUtil {
     newLog.setTimestamp(LocalDateTime.now());
     newLog.setOldData(Collections.singletonMap("location_id", fromLocationId));
     newLog.setNewData(Collections.singletonMap("device_id", toDeviceId));
+
+    return newLog;
+  }
+
+  public static void deleteDeviceAndLog(
+      ApiDevice device,
+      DeviceRepository deviceRepository,
+      LogRepository logRepository,
+      boolean hardDelete) {
+    Log deleteDeviceLog = createDeleteDeviceLog(device);
+
+    if (hardDelete) {
+      deviceRepository.delete(device.getId());
+    } else {
+      device.setLocationId(null);
+      deviceRepository.save(device.toDatabase());
+    }
+
+    logRepository.save(deleteDeviceLog);
+  }
+
+  private static Log createDeleteDeviceLog(ApiDevice device) {
+    Log newLog = new Log();
+
+    newLog.setObjectId(device.getId());
+    newLog.setType(LogType.DEVICE_DELETED);
+    newLog.setTimestamp(LocalDateTime.now());
+    newLog.setOldData(device.toLogObject());
 
     return newLog;
   }

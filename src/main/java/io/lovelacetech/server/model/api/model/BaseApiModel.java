@@ -5,6 +5,8 @@ import com.google.gson.GsonBuilder;
 import io.lovelacetech.server.model.ApiModelConvertible;
 
 import java.beans.Transient;
+import java.util.HashMap;
+import java.util.Map;
 
 public class BaseApiModel<T extends ApiModelConvertible<? extends BaseApiModel>> {
   @Override
@@ -20,5 +22,9 @@ public class BaseApiModel<T extends ApiModelConvertible<? extends BaseApiModel>>
 
   public T toDatabase() {
     return null;
+  }
+
+  public Map<String, Object> toLogObject() {
+    return new HashMap<>();
   }
 }

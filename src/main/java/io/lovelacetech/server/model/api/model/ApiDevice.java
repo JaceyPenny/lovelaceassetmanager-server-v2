@@ -4,10 +4,7 @@ import io.lovelacetech.server.model.Device;
 import io.lovelacetech.server.util.UUIDUtils;
 import org.assertj.core.util.Strings;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 public class ApiDevice extends BaseApiModel<Device> {
   private UUID id;
@@ -100,6 +97,18 @@ public class ApiDevice extends BaseApiModel<Device> {
     device.setLocationId(UUIDUtils.isValidId(locationId) ? locationId : null);
 
     return device;
+  }
+
+  @Override
+  public Map<String, Object> toLogObject() {
+    Map<String, Object> resultingMap = new HashMap<>();
+
+    resultingMap.put("id", id);
+    resultingMap.put("deviceCode", deviceCode);
+    resultingMap.put("name", name);
+    resultingMap.put("locationId", locationId);
+
+    return resultingMap;
   }
 
   public void sort() {

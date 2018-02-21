@@ -6,10 +6,7 @@ import io.lovelacetech.server.model.api.model.ApiDeviceActivation;
 import io.lovelacetech.server.model.api.model.ApiUser;
 import io.lovelacetech.server.model.api.response.device.DeviceApiResponse;
 import io.lovelacetech.server.model.api.response.device.DeviceListApiResponse;
-import io.lovelacetech.server.repository.AssetRepository;
-import io.lovelacetech.server.repository.CompanyRepository;
-import io.lovelacetech.server.repository.DeviceRepository;
-import io.lovelacetech.server.repository.LocationRepository;
+import io.lovelacetech.server.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,17 +21,20 @@ public class DeviceController extends BaseController {
   private final LocationRepository locationRepository;
   private final DeviceRepository deviceRepository;
   private final AssetRepository assetRepository;
+  private final LogRepository logRepository;
 
   @Autowired
   DeviceController(
       CompanyRepository companyRepository,
       LocationRepository locationRepository,
       DeviceRepository deviceRepository,
-      AssetRepository assetRepository) {
+      AssetRepository assetRepository,
+      LogRepository logRepository) {
     this.companyRepository = companyRepository;
     this.locationRepository = locationRepository;
     this.deviceRepository = deviceRepository;
     this.assetRepository = assetRepository;
+    this.logRepository = logRepository;
   }
 
   /**
@@ -230,6 +230,34 @@ public class DeviceController extends BaseController {
         .setLocationRepository(locationRepository)
         .setUser(authenticatedUser)
         .setDeviceActivation(deviceActivation)
+        .execute();
+  }
+
+  /**
+   * <b> DELETE /api/secure/devices/{deviceId} </b><br>
+   * Deletes a Device by id. In actuality, the device is not removed from the database. Instead,
+   * its locationId is set to null, effectively "deactivating" it from the user's point of view.
+   * <br><br>
+   * <b>  REQUEST BODY:  </b>
+   * <pre>{@code    {
+   *   "status": 200,
+   *   "message": "success",
+   *   "response": Device
+   * }}</pre>
+   * <br><b>  PERMISSIONS:  </b>
+   * <br>The user must be an ADMIN for the company where they're trying to delete this device.
+   */
+  @RequestMapping(value = "/{deviceId}", method = RequestMethod.DELETE)
+  public DeviceApiResponse deleteDeviceById(
+      @RequestAttribute ApiUser authenticatedUser,
+      @PathVariable UUID deviceId) {
+    return new DeleteDeviceCommand()
+        .setUser(authenticatedUser)
+        .setDeviceId(deviceId)
+        .setAssetRepository(assetRepository)
+        .setDeviceRepository(deviceRepository)
+        .setLocationRepository(locationRepository)
+        .setLogRepository(logRepository)
         .execute();
   }
 }
