@@ -20,4 +20,6 @@ public interface AssetRepository extends CrudRepository<Asset, UUID> {
   List<Asset> findAllByHomeId(UUID homeId);
 
   Asset findOneByRfid(String rfid);
+
+  List<Asset> findAllByRfidIn(List<String> rfids);
 }
