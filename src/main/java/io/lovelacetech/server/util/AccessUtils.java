@@ -92,7 +92,8 @@ public class AccessUtils {
   public static boolean userCanAccessUser(ApiUser user, User otherUser) {
     return AuthenticationUtils.userIsSuper(user)
         || (user.getAccessLevel() == AccessLevel.ADMIN
-        && UUIDUtils.idsEqual(user.getCompanyId(), otherUser.getCompanyId()));
+        && UUIDUtils.idsEqual(user.getCompanyId(), otherUser.getCompanyId())
+        && otherUser.getAccessLevel() != AccessLevel.SUPER);
   }
 
   public static boolean userCanAccessNotification(
