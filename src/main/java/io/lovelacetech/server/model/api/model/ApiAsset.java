@@ -18,6 +18,8 @@ public class ApiAsset extends BaseApiModel<Asset> {
   private UUID deviceId;
   private ApiAssetType assetType;
 
+  private ApiLog lastLog;
+
   public ApiAsset() {
     this.id = null;
     this.name = "";
@@ -126,6 +128,23 @@ public class ApiAsset extends BaseApiModel<Asset> {
   public void setType(String type) {
     assetType = new ApiAssetType();
     assetType.setType(type);
+  }
+
+  public ApiLog getLastLog() {
+    return lastLog;
+  }
+
+  public ApiAsset setLastLog(ApiLog lastLog) {
+    this.lastLog = lastLog;
+    return this;
+  }
+
+  public String getLastActivityString() {
+    if (lastLog == null) {
+      return "(unknown)";
+    }
+
+    return lastLog.getFormattedTime();
   }
 
   @Override

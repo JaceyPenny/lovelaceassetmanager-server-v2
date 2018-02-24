@@ -10,4 +10,6 @@ import java.util.UUID;
 @RepositoryRestResource
 public interface LogRepository extends CrudRepository<Log, UUID> {
   List<Log> findAllByObjectId(UUID objectId);
+
+  Log findFirstByObjectIdOrderByTimestampDesc(UUID objectId);
 }

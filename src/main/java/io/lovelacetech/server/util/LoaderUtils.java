@@ -1,11 +1,14 @@
 package io.lovelacetech.server.util;
 
 import com.google.common.base.Functions;
+import io.lovelacetech.server.model.Location;
+import io.lovelacetech.server.model.Log;
 import io.lovelacetech.server.model.api.enums.AccessLevel;
 import io.lovelacetech.server.model.api.model.*;
 import io.lovelacetech.server.repository.AssetRepository;
 import io.lovelacetech.server.repository.DeviceRepository;
 import io.lovelacetech.server.repository.LocationRepository;
+import io.lovelacetech.server.repository.LogRepository;
 
 import java.util.*;
 import java.util.function.Function;
@@ -43,6 +46,18 @@ public class LoaderUtils {
 
     populateDevices(deviceMap, assets);
     fillAssetCounts(devices, assetRepository);
+  }
+
+  public static void populateDevices(
+      List<ApiDevice> devices,
+      AssetRepository assetRepository,
+      LogRepository logRepository) {
+    populateDevices(devices, assetRepository);
+    List<ApiAsset> assets = devices
+        .stream()
+        .flatMap(device -> device.getAssets().stream())
+        .collect(Collectors.toList());
+    populateAssetsLastLog(assets, logRepository);
   }
 
   public static void populateDevices(Map<UUID, ApiDevice> deviceMap, List<ApiAsset> assets) {
@@ -109,6 +124,19 @@ public class LoaderUtils {
     populateLocationsWithDevices(locationMap, devices);
   }
 
+  public static void populateLocations(
+      List<ApiLocation> locations,
+      DeviceRepository deviceRepository,
+      AssetRepository assetRepository,
+      LogRepository logRepository) {
+    populateLocations(locations, deviceRepository, assetRepository);
+    List<ApiAsset> assets = locations
+        .stream()
+        .flatMap(location -> location.getAssets().stream())
+        .collect(Collectors.toList());
+    populateAssetsLastLog(assets, logRepository);
+  }
+
   public static void populateLocationsWithAssets(
       Map<UUID, ApiLocation> locationMap,
       List<ApiAsset> assets) {
@@ -167,9 +195,17 @@ public class LoaderUtils {
   public static void populateNotification(
       ApiNotification notification,
       DeviceRepository deviceRepository,
-      AssetRepository assetRepository) {
-    populateLocations(notification.getLocations(), deviceRepository, assetRepository);
-    populateDevices(notification.getDevices(), assetRepository);
+      AssetRepository assetRepository,
+      LogRepository logRepository) {
+    populateLocations(notification.getLocations(), deviceRepository, assetRepository, logRepository);
+    populateDevices(notification.getDevices(), assetRepository, logRepository);
+  }
+
+  public static void populateAssetsLastLog(List<ApiAsset> assets, LogRepository logRepository) {
+    for (ApiAsset asset : assets) {
+      Log lastLog = logRepository.findFirstByObjectIdOrderByTimestampDesc(asset.getId());
+      asset.setLastLog(lastLog.toApi());
+    }
   }
 
   public static void fillAssetCounts(List<ApiDevice> devices, AssetRepository assetRepository) {
