@@ -164,6 +164,14 @@ public class LoaderUtils {
     }
   }
 
+  public static void populateNotification(
+      ApiNotification notification,
+      DeviceRepository deviceRepository,
+      AssetRepository assetRepository) {
+    populateLocations(notification.getLocations(), deviceRepository, assetRepository);
+    populateDevices(notification.getDevices(), assetRepository);
+  }
+
   public static void fillAssetCounts(List<ApiDevice> devices, AssetRepository assetRepository) {
     for (ApiDevice device : devices) {
       fillAssetCounts(device, assetRepository);

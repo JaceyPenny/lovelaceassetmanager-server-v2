@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <style>
+        div.container {
+            width: 100%;
+        }
+
+        body {
+            font-family: arial,sans-serif;
+            margin: 0px;
+            padding: 0px;
+            align-content: center;
+        }
+
+        div.body {
+            width: 50%;
+            align-content: center;
+            margin: auto;
+        }
+
+        div.border {
+            width: 90%;
+            margin:auto;
+            background-color: #bbbbbb !important;
+            height: 2px;
+        }
+
+        ul.missing {
+            border: 1px solid #ccc !important;
+            display: block;
+            padding: 0px;
+            border-radius: 3px;
+            color: #000 !important;
+            background-color: #fff !important;
+        }
+
+        li.missing {
+            list-style-type: disc;
+            color: #a94442 !important;
+            background-color: #DBA5A4;
+            line-height: 1.42857143;
+            font-size: 14px;
+            box-sizing: border-box;
+            border: 1px solid #ddd !important;
+            margin-bottom: -1px;
+            display: block;
+            position: relative;
+            padding: 10px 15px;
+        }
+
+        ul.device {
+            border: 1px solid #ccc !important;
+            display: block;
+            padding: 0px;
+            color: #000 !important;
+            background-color: #fff !important;
+        }
+
+        li.device {
+            list-style-type: disc;
+            color: #3c763d !important;
+            line-height: 1.42857143;
+            font-size: 14px;
+            box-sizing: border-box;
+            border: 1px solid #ddd !important;
+            margin-bottom: -1px;
+            display: block;
+            position: relative;
+            padding: 10px 15px;
+        }
+
+        span.asset-name {
+            font-size: 18px;
+            color: black;
+        }
+
+        span.asset-details {
+            position: absolute;
+            right: 10px;
+            top: 12px;
+            font-style: italic;
+        }
+
+        header, footer {
+            clear: left;
+            text-align: center;
+        }
+
+        h2.footer {
+            margin-top: 20px;
+        }
+
+        footer {
+            margin-top: 20px;
+        }
+
+        article {
+            margin-left: 170px;
+            border-left: 1px solid gray;
+            padding: 1em;
+            overflow: hidden;
+        }
+
+        h1.location {
+            font-size: 36px;
+            font-weight: normal;
+            margin-bottom: 0;
+            display: inline-block;
+            color: #447DF7 !important;
+        }
+
+        h2.missing {
+            font-size: 24px;
+            font-weight: normal;
+            color: #888 !important;
+        }
+
+        h2.device {
+            font-size: 24px;
+            font-weight: normal;
+            color: #888 !important;
+        }
+
+        aside {
+            text-align: center;
+        }
+    </style>
+    <meta charset="UTF-8"/>
+    <title>Lovelace Asset Manager Report</title>
+</head>
+
+
+<body>
+<div class="container">
+
+    <header>
+        <img src="http://ec2-52-91-97-172.compute-1.amazonaws.com/assets/img/full-logo.png" width="300"/>
+        <h1>Current Inventory Status</h1>
+        <p>Hey! Here's your inventory report. You can change your notification settings by clicking
+            <a href="http://www.lovelacetech.io/#/mypage">here</a>.</p>
+        <div class="border"></div>
+    </header>
+
+    <!-- Main body of email: Contains Locations with missing Assets,
+         and Devices with contained Assets -->
+    <div class="body" th:each="location : ${notification.locations}">
+        <h1 class="location" th:text="${location.city}">Fayetteville</h1>
+        <h2 class="missing" th:text="${'Missing Assets (' + #lists.size(location.assets) + ')'}"></h2>
+        <ul class="missing">
+            <li class="missing" th:each="asset : ${location.assets}">
+                <span class="asset-name" th:text="${asset.name}"></span>
+                <span class="asset-details" th:text="'Example message'"></span>
+            </li>
+        </ul>
+
+        <div th:each="device : ${location.devices}">
+            <h2 class="device"><span th:text="${device.name + ' (' + #lists.size(location.devices) + ')'}"></span></h2>
+            <ul class="device">
+                <li class="device" th:each="asset : ${device.assets}">
+                    <span class="asset-name" th:text="${asset.name}"></span>
+                    <span class="asset-details" th:text="'Example message'"></span>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <footer>
+        <div class="border"></div>
+        <h2 class="footer">Connect With Us:</h2>
+        <a href="https://www.linkedin.com/company/25056004/">
+            <img src="https://cdn1.iconfinder.com/data/icons/logotypes/32/square-linkedin-256.png" width="50" height="50" />
+        </a>
+    </footer>
+
+    <aside>
+        <h2>Contact Us:</h2>
+        <p>Canon Reeves, CEO: canon@lovelacetech.io</p>
+        <p>Jace McPherson, CTO: jace@lovelacetech.io</p>
+        <p>Ted Thorpe, COO: ted.thorpe@lovelacetech.io</p>
+        <p>Chris Faulkner, CFO: chris@lovelacetech.io</p>
+    </aside>
+</div>
+</body>
+</html>
