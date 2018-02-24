@@ -5,8 +5,11 @@ import io.lovelacetech.server.model.Log;
 import io.lovelacetech.server.model.api.enums.LogType;
 
 import java.beans.Transient;
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.ZoneOffset;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -106,6 +109,11 @@ public class ApiLog extends BaseApiModel<Log> {
   public ApiLog setNewData(Map<String, Object> newData) {
     this.newData = newData;
     return this;
+  }
+
+  public String getFormattedTime() {
+    DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("h:mma; M/dd/yy");
+    return getTimestamp().atZone(ZoneId.of("UTC-06:00")).format(dateTimeFormatter);
   }
 
   @Override

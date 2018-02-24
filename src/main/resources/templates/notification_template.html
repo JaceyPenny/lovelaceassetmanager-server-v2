@@ -76,9 +76,10 @@
         }
 
         span.asset-details {
+            font-size: 12px;
             position: absolute;
-            right: 10px;
-            top: 12px;
+            right: 12px;
+            top: 15px;
             font-style: italic;
         }
 
@@ -138,7 +139,7 @@
         <img src="http://ec2-52-91-97-172.compute-1.amazonaws.com/assets/img/full-logo.png" width="300"/>
         <h1>Current Inventory Status</h1>
         <p>Hey! Here's your inventory report. You can change your notification settings by clicking
-            <a href="http://www.lovelacetech.io/#/mypage">here</a>.</p>
+            <a href="https://dashboard.lovelacetech.io/">here</a>.</p>
         <div class="border"></div>
     </header>
 
@@ -150,7 +151,7 @@
         <ul class="missing">
             <li class="missing" th:each="asset : ${location.assets}">
                 <span class="asset-name" th:text="${asset.name}"></span>
-                <span class="asset-details" th:text="'Example message'"></span>
+                <span class="asset-details" th:text="${'As of ' + asset.lastActivityString}"></span>
             </li>
         </ul>
 
@@ -159,7 +160,7 @@
             <ul class="device">
                 <li class="device" th:each="asset : ${device.assets}">
                     <span class="asset-name" th:text="${asset.name}"></span>
-                    <span class="asset-details" th:text="'Example message'"></span>
+                    <span class="asset-details" th:text="${'As of ' + asset.lastActivityString}"></span>
                 </li>
             </ul>
         </div>
