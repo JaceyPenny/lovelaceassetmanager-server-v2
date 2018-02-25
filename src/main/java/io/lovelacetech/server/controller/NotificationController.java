@@ -100,7 +100,7 @@ public class NotificationController extends BaseController {
    * <br><br>
    * <b>  REQUEST BODY (CREATE):  </b>
    * <pre>{@code    {
-   *   (required) "notificationType": {EMAIL|TEXT|EMAIL_TEXT},
+   *   (required) "notificationType": {email|text|email_text},
    *   (required) "time": "hh:mm:ss",
    *   (semi-optional) "locationIds": [locationId1, locationId2, ...],
    *   (semi-optional) "deviceIds": [deviceId1, deviceId2, ...]
