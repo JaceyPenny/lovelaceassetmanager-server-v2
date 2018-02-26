@@ -109,7 +109,6 @@ public class SaveNotificationCommand extends NotificationCommand<SaveNotificatio
       }
     }
 
-    System.out.println(notificationUpdate.getNotificationType());
     if (!notificationUpdate.toApi().isValid()) {
       return new NotificationApiResponse().setInvalidBody();
     }

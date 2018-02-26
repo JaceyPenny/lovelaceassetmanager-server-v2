@@ -162,7 +162,6 @@ public class ApiNotification extends BaseApiModel<Notification> {
 
   @Override
   public boolean isValid() {
-    System.out.println(this);
     return UUIDUtils.isValidId(userId)
         && time != null
         && notificationType != null

@@ -20,7 +20,6 @@ public class CompanyListApiResponse
 
   @Override
   public ApiCompanyList getResponse() {
-    System.out.println("Sorting");
     super.getResponse().sort();
     return super.getResponse();
   }

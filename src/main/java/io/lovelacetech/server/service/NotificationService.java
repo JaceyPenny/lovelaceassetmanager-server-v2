@@ -47,7 +47,6 @@ public class NotificationService {
   @Scheduled(fixedRate = 60000) // fixedRate = 1 minute
   public void checkAndSendNotifications() {
     List<ApiNotification> notifications = getCurrentNotifications();
-    System.out.println(notifications.size());
     for (ApiNotification notification : notifications) {
       sendNotification(notification);
     }
