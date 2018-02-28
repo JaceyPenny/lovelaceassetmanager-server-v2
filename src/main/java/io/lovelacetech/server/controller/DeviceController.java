@@ -196,6 +196,7 @@ public class DeviceController extends BaseController {
         .setLocationRepository(locationRepository)
         .setDeviceRepository(deviceRepository)
         .setAssetRepository(assetRepository)
+        .setLogRepository(logRepository)
         .setUser(authenticatedUser)
         .setDevice(device)
         .execute();
@@ -230,6 +231,7 @@ public class DeviceController extends BaseController {
         .setLocationRepository(locationRepository)
         .setDeviceRepository(deviceRepository)
         .setAssetRepository(assetRepository)
+        .setLogRepository(logRepository)
         .setUser(authenticatedUser)
         .setDeviceActivation(deviceActivation)
         .execute();

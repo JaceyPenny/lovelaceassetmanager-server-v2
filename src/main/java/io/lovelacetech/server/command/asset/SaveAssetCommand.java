@@ -151,7 +151,9 @@ public class SaveAssetCommand extends AssetCommand<SaveAssetCommand> {
       if (assetType == null) {
         if (!assetUpdate.getAssetType().getType().equals(ApiAssetType.DEFAULT_ASSET_TYPE)
             && user.getAccessLevel() == AccessLevel.USER) {
-          return new AssetApiResponse().setAccessDenied().setMessage(Messages.ASSET_CANNOT_CREATE_NEW_ASSET_TYPE);
+          return new AssetApiResponse()
+              .setAccessDenied()
+              .setMessage(Messages.ASSET_CANNOT_CREATE_NEW_ASSET_TYPE);
         }
 
         assetType = assetTypeRepository.save(assetUpdate.getAssetType());
@@ -162,7 +164,8 @@ public class SaveAssetCommand extends AssetCommand<SaveAssetCommand> {
 
     try {
       if (assetUpdate.hasId()) {
-        LogUtil.editAssetAndLog(user, oldAsset, assetUpdate.toApi(), getAssetRepository(), logRepository);
+        LogUtil.editAssetAndLog(
+            user, oldAsset, assetUpdate.toApi(), getAssetRepository(), logRepository);
       } else {
         LogUtil.registerAssetAndLog(assetUpdate.toApi(), getAssetRepository(), logRepository);
       }

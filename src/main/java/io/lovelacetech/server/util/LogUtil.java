@@ -3,7 +3,10 @@ package io.lovelacetech.server.util;
 import io.lovelacetech.server.model.Asset;
 import io.lovelacetech.server.model.Log;
 import io.lovelacetech.server.model.api.enums.LogType;
-import io.lovelacetech.server.model.api.model.*;
+import io.lovelacetech.server.model.api.model.ApiAsset;
+import io.lovelacetech.server.model.api.model.ApiDevice;
+import io.lovelacetech.server.model.api.model.ApiLocation;
+import io.lovelacetech.server.model.api.model.ApiUser;
 import io.lovelacetech.server.repository.AssetRepository;
 import io.lovelacetech.server.repository.DeviceRepository;
 import io.lovelacetech.server.repository.LocationRepository;
@@ -96,6 +99,7 @@ public class LogUtil {
       deviceRepository.delete(device.getId());
     } else {
       device.setLocationId(null);
+      device.setName("Device " + device.getDeviceCode());
       deviceRepository.save(device.toDatabase());
     }
 
@@ -194,10 +198,58 @@ public class LogUtil {
     Log newLog = new Log();
 
     newLog.setObjectId(asset.getId());
-    newLog.setType(LogType.ASSET_EDITED);
+    newLog.setType(LogType.ASSET_DELETED);
     newLog.setUserId(user.getId());
     newLog.setTimestamp(LocalDateTime.now());
     newLog.setOldData(asset.toLogObject());
+
+    return newLog;
+  }
+
+  public static void registerDeviceAndLog(
+      ApiUser user,
+      ApiDevice device,
+      DeviceRepository deviceRepository,
+      LogRepository logRepository) {
+    deviceRepository.save(device.toDatabase());
+
+    Log registerDeviceLog = createRegisterDeviceLog(user, device);
+    logRepository.save(registerDeviceLog);
+  }
+
+  private static Log createRegisterDeviceLog(ApiUser user, ApiDevice device) {
+    Log newLog = new Log();
+
+    newLog.setObjectId(device.getId());
+    newLog.setType(LogType.DEVICE_REGISTERED);
+    newLog.setUserId(user.getId());
+    newLog.setTimestamp(LocalDateTime.now());
+    newLog.setNewData(device.toLogObject());
+
+    return newLog;
+  }
+
+  public static void editDeviceAndLog(
+      ApiUser user,
+      ApiDevice oldDevice,
+      ApiDevice newDevice,
+      DeviceRepository deviceRepository,
+      LogRepository logRepository) {
+    deviceRepository.save(newDevice.toDatabase());
+
+    Log editDeviceLog = createEditDeviceLog(user, oldDevice, newDevice);
+    logRepository.save(editDeviceLog);
+  }
+
+  private static Log createEditDeviceLog(ApiUser user, ApiDevice oldDevice, ApiDevice newDevice) {
+    Log newLog = new Log();
+
+    newLog.setObjectId(newDevice.getId());
+    newLog.setType(LogType.DEVICE_EDITED);
+    newLog.setUserId(user.getId());
+    newLog.setTimestamp(LocalDateTime.now());
+    newLog.setOldData(oldDevice.toLogObject());
+    newLog.setNewData(newDevice.toLogObject());
 
     return newLog;
   }

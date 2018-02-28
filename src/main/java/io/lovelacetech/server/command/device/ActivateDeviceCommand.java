@@ -9,10 +9,8 @@ import io.lovelacetech.server.model.api.model.ApiUser;
 import io.lovelacetech.server.model.api.response.device.DeviceApiResponse;
 import io.lovelacetech.server.repository.AssetRepository;
 import io.lovelacetech.server.repository.LocationRepository;
-import io.lovelacetech.server.util.AuthenticationUtils;
-import io.lovelacetech.server.util.LoaderUtils;
-import io.lovelacetech.server.util.Messages;
-import io.lovelacetech.server.util.UUIDUtils;
+import io.lovelacetech.server.repository.LogRepository;
+import io.lovelacetech.server.util.*;
 import org.assertj.core.util.Strings;
 
 import java.util.UUID;
@@ -23,6 +21,7 @@ public class ActivateDeviceCommand extends DeviceCommand<ActivateDeviceCommand> 
   private ApiUser user;
 
   private AssetRepository assetRepository;
+  private LogRepository logRepository;
 
   public ActivateDeviceCommand setDeviceActivation(ApiDeviceActivation deviceActivation) {
     this.deviceActivation = deviceActivation;
@@ -44,12 +43,18 @@ public class ActivateDeviceCommand extends DeviceCommand<ActivateDeviceCommand> 
     return this;
   }
 
+  public ActivateDeviceCommand setLogRepository(LogRepository logRepository) {
+    this.logRepository = logRepository;
+    return this;
+  }
+
   @Override
   public boolean checkCommand() {
     return super.checkCommand()
         && deviceActivation != null
         && locationRepository != null
-        && assetRepository != null;
+        && assetRepository != null
+        && logRepository != null;
   }
 
   @Override
@@ -99,7 +104,7 @@ public class ActivateDeviceCommand extends DeviceCommand<ActivateDeviceCommand> 
     }
 
     existingDeviceWithCode.setLocationId(locationId);
-    existingDeviceWithCode = getDeviceRepository().save(existingDeviceWithCode);
+    LogUtil.registerDeviceAndLog(user, existingDeviceWithCode.toApi(), getDeviceRepository(), logRepository);
 
     ApiDevice existingApiDeviceWithCode = existingDeviceWithCode.toApi();
 

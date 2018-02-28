@@ -14,8 +14,8 @@ public class ApiDevice extends BaseApiModel<Device> {
 
   private List<ApiAsset> assets;
 
-  int assetsInDevice = 0;
-  int assetsWithHome = 0;
+  private int assetsInDevice = 0;
+  private int assetsWithHome = 0;
 
   public ApiDevice() {
     this.id = UUIDUtils.empty();
