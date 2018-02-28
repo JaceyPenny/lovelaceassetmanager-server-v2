@@ -189,6 +189,7 @@ public class LocationController extends BaseController {
 
     return new SaveLocationCommand()
         .setLocationRepository(locationRepository)
+        .setLogRepository(logRepository)
         .setLocation(location)
         .setUser(authenticatedUser)
         .execute();

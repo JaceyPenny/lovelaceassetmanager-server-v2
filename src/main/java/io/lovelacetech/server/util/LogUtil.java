@@ -253,4 +253,53 @@ public class LogUtil {
 
     return newLog;
   }
+
+  public static void addLocationAndLog(
+      ApiUser user,
+      ApiLocation location,
+      LocationRepository locationRepository,
+      LogRepository logRepository) {
+    locationRepository.save(location.toDatabase());
+
+    Log addLocationLog = createAddLocationLog(user, location);
+    logRepository.save(addLocationLog);
+  }
+
+  private static Log createAddLocationLog(ApiUser user, ApiLocation location) {
+    Log newLog = new Log();
+
+    newLog.setObjectId(location.getId());
+    newLog.setType(LogType.LOCATION_ADDED);
+    newLog.setUserId(user.getId());
+    newLog.setNewData(location.toLogObject());
+
+    return newLog;
+  }
+
+  public static void editLocationAndLog(
+      ApiUser user,
+      ApiLocation oldLocation,
+      ApiLocation newLocation,
+      LocationRepository locationRepository,
+      LogRepository logRepository) {
+    locationRepository.save(newLocation.toDatabase());
+
+    Log editLocationLog = createEditLocationLog(user, oldLocation, newLocation);
+    logRepository.save(editLocationLog);
+  }
+
+  private static Log createEditLocationLog(
+      ApiUser user,
+      ApiLocation oldLocation,
+      ApiLocation newLocation) {
+    Log newLog = new Log();
+
+    newLog.setObjectId(newLocation.getId());
+    newLog.setType(LogType.LOCATION_EDITED);
+    newLog.setUserId(user.getId());
+    newLog.setOldData(oldLocation.toLogObject());
+    newLog.setNewData(newLocation.toLogObject());
+
+    return newLog;
+  }
 }

@@ -5,15 +5,15 @@ import io.lovelacetech.server.model.api.enums.AccessLevel;
 import io.lovelacetech.server.model.api.model.ApiLocation;
 import io.lovelacetech.server.model.api.model.ApiUser;
 import io.lovelacetech.server.model.api.response.location.LocationApiResponse;
-import io.lovelacetech.server.util.AccessUtils;
-import io.lovelacetech.server.util.Messages;
-import io.lovelacetech.server.util.RepositoryUtils;
-import io.lovelacetech.server.util.UUIDUtils;
+import io.lovelacetech.server.repository.LogRepository;
+import io.lovelacetech.server.util.*;
 import org.springframework.dao.DataIntegrityViolationException;
 
 public class SaveLocationCommand extends LocationCommand<SaveLocationCommand> {
   private ApiLocation location;
   private ApiUser user;
+
+  private LogRepository logRepository;
 
   public SaveLocationCommand setLocation(ApiLocation location) {
     this.location = location;
@@ -25,9 +25,17 @@ public class SaveLocationCommand extends LocationCommand<SaveLocationCommand> {
     return this;
   }
 
+  public SaveLocationCommand setLogRepository(LogRepository logRepository) {
+    this.logRepository = logRepository;
+    return this;
+  }
+
   @Override
   public boolean checkCommand() {
-    return super.checkCommand() && location != null && user != null;
+    return super.checkCommand()
+        && location != null
+        && user != null
+        && logRepository != null;
   }
 
   @Override
@@ -43,6 +51,7 @@ public class SaveLocationCommand extends LocationCommand<SaveLocationCommand> {
     // If the user supplied "id" with their request, fetch the existing Location
     // for that ID. Otherwise, throw "Not Found"
     Location locationUpdate = location.toDatabase();
+    ApiLocation oldLocation = new ApiLocation();
     if (locationUpdate.hasId()) {
       Location existingLocation = getLocationRepository().findOne(locationUpdate.getId());
 
@@ -58,6 +67,7 @@ public class SaveLocationCommand extends LocationCommand<SaveLocationCommand> {
         return new LocationApiResponse().setAccessDenied();
       }
 
+      oldLocation = existingLocation.toApi();
       existingLocation.applyUpdate(locationUpdate);
       locationUpdate = existingLocation;
     }
@@ -87,7 +97,13 @@ public class SaveLocationCommand extends LocationCommand<SaveLocationCommand> {
 
     // Save the location
     try {
-      locationUpdate = getLocationRepository().save(locationUpdate);
+      if (locationUpdate.hasId()) {
+        LogUtil.editLocationAndLog(
+            user, oldLocation, locationUpdate.toApi(), getLocationRepository(), logRepository);
+      } else {
+        LogUtil.addLocationAndLog(
+            user, locationUpdate.toApi(), getLocationRepository(), logRepository);
+      }
     } catch (DataIntegrityViolationException exception) {
       return new LocationApiResponse().setBadId();
     }

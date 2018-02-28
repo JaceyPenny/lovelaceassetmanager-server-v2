@@ -4,10 +4,7 @@ import com.google.common.base.Strings;
 import io.lovelacetech.server.model.Location;
 import io.lovelacetech.server.util.UUIDUtils;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 public class ApiLocation extends BaseApiModel<Location> {
   private UUID id;
@@ -131,6 +128,18 @@ public class ApiLocation extends BaseApiModel<Location> {
     location.setCompanyId(UUIDUtils.isValidId(companyId) ? companyId : null);
 
     return location;
+  }
+
+  @Override
+  public Map<String, Object> toLogObject() {
+    Map<String, Object> resultingMap = new HashMap<>();
+
+    resultingMap.put("name", name);
+    resultingMap.put("city", city);
+    resultingMap.put("state", state);
+    resultingMap.put("companyId", companyId);
+
+    return resultingMap;
   }
 
   public void sort() {
