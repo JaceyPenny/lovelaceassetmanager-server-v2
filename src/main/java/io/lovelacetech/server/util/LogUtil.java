@@ -1,16 +1,12 @@
 package io.lovelacetech.server.util;
 
-import io.lovelacetech.server.model.Asset;
-import io.lovelacetech.server.model.Log;
+import io.lovelacetech.server.model.*;
 import io.lovelacetech.server.model.api.enums.LogType;
 import io.lovelacetech.server.model.api.model.ApiAsset;
 import io.lovelacetech.server.model.api.model.ApiDevice;
 import io.lovelacetech.server.model.api.model.ApiLocation;
 import io.lovelacetech.server.model.api.model.ApiUser;
-import io.lovelacetech.server.repository.AssetRepository;
-import io.lovelacetech.server.repository.DeviceRepository;
-import io.lovelacetech.server.repository.LocationRepository;
-import io.lovelacetech.server.repository.LogRepository;
+import io.lovelacetech.server.repository.*;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -141,14 +137,16 @@ public class LogUtil {
     return newLog;
   }
 
-  public static void registerAssetAndLog(
+  public static Asset registerAssetAndLog(
       ApiAsset asset,
       AssetRepository assetRepository,
       LogRepository logRepository) {
-    assetRepository.save(asset.toDatabase());
+    Asset result = assetRepository.save(asset.toDatabase());
 
-    Log registerAssetLog = createRegisterAssetLog(asset);
+    Log registerAssetLog = createRegisterAssetLog(result.toApi());
     logRepository.save(registerAssetLog);
+
+    return result;
   }
 
   private static Log createRegisterAssetLog(ApiAsset asset) {
@@ -162,16 +160,18 @@ public class LogUtil {
     return newLog;
   }
 
-  public static void editAssetAndLog(
+  public static Asset editAssetAndLog(
       ApiUser user,
       ApiAsset oldAsset,
       ApiAsset newAsset,
       AssetRepository assetRepository,
       LogRepository logRepository) {
-    assetRepository.save(newAsset.toDatabase());
+    Asset result = assetRepository.save(newAsset.toDatabase());
 
-    Log editAssetLog = createEditAssetLog(user, oldAsset, newAsset);
+    Log editAssetLog = createEditAssetLog(user, oldAsset, result.toApi());
     logRepository.save(editAssetLog);
+
+    return result;
   }
 
   private static Log createEditAssetLog(ApiUser user, ApiAsset oldAsset, ApiAsset newAsset) {
@@ -206,15 +206,17 @@ public class LogUtil {
     return newLog;
   }
 
-  public static void registerDeviceAndLog(
+  public static Device registerDeviceAndLog(
       ApiUser user,
       ApiDevice device,
       DeviceRepository deviceRepository,
       LogRepository logRepository) {
-    deviceRepository.save(device.toDatabase());
+    Device result = deviceRepository.save(device.toDatabase());
 
-    Log registerDeviceLog = createRegisterDeviceLog(user, device);
+    Log registerDeviceLog = createRegisterDeviceLog(user, result.toApi());
     logRepository.save(registerDeviceLog);
+
+    return result;
   }
 
   private static Log createRegisterDeviceLog(ApiUser user, ApiDevice device) {
@@ -229,16 +231,18 @@ public class LogUtil {
     return newLog;
   }
 
-  public static void editDeviceAndLog(
+  public static Device editDeviceAndLog(
       ApiUser user,
       ApiDevice oldDevice,
       ApiDevice newDevice,
       DeviceRepository deviceRepository,
       LogRepository logRepository) {
-    deviceRepository.save(newDevice.toDatabase());
+    Device result = deviceRepository.save(newDevice.toDatabase());
 
-    Log editDeviceLog = createEditDeviceLog(user, oldDevice, newDevice);
+    Log editDeviceLog = createEditDeviceLog(user, oldDevice, result.toApi());
     logRepository.save(editDeviceLog);
+
+    return result;
   }
 
   private static Log createEditDeviceLog(ApiUser user, ApiDevice oldDevice, ApiDevice newDevice) {
@@ -254,15 +258,17 @@ public class LogUtil {
     return newLog;
   }
 
-  public static void addLocationAndLog(
+  public static Location addLocationAndLog(
       ApiUser user,
       ApiLocation location,
       LocationRepository locationRepository,
       LogRepository logRepository) {
-    locationRepository.save(location.toDatabase());
+    Location result = locationRepository.save(location.toDatabase());
 
-    Log addLocationLog = createAddLocationLog(user, location);
+    Log addLocationLog = createAddLocationLog(user, result.toApi());
     logRepository.save(addLocationLog);
+
+    return result;
   }
 
   private static Log createAddLocationLog(ApiUser user, ApiLocation location) {
@@ -271,21 +277,24 @@ public class LogUtil {
     newLog.setObjectId(location.getId());
     newLog.setType(LogType.LOCATION_ADDED);
     newLog.setUserId(user.getId());
+    newLog.setTimestamp(LocalDateTime.now());
     newLog.setNewData(location.toLogObject());
 
     return newLog;
   }
 
-  public static void editLocationAndLog(
+  public static Location editLocationAndLog(
       ApiUser user,
       ApiLocation oldLocation,
       ApiLocation newLocation,
       LocationRepository locationRepository,
       LogRepository logRepository) {
-    locationRepository.save(newLocation.toDatabase());
+    Location result = locationRepository.save(newLocation.toDatabase());
 
-    Log editLocationLog = createEditLocationLog(user, oldLocation, newLocation);
+    Log editLocationLog = createEditLocationLog(user, oldLocation, result.toApi());
     logRepository.save(editLocationLog);
+
+    return result;
   }
 
   private static Log createEditLocationLog(
@@ -297,8 +306,32 @@ public class LogUtil {
     newLog.setObjectId(newLocation.getId());
     newLog.setType(LogType.LOCATION_EDITED);
     newLog.setUserId(user.getId());
+    newLog.setTimestamp(LocalDateTime.now());
     newLog.setOldData(oldLocation.toLogObject());
     newLog.setNewData(newLocation.toLogObject());
+
+    return newLog;
+  }
+
+  public static User registerUserAndLog(
+      ApiUser user,
+      UserRepository userRepository,
+      LogRepository logRepository) {
+    User result = userRepository.save(user.toDatabase());
+
+    Log registerUserLog = createRegisterUserLog(result.toApi());
+    logRepository.save(registerUserLog);
+
+    return result;
+  }
+
+  private static Log createRegisterUserLog(ApiUser user) {
+    Log newLog = new Log();
+
+    newLog.setObjectId(user.getId());
+    newLog.setType(LogType.USER_REGISTERED);
+    newLog.setTimestamp(LocalDateTime.now());
+    newLog.setNewData(user.toLogObject());
 
     return newLog;
   }

@@ -110,10 +110,10 @@ public class SaveDeviceCommand extends DeviceCommand<SaveDeviceCommand> {
 
     try {
       if (deviceUpdate.hasId()) {
-        LogUtil.editDeviceAndLog(
+        deviceUpdate = LogUtil.editDeviceAndLog(
             user, oldDevice, deviceUpdate.toApi(), getDeviceRepository(), logRepository);
       } else {
-        LogUtil.registerDeviceAndLog(
+        deviceUpdate = LogUtil.registerDeviceAndLog(
             user, deviceUpdate.toApi(), getDeviceRepository(), logRepository);
       }
     } catch (DataIntegrityViolationException exception) {

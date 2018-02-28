@@ -98,10 +98,10 @@ public class SaveLocationCommand extends LocationCommand<SaveLocationCommand> {
     // Save the location
     try {
       if (locationUpdate.hasId()) {
-        LogUtil.editLocationAndLog(
+        locationUpdate = LogUtil.editLocationAndLog(
             user, oldLocation, locationUpdate.toApi(), getLocationRepository(), logRepository);
       } else {
-        LogUtil.addLocationAndLog(
+        locationUpdate = LogUtil.addLocationAndLog(
             user, locationUpdate.toApi(), getLocationRepository(), logRepository);
       }
     } catch (DataIntegrityViolationException exception) {

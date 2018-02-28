@@ -104,7 +104,8 @@ public class ActivateDeviceCommand extends DeviceCommand<ActivateDeviceCommand> 
     }
 
     existingDeviceWithCode.setLocationId(locationId);
-    LogUtil.registerDeviceAndLog(user, existingDeviceWithCode.toApi(), getDeviceRepository(), logRepository);
+    existingDeviceWithCode = LogUtil.registerDeviceAndLog(
+        user, existingDeviceWithCode.toApi(), getDeviceRepository(), logRepository);
 
     ApiDevice existingApiDeviceWithCode = existingDeviceWithCode.toApi();
 

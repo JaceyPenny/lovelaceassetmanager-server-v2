@@ -5,8 +5,10 @@ import io.lovelacetech.server.model.api.model.ApiAuthenticationResult;
 import io.lovelacetech.server.model.api.model.ApiRegistration;
 import io.lovelacetech.server.model.api.model.ApiUser;
 import io.lovelacetech.server.model.api.response.authentication.AuthenticationApiResponse;
+import io.lovelacetech.server.repository.LogRepository;
 import io.lovelacetech.server.repository.UserRepository;
 import io.lovelacetech.server.util.AuthenticationUtils;
+import io.lovelacetech.server.util.LogUtil;
 import io.lovelacetech.server.util.Messages;
 import io.lovelacetech.server.util.PasswordUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,13 +23,16 @@ public class RegistrationController {
 
   private final UserRepository userRepository;
   private final PasswordEncoder passwordEncoder;
+  private final LogRepository logRepository;
 
   @Autowired
   public RegistrationController(
       UserRepository userRepository,
-      PasswordEncoder passwordEncoder) {
+      PasswordEncoder passwordEncoder,
+      LogRepository logRepository) {
     this.userRepository = userRepository;
     this.passwordEncoder = passwordEncoder;
+    this.logRepository = logRepository;
   }
 
   /**
@@ -83,7 +88,7 @@ public class RegistrationController {
     }
 
     User newUser = registration.createUser(passwordEncoder);
-    User userResult = userRepository.save(newUser);
+    User userResult = LogUtil.registerUserAndLog(newUser.toApi(), userRepository, logRepository);
 
     if (userResult == null) {
       return new AuthenticationApiResponse()

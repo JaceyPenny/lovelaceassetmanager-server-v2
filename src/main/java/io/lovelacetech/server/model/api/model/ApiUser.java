@@ -5,10 +5,7 @@ import io.lovelacetech.server.model.api.enums.AccessLevel;
 import io.lovelacetech.server.util.RepositoryUtils;
 import io.lovelacetech.server.util.UUIDUtils;
 
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 public class ApiUser extends BaseApiModel<User> {
   private UUID id;
@@ -148,5 +145,19 @@ public class ApiUser extends BaseApiModel<User> {
     user.setLocations(RepositoryUtils.toDatabaseList(locations));
 
     return user;
+  }
+
+  @Override
+  public Map<String, Object> toLogObject() {
+    Map<String, Object> resultingMap = new HashMap<>();
+
+    resultingMap.put("email", email);
+    resultingMap.put("username", username);
+    resultingMap.put("accessLevel", accessLevel);
+    resultingMap.put("companyId", companyId);
+    resultingMap.put("firstName", firstName);
+    resultingMap.put("lastName", lastName);
+
+    return resultingMap;
   }
 }
