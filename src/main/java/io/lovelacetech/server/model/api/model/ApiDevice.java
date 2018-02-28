@@ -124,7 +124,6 @@ public class ApiDevice extends BaseApiModel<Device> {
   public Map<String, Object> toLogObject() {
     Map<String, Object> resultingMap = new HashMap<>();
 
-    resultingMap.put("id", id);
     resultingMap.put("deviceCode", deviceCode);
     resultingMap.put("name", name);
     resultingMap.put("locationId", locationId);

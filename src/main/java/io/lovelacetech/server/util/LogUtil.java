@@ -136,4 +136,69 @@ public class LogUtil {
 
     return newLog;
   }
+
+  public static void registerAssetAndLog(
+      ApiAsset asset,
+      AssetRepository assetRepository,
+      LogRepository logRepository) {
+    assetRepository.save(asset.toDatabase());
+
+    Log registerAssetLog = createRegisterAssetLog(asset);
+    logRepository.save(registerAssetLog);
+  }
+
+  private static Log createRegisterAssetLog(ApiAsset asset) {
+    Log newLog = new Log();
+
+    newLog.setObjectId(asset.getId());
+    newLog.setType(LogType.ASSET_REGISTERED);
+    newLog.setTimestamp(LocalDateTime.now());
+    newLog.setNewData(asset.toLogObject());
+
+    return newLog;
+  }
+
+  public static void editAssetAndLog(
+      ApiUser user,
+      ApiAsset oldAsset,
+      ApiAsset newAsset,
+      AssetRepository assetRepository,
+      LogRepository logRepository) {
+    assetRepository.save(newAsset.toDatabase());
+
+    Log editAssetLog = createEditAssetLog(user, oldAsset, newAsset);
+    logRepository.save(editAssetLog);
+  }
+
+  private static Log createEditAssetLog(ApiUser user, ApiAsset oldAsset, ApiAsset newAsset) {
+    Log newLog = new Log();
+
+    newLog.setObjectId(newAsset.getId());
+    newLog.setType(LogType.ASSET_EDITED);
+    newLog.setUserId(user.getId());
+    newLog.setTimestamp(LocalDateTime.now());
+    newLog.setOldData(oldAsset.toLogObject());
+    newLog.setNewData(newAsset.toLogObject());
+
+    return newLog;
+  }
+
+  public static void deleteAssetAndLog(ApiUser user, ApiAsset asset, AssetRepository assetRepository, LogRepository logRepository) {
+    assetRepository.delete(asset.getId());
+
+    Log deleteAssetLog = createDeleteAssetLog(user, asset);
+    logRepository.save(deleteAssetLog);
+  }
+
+  private static Log createDeleteAssetLog(ApiUser user, ApiAsset asset) {
+    Log newLog = new Log();
+
+    newLog.setObjectId(asset.getId());
+    newLog.setType(LogType.ASSET_EDITED);
+    newLog.setUserId(user.getId());
+    newLog.setTimestamp(LocalDateTime.now());
+    newLog.setOldData(asset.toLogObject());
+
+    return newLog;
+  }
 }

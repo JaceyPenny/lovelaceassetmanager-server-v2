@@ -13,10 +13,8 @@ import io.lovelacetech.server.model.api.response.asset.AssetApiResponse;
 import io.lovelacetech.server.repository.AssetTypeRepository;
 import io.lovelacetech.server.repository.DeviceRepository;
 import io.lovelacetech.server.repository.LocationRepository;
-import io.lovelacetech.server.util.AccessUtils;
-import io.lovelacetech.server.util.Messages;
-import io.lovelacetech.server.util.RepositoryUtils;
-import io.lovelacetech.server.util.UUIDUtils;
+import io.lovelacetech.server.repository.LogRepository;
+import io.lovelacetech.server.util.*;
 import org.springframework.dao.DataIntegrityViolationException;
 
 public class SaveAssetCommand extends AssetCommand<SaveAssetCommand> {
@@ -25,6 +23,7 @@ public class SaveAssetCommand extends AssetCommand<SaveAssetCommand> {
   private AssetTypeRepository assetTypeRepository;
   private DeviceRepository deviceRepository;
   private LocationRepository locationRepository;
+  private LogRepository logRepository;
 
   public SaveAssetCommand setAsset(ApiAsset asset) {
     this.asset = asset;
@@ -51,13 +50,19 @@ public class SaveAssetCommand extends AssetCommand<SaveAssetCommand> {
     return this;
   }
 
+  public SaveAssetCommand setLogRepository(LogRepository logRepository) {
+    this.logRepository = logRepository;
+    return this;
+  }
+
   @Override
   public boolean checkCommand() {
     return super.checkCommand()
         && asset != null
         && assetTypeRepository != null
         && deviceRepository != null
-        && locationRepository != null;
+        && locationRepository != null
+        && logRepository != null;
   }
 
   @Override
@@ -67,6 +72,8 @@ public class SaveAssetCommand extends AssetCommand<SaveAssetCommand> {
     }
 
     Asset assetUpdate = asset.toDatabase();
+    ApiAsset oldAsset = new ApiAsset();
+
     if (assetUpdate.hasId()) {
       Asset existingAsset = getAssetRepository().findOne(assetUpdate.getId());
 
@@ -90,6 +97,7 @@ public class SaveAssetCommand extends AssetCommand<SaveAssetCommand> {
         return new AssetApiResponse().setCannotModify();
       }
 
+      oldAsset = existingAsset.toApi();
       existingAsset.applyUpdate(assetUpdate);
       assetUpdate = existingAsset;
     }
@@ -153,6 +161,12 @@ public class SaveAssetCommand extends AssetCommand<SaveAssetCommand> {
     }
 
     try {
+      if (assetUpdate.hasId()) {
+        LogUtil.editAssetAndLog(user, oldAsset, assetUpdate.toApi(), getAssetRepository(), logRepository);
+      } else {
+        LogUtil.registerAssetAndLog(assetUpdate.toApi(), getAssetRepository(), logRepository);
+      }
+
       assetUpdate = getAssetRepository().save(assetUpdate);
     } catch (DataIntegrityViolationException constraintViolationException) {
       return new AssetApiResponse().setBadId();

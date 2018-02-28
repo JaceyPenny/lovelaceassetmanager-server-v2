@@ -6,6 +6,8 @@ import io.lovelacetech.server.util.UUIDUtils;
 import org.assertj.core.util.Strings;
 
 import java.beans.Transient;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 public class ApiAsset extends BaseApiModel<Asset> {
@@ -170,5 +172,21 @@ public class ApiAsset extends BaseApiModel<Asset> {
     asset.setAssetType(assetType.toDatabase());
 
     return asset;
+  }
+
+  @Override
+  public Map<String, Object> toLogObject() {
+    Map<String, Object> resultingMap = new HashMap<>();
+
+    resultingMap.put("id", id);
+    resultingMap.put("name", name);
+    resultingMap.put("rfid", rfid);
+    resultingMap.put("status", status);
+    resultingMap.put("homeId", homeId);
+    resultingMap.put("locationId", locationId);
+    resultingMap.put("deviceId", deviceId);
+    resultingMap.put("assetTypeId", assetType.getId());
+
+    return resultingMap;
   }
 }
