@@ -7,6 +7,7 @@ import io.lovelacetech.server.model.api.model.ApiUser;
 import io.lovelacetech.server.model.api.response.device.DeviceApiResponse;
 import io.lovelacetech.server.repository.AssetRepository;
 import io.lovelacetech.server.repository.LocationRepository;
+import io.lovelacetech.server.repository.LogRepository;
 import io.lovelacetech.server.util.*;
 import org.h2.util.StringUtils;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -16,6 +17,7 @@ public class SaveDeviceCommand extends DeviceCommand<SaveDeviceCommand> {
   private ApiUser user;
   private LocationRepository locationRepository;
   private AssetRepository assetRepository;
+  private LogRepository logRepository;
 
   public SaveDeviceCommand setDevice(ApiDevice device) {
     this.device = device;
@@ -37,12 +39,18 @@ public class SaveDeviceCommand extends DeviceCommand<SaveDeviceCommand> {
     return this;
   }
 
+  public SaveDeviceCommand setLogRepository(LogRepository logRepository) {
+    this.logRepository = logRepository;
+    return this;
+  }
+
   @Override
   public boolean checkCommand() {
     return super.checkCommand()
         && device != null
         && user != null
-        && assetRepository != null;
+        && assetRepository != null
+        && logRepository != null;
   }
 
   @Override
@@ -52,6 +60,8 @@ public class SaveDeviceCommand extends DeviceCommand<SaveDeviceCommand> {
     }
 
     Device deviceUpdate = device.toDatabase();
+    ApiDevice oldDevice = new ApiDevice();
+
     if (deviceUpdate.hasId()) {
       Device existingDevice = getDeviceRepository().findOne(deviceUpdate.getId());
 
@@ -74,6 +84,7 @@ public class SaveDeviceCommand extends DeviceCommand<SaveDeviceCommand> {
             .setMessage(Messages.DEVICE_CANNOT_MODIFY_DEVICE_CODE);
       }
 
+      oldDevice = existingDevice.toApi();
       existingDevice.applyUpdate(deviceUpdate);
       deviceUpdate = existingDevice;
     } else if (!AuthenticationUtils.userIsSuper(user)) {
@@ -98,7 +109,13 @@ public class SaveDeviceCommand extends DeviceCommand<SaveDeviceCommand> {
     }
 
     try {
-      deviceUpdate = getDeviceRepository().save(deviceUpdate);
+      if (deviceUpdate.hasId()) {
+        deviceUpdate = LogUtil.editDeviceAndLog(
+            user, oldDevice, deviceUpdate.toApi(), getDeviceRepository(), logRepository);
+      } else {
+        deviceUpdate = LogUtil.registerDeviceAndLog(
+            user, deviceUpdate.toApi(), getDeviceRepository(), logRepository);
+      }
     } catch (DataIntegrityViolationException exception) {
       return new DeviceApiResponse().setBadId();
     }

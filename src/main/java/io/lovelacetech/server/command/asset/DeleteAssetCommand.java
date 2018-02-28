@@ -5,7 +5,9 @@ import io.lovelacetech.server.model.api.model.ApiUser;
 import io.lovelacetech.server.model.api.response.asset.AssetApiResponse;
 import io.lovelacetech.server.repository.DeviceRepository;
 import io.lovelacetech.server.repository.LocationRepository;
+import io.lovelacetech.server.repository.LogRepository;
 import io.lovelacetech.server.util.AccessUtils;
+import io.lovelacetech.server.util.LogUtil;
 import io.lovelacetech.server.util.UUIDUtils;
 
 import java.util.UUID;
@@ -16,6 +18,7 @@ public class DeleteAssetCommand extends AssetCommand<DeleteAssetCommand> {
 
   private LocationRepository locationRepository;
   private DeviceRepository deviceRepository;
+  private LogRepository logRepository;
 
   public DeleteAssetCommand setUser(ApiUser user) {
     this.user = user;
@@ -37,13 +40,19 @@ public class DeleteAssetCommand extends AssetCommand<DeleteAssetCommand> {
     return this;
   }
 
+  public DeleteAssetCommand setLogRepository(LogRepository logRepository) {
+    this.logRepository = logRepository;
+    return this;
+  }
+
   @Override
   public boolean checkCommand() {
     return super.checkCommand()
         && user != null
         && UUIDUtils.isValidId(assetId)
         && locationRepository != null
-        && deviceRepository != null;
+        && deviceRepository != null
+        && logRepository != null;
   }
 
   public AssetApiResponse execute() {
@@ -60,7 +69,7 @@ public class DeleteAssetCommand extends AssetCommand<DeleteAssetCommand> {
       return new AssetApiResponse().setAccessDenied();
     }
 
-    getAssetRepository().delete(deletedAsset);
+    LogUtil.deleteAssetAndLog(user, deletedAsset.toApi(), getAssetRepository(), logRepository);
     return new AssetApiResponse()
         .setSuccess()
         .setResponse(deletedAsset.toApi());

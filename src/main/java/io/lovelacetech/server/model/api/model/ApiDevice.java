@@ -14,8 +14,8 @@ public class ApiDevice extends BaseApiModel<Device> {
 
   private List<ApiAsset> assets;
 
-  int assetsInDevice = 0;
-  int assetsWithHome = 0;
+  private int assetsInDevice = 0;
+  private int assetsWithHome = 0;
 
   public ApiDevice() {
     this.id = UUIDUtils.empty();
@@ -124,7 +124,6 @@ public class ApiDevice extends BaseApiModel<Device> {
   public Map<String, Object> toLogObject() {
     Map<String, Object> resultingMap = new HashMap<>();
 
-    resultingMap.put("id", id);
     resultingMap.put("deviceCode", deviceCode);
     resultingMap.put("name", name);
     resultingMap.put("locationId", locationId);

@@ -5,10 +5,7 @@ import io.lovelacetech.server.model.api.model.ApiAsset;
 import io.lovelacetech.server.model.api.model.ApiUser;
 import io.lovelacetech.server.model.api.response.asset.AssetApiResponse;
 import io.lovelacetech.server.model.api.response.asset.AssetListApiResponse;
-import io.lovelacetech.server.repository.AssetRepository;
-import io.lovelacetech.server.repository.AssetTypeRepository;
-import io.lovelacetech.server.repository.DeviceRepository;
-import io.lovelacetech.server.repository.LocationRepository;
+import io.lovelacetech.server.repository.*;
 import io.lovelacetech.server.util.AccessUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -24,17 +21,20 @@ public class AssetController extends BaseController {
   private final DeviceRepository deviceRepository;
   private final AssetRepository assetRepository;
   private final AssetTypeRepository assetTypeRepository;
+  private final LogRepository logRepository;
 
   @Autowired
   public AssetController(
       LocationRepository locationRepository,
       DeviceRepository deviceRepository,
       AssetRepository assetRepository,
-      AssetTypeRepository assetTypeRepository) {
+      AssetTypeRepository assetTypeRepository,
+      LogRepository logRepository) {
     this.locationRepository = locationRepository;
     this.deviceRepository = deviceRepository;
     this.assetRepository = assetRepository;
     this.assetTypeRepository = assetTypeRepository;
+    this.logRepository = logRepository;
   }
 
   /**
@@ -244,6 +244,7 @@ public class AssetController extends BaseController {
         .setAssetRepository(assetRepository)
         .setDeviceRepository(deviceRepository)
         .setLocationRepository(locationRepository)
+        .setLogRepository(logRepository)
         .setUser(authenticatedUser)
         .setAsset(asset)
         .execute();
@@ -270,6 +271,7 @@ public class AssetController extends BaseController {
         .setLocationRepository(locationRepository)
         .setDeviceRepository(deviceRepository)
         .setAssetRepository(assetRepository)
+        .setLogRepository(logRepository)
         .setAssetId(assetId)
         .execute();
   }
