@@ -112,6 +112,42 @@ public class UserController extends BaseController {
   }
 
   /**
+   * <b>  POST /api/secure/users/modifyUser  </b>
+   * <br><br>
+   * Updates another user's profile. This is only accessible to ADMIN users.
+   * <br>
+   * <b>REQUEST BODY:</b>
+   * <pre>{@code    {
+   *    (required) "id": User.id,
+   *    (optional) "email": String,
+   *    (optional) "username": String,
+   *    (optional) "firstName": String,
+   *    (optional) "lastName": String,
+   *    (optional) "accessLevel": {USER|ADMIN|SUPER}
+   * }}</pre>
+   * <br><br>
+   * <b>  RESULT:  </b><br>
+   * <pre>{@code    {
+   *   "status": 200,
+   *   "message": "success",
+   *   "response": User
+   * }}</pre>
+   * <br>
+   * <b>  PERMISSIONS  </b><br>
+   * User must be an authenticated User with at least ADMIN privileges to access this endpoint.
+   */
+  @RequestMapping(value = "/modifyUser", method = RequestMethod.POST)
+  public UserApiResponse modifyUser(
+      @RequestAttribute ApiUser authenticatedUser,
+      @RequestBody ApiUser userUpdate) {
+    return new ModifyUserCommand()
+        .setUserRepository(userRepository)
+        .setActingUser(authenticatedUser)
+        .setUserUpdate(userUpdate)
+        .execute();
+  }
+
+  /**
    * <b>  GET /api/secure/users/forAdmin  </b>
    * <br><br>
    * Gets all the users for this authenticated Admin user. That is to say,

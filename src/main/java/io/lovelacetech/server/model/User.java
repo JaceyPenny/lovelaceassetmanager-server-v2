@@ -76,15 +76,11 @@ public class User implements DatabaseModel<User>, ApiModelConvertible<ApiUser> {
       username = other.username;
     }
 
-    if (!Strings.isNullOrEmpty(other.password)) {
-      password = other.password;
-    }
-
     if (other.accessLevel != null) {
       accessLevel = other.accessLevel;
     }
 
-    if (other.companyId != null) {
+    if (UUIDUtils.isValidId(other.companyId)) {
       companyId = other.companyId;
     }
 
