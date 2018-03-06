@@ -7,6 +7,7 @@ import io.lovelacetech.server.model.api.model.ApiUser;
 import io.lovelacetech.server.model.api.response.DefaultApiResponse;
 import io.lovelacetech.server.repository.AssetRepository;
 import io.lovelacetech.server.repository.AssetTypeRepository;
+import io.lovelacetech.server.util.AccessUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,6 +29,21 @@ public class AssetTypeController {
     this.assetRepository = assetRepository;
   }
 
+  /**
+   * <b> PUT /api/secure/assetTypes/{newAssetTypeName}</b>
+   * <br><br>
+   * Creates a new AssetType with the specified name.
+   * <br><br>
+   * <b>  RESULT:  </b><br>
+   * <pre>{@code    {
+   *   "status": 200,
+   *   "message": "success",
+   *   "response": null
+   * }}</pre>
+   * <br>
+   * <b>  PERMISSIONS  </b><br>
+   * The user must be an admin at their company.
+   */
   @RequestMapping(value = "/{newAssetTypeName}", method = RequestMethod.PUT)
   public DefaultApiResponse putAssetType(
       @RequestAttribute ApiUser authenticatedUser,
@@ -39,6 +55,21 @@ public class AssetTypeController {
         .execute();
   }
 
+  /**
+   * <b> POST /api/secure/assetTypes/{existingName}/{newName}</b>
+   * <br><br>
+   * Updates the name of the existing AssetType with the name "existingName" to the name "newName".
+   * <br><br>
+   * <b>  RESULT:  </b><br>
+   * <pre>{@code    {
+   *   "status": 200,
+   *   "message": "success",
+   *   "response": null
+   * }}</pre>
+   * <br>
+   * <b>  PERMISSIONS  </b><br>
+   * The user must be an admin at their company.
+   */
   @RequestMapping(value = "/{existingName}/{newName}", method = RequestMethod.POST)
   public DefaultApiResponse editAssetType(
       @RequestAttribute ApiUser authenticatedUser,
@@ -52,6 +83,24 @@ public class AssetTypeController {
         .execute();
   }
 
+  /**
+   * <b> DELETE /api/secure/assetTypes/{assetTypeName}</b>
+   * <br><br>
+   * Deletes the AssetType with the name "assetTypeName". If any Assets are set to the AssetType
+   * with name "assetTypeName", their AssetTypes will be set to the AssetType with default name
+   * "Asset". If no AssetType
+   * exists with the default name, then a new AssetType will be created.
+   * <br><br>
+   * <b>  RESULT:  </b><br>
+   * <pre>{@code    {
+   *   "status": 200,
+   *   "message": "success",
+   *   "response": null
+   * }}</pre>
+   * <br>
+   * <b>  PERMISSIONS  </b><br>
+   * The user must be an admin at their company
+   */
   @RequestMapping(value = "/{assetTypeName}", method = RequestMethod.DELETE)
   public DefaultApiResponse deleteAssetType(
       @RequestAttribute ApiUser authenticatedUser,

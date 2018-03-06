@@ -7,6 +7,9 @@ import org.assertj.core.util.Strings;
 import java.util.UUID;
 
 public class ApiAssetType extends BaseApiModel<AssetType> {
+  /**
+   * The default name for a newly created AssetType.
+   */
   public static final String DEFAULT_ASSET_TYPE = "Asset";
 
   private UUID id;
