@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.sql.Time;
 import java.time.LocalTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class NotificationService {
@@ -23,6 +24,7 @@ public class NotificationService {
 
   private final UserRepository userRepository;
   private final NotificationRepository notificationRepository;
+  private final LocationRepository locationRepository;
   private final DeviceRepository deviceRepository;
   private final AssetRepository assetRepository;
   private final LogRepository logRepository;
@@ -32,6 +34,7 @@ public class NotificationService {
       MailContentBuilder mailContentBuilder,
       UserRepository userRepository,
       NotificationRepository notificationRepository,
+      LocationRepository locationRepository,
       DeviceRepository deviceRepository,
       AssetRepository assetRepository,
       LogRepository logRepository) {
@@ -39,6 +42,7 @@ public class NotificationService {
     this.mailContentBuilder = mailContentBuilder;
     this.userRepository = userRepository;
     this.notificationRepository = notificationRepository;
+    this.locationRepository = locationRepository;
     this.deviceRepository = deviceRepository;
     this.assetRepository = assetRepository;
     this.logRepository = logRepository;
@@ -54,12 +58,14 @@ public class NotificationService {
 
   private List<ApiNotification> getCurrentNotifications() {
     Time currentTime = Time.valueOf(LocalTime.now().withSecond(0));
-    return RepositoryUtils.toApiList(notificationRepository.findByTimeEquals(currentTime));
+    List<ApiNotification> notifications =
+        RepositoryUtils.toApiList(notificationRepository.findByTimeEquals(currentTime));
+    return notifications.stream().filter(ApiNotification::isActive).collect(Collectors.toList());
   }
 
-  public void sendNotification(ApiNotification notification) {
+  private void sendNotification(ApiNotification notification) {
     LoaderUtils.populateNotification(
-        notification, deviceRepository, assetRepository, logRepository);
+        notification, locationRepository, deviceRepository, assetRepository, logRepository);
 
     User fetchedUser = userRepository.findOne(notification.getUserId());
     if (fetchedUser == null) {

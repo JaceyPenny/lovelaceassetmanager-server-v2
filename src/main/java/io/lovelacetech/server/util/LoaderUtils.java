@@ -193,11 +193,49 @@ public class LoaderUtils {
 
   public static void populateNotification(
       ApiNotification notification,
+      LocationRepository locationRepository,
       DeviceRepository deviceRepository,
       AssetRepository assetRepository,
       LogRepository logRepository) {
     populateLocations(notification.getLocations(), deviceRepository, assetRepository, logRepository);
     populateDevices(notification.getDevices(), assetRepository, logRepository);
+
+    Set<UUID> locationIds = new HashSet<>(
+        RepositoryUtils.mapToIds(RepositoryUtils.toDatabaseList(notification.getLocations())));
+    for (ApiDevice device : notification.getDevices()) {
+      locationIds.add(device.getLocationId());
+    }
+
+    for (ApiLocation location : notification.getLocations()) {
+      if (locationIds.contains(location.getId())) {
+        locationIds.remove(location.getId());
+      }
+    }
+
+    if (!locationIds.isEmpty()) {
+      List<UUID> locationIdsList = new ArrayList<>(locationIds);
+
+      List<ApiLocation> locations = RepositoryUtils.toApiList(
+          locationRepository.findAllByIdIn(new ArrayList<>(locationIdsList)));
+
+      Map<UUID, ApiLocation> locationMap = locations
+          .stream()
+          .collect(Collectors.toMap(ApiLocation::getId, Functions.identity()));
+
+      List<ApiAsset> assets = RepositoryUtils.toApiList(
+          assetRepository.findAllByLocationIdIn(locationIdsList));
+
+      populateLocationsWithDevices(locationMap, notification.getDevices());
+      populateLocationsWithAssets(locationMap, assets);
+      notification.getLocations().addAll(locations);
+    }
+
+    List<ApiDevice> allDevices = new ArrayList<>();
+    for (ApiLocation location : notification.getLocations()) {
+      allDevices.addAll(location.getDevices());
+    }
+
+    fillAssetCounts(allDevices, assetRepository);
   }
 
   public static void populateAssetsLastLog(List<ApiAsset> assets, LogRepository logRepository) {
