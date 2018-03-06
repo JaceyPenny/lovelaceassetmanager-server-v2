@@ -42,7 +42,7 @@ public class ModelUtils {
     User user = new User();
     user.setId(new UUID(0, index));
     user.setEmail(String.format("test_email_%d@test.com", index));
-    user.setPassword(PasswordUtils.encode("test_password_" + index));
+    user.setPassword(RegistrationUtils.encode("test_password_" + index));
     user.setAccessLevel(AccessLevel.USER);
     user.setCompanyId(new UUID(index, index));
     user.setFirstName("first_name_" + index);

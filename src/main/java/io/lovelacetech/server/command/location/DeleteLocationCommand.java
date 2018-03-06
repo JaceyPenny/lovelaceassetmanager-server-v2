@@ -9,7 +9,7 @@ import io.lovelacetech.server.repository.DeviceRepository;
 import io.lovelacetech.server.repository.LogRepository;
 import io.lovelacetech.server.util.AccessUtils;
 import io.lovelacetech.server.util.AuthenticationUtils;
-import io.lovelacetech.server.util.LogUtil;
+import io.lovelacetech.server.util.LogUtils;
 import io.lovelacetech.server.util.UUIDUtils;
 
 import java.util.UUID;
@@ -83,7 +83,7 @@ public class DeleteLocationCommand extends LocationCommand<DeleteLocationCommand
       return new LocationApiResponse().setCannotModify();
     }
 
-    LogUtil.deleteLocationAndLog(
+    LogUtils.deleteLocationAndLog(
         user, deletedLocation.toApi(), getLocationRepository(), logRepository);
     return new LocationApiResponse()
         .setSuccess()

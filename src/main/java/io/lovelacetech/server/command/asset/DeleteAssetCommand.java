@@ -7,7 +7,7 @@ import io.lovelacetech.server.repository.DeviceRepository;
 import io.lovelacetech.server.repository.LocationRepository;
 import io.lovelacetech.server.repository.LogRepository;
 import io.lovelacetech.server.util.AccessUtils;
-import io.lovelacetech.server.util.LogUtil;
+import io.lovelacetech.server.util.LogUtils;
 import io.lovelacetech.server.util.UUIDUtils;
 
 import java.util.UUID;
@@ -69,7 +69,7 @@ public class DeleteAssetCommand extends AssetCommand<DeleteAssetCommand> {
       return new AssetApiResponse().setAccessDenied();
     }
 
-    LogUtil.deleteAssetAndLog(user, deletedAsset.toApi(), getAssetRepository(), logRepository);
+    LogUtils.deleteAssetAndLog(user, deletedAsset.toApi(), getAssetRepository(), logRepository);
     return new AssetApiResponse()
         .setSuccess()
         .setResponse(deletedAsset.toApi());

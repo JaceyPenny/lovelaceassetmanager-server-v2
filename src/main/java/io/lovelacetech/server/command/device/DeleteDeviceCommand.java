@@ -9,7 +9,7 @@ import io.lovelacetech.server.repository.LocationRepository;
 import io.lovelacetech.server.repository.LogRepository;
 import io.lovelacetech.server.util.AccessUtils;
 import io.lovelacetech.server.util.AuthenticationUtils;
-import io.lovelacetech.server.util.LogUtil;
+import io.lovelacetech.server.util.LogUtils;
 import io.lovelacetech.server.util.UUIDUtils;
 
 import java.util.UUID;
@@ -85,7 +85,7 @@ public class DeleteDeviceCommand extends DeviceCommand<DeleteDeviceCommand> {
       return new DeviceApiResponse().setCannotModify();
     }
 
-    LogUtil.deleteDeviceAndLog(
+    LogUtils.deleteDeviceAndLog(
         user, deletedDevice.toApi(), getDeviceRepository(), logRepository, false);
     return new DeviceApiResponse()
         .setSuccess()

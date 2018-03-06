@@ -18,9 +18,9 @@ import java.util.stream.Collectors;
 
 @Service
 public class NotificationService {
-
   private final SendGrid sendGrid;
   private final MailContentBuilder mailContentBuilder;
+  private final EmailBuilder emailBuilder;
 
   private final UserRepository userRepository;
   private final NotificationRepository notificationRepository;
@@ -32,6 +32,7 @@ public class NotificationService {
   public NotificationService(
       SendGrid sendGrid,
       MailContentBuilder mailContentBuilder,
+      EmailBuilder emailBuilder,
       UserRepository userRepository,
       NotificationRepository notificationRepository,
       LocationRepository locationRepository,
@@ -40,6 +41,7 @@ public class NotificationService {
       LogRepository logRepository) {
     this.sendGrid = sendGrid;
     this.mailContentBuilder = mailContentBuilder;
+    this.emailBuilder = emailBuilder;
     this.userRepository = userRepository;
     this.notificationRepository = notificationRepository;
     this.locationRepository = locationRepository;
@@ -73,34 +75,19 @@ public class NotificationService {
     }
 
     ApiUser user = fetchedUser.toApi();
-    Mail notificationMail = makeMail(user, notification);
+    String html = mailContentBuilder.buildNotification(user, notification);
+    Mail mail = emailBuilder.buildMail(
+        "notification@lovelacetech.io",
+        "Lovelace Technologies Notifications",
+        user.getFirstName() + ", Your Daily Inventory Report",
+        user.getEmail(),
+        html);
 
     try {
-      Request request = buildSendMailRequest(notificationMail);
+      Request request = emailBuilder.buildRequest(mail);
       sendGrid.api(request);
     } catch (IOException ex) {
       // do nothing
     }
-  }
-
-  private Mail makeMail(ApiUser user, ApiNotification notification) {
-    Email from = new Email("notification@lovelacetech.io");
-    from.setName("Lovelace Technologies Notifications");
-    String subject = user.getFirstName() + ", Your Daily Inventory Report";
-    Email to = new Email(user.getEmail());
-
-    String html = mailContentBuilder.build(user, notification);
-
-    Content content = new Content("text/html", html);
-
-    return new Mail(from, subject, to, content);
-  }
-
-  private Request buildSendMailRequest(Mail mail) throws IOException {
-    Request request = new Request();
-    request.setMethod(Method.POST);
-    request.setEndpoint("mail/send");
-    request.setBody(mail.build());
-    return request;
   }
 }

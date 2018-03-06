@@ -8,9 +8,9 @@ import io.lovelacetech.server.model.api.model.ApiDevice;
 import io.lovelacetech.server.repository.AssetRepository;
 import io.lovelacetech.server.repository.DeviceRepository;
 import io.lovelacetech.server.repository.LogRepository;
-import io.lovelacetech.server.util.ListUtil;
+import io.lovelacetech.server.util.ListUtils;
 import io.lovelacetech.server.util.LoaderUtils;
-import io.lovelacetech.server.util.LogUtil;
+import io.lovelacetech.server.util.LogUtils;
 import io.lovelacetech.server.util.RepositoryUtils;
 
 import java.util.List;
@@ -76,22 +76,22 @@ public class DeviceUpdateCommand {
 
     // Use list subtraction to figure out which assets are new to the device and which have been
     // removed.
-    List<String> newlyAddedRfids = ListUtil.subtract(newRfidTags, currentRfidTags);
-    List<String> removedRfids = ListUtil.subtract(currentRfidTags, newRfidTags);
+    List<String> newlyAddedRfids = ListUtils.subtract(newRfidTags, currentRfidTags);
+    List<String> removedRfids = ListUtils.subtract(currentRfidTags, newRfidTags);
 
     List<ApiAsset> newlyAddedAssets = RepositoryUtils
         .toApiList(assetRepository.findAllByRfidIn(newlyAddedRfids));
     List<ApiAsset> removedAssets = LoaderUtils.filterByRfidIn(apiDevice.getAssets(), removedRfids);
 
     // Update the assets and create logs.
-    LogUtil.removeAssetsFromDeviceAndLog(
+    LogUtils.removeAssetsFromDeviceAndLog(
         removedAssets,
         apiDevice.getId(),
         apiDevice.getLocationId(),
         assetRepository,
         logRepository);
 
-    LogUtil.addAssetsToDeviceAndLog(
+    LogUtils.addAssetsToDeviceAndLog(
         newlyAddedAssets,
         apiDevice.getLocationId(),
         apiDevice.getId(),

@@ -77,4 +77,5 @@ public class Messages {
   public static final String REGISTRATION_EMAIL_ALREADY_EXISTS = "another user is using this email";
   public static final String REGISTRATION_USERNAME_ALREADY_EXISTS = "another user is using this username";
   public static final String REGISTRATION_PASSWORD_INVALID = "the password must meet the minimum strength requirements";
+  public static final String REGISTRATION_EMAIL_INVALID = "the email supplied is not in the valid format";
 }

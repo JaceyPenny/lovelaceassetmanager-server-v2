@@ -8,9 +8,9 @@ import io.lovelacetech.server.model.api.response.authentication.AuthenticationAp
 import io.lovelacetech.server.repository.LogRepository;
 import io.lovelacetech.server.repository.UserRepository;
 import io.lovelacetech.server.util.AuthenticationUtils;
-import io.lovelacetech.server.util.LogUtil;
+import io.lovelacetech.server.util.LogUtils;
 import io.lovelacetech.server.util.Messages;
-import io.lovelacetech.server.util.PasswordUtils;
+import io.lovelacetech.server.util.RegistrationUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -81,14 +81,20 @@ public class RegistrationController {
           .setMessage(Messages.REGISTRATION_USERNAME_ALREADY_EXISTS);
     }
 
-    if (!PasswordUtils.isValidPassword(registration.getPassword())) {
+    if (!RegistrationUtils.isValidEmail(registration.getEmail())) {
+      return new AuthenticationApiResponse()
+          .setStatus(HttpStatus.PRECONDITION_FAILED)
+          .setMessage(Messages.REGISTRATION_EMAIL_INVALID);
+    }
+
+    if (!RegistrationUtils.isValidPassword(registration.getPassword())) {
       return new AuthenticationApiResponse()
           .setStatus(HttpStatus.PRECONDITION_FAILED)
           .setMessage(Messages.REGISTRATION_PASSWORD_INVALID);
     }
 
     User newUser = registration.createUser(passwordEncoder);
-    User userResult = LogUtil.registerUserAndLog(newUser.toApi(), userRepository, logRepository);
+    User userResult = LogUtils.registerUserAndLog(newUser.toApi(), userRepository, logRepository);
 
     if (userResult == null) {
       return new AuthenticationApiResponse()

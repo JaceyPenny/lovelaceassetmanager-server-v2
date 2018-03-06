@@ -14,7 +14,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
-public class LogUtil {
+public class LogUtils {
   public static void removeAssetsFromDeviceAndLog(
       List<ApiAsset> assets,
       UUID fromDeviceId,

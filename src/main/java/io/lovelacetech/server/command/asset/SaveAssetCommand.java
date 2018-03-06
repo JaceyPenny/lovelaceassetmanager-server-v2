@@ -164,10 +164,10 @@ public class SaveAssetCommand extends AssetCommand<SaveAssetCommand> {
 
     try {
       if (assetUpdate.hasId()) {
-        assetUpdate = LogUtil.editAssetAndLog(
+        assetUpdate = LogUtils.editAssetAndLog(
             user, oldAsset, assetUpdate.toApi(), getAssetRepository(), logRepository);
       } else {
-        assetUpdate = LogUtil.registerAssetAndLog(assetUpdate.toApi(), getAssetRepository(), logRepository);
+        assetUpdate = LogUtils.registerAssetAndLog(assetUpdate.toApi(), getAssetRepository(), logRepository);
       }
 
       assetUpdate = getAssetRepository().save(assetUpdate);
