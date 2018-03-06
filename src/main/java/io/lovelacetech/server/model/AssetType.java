@@ -21,7 +21,6 @@ public class AssetType implements DatabaseModel<AssetType>, ApiModelConvertible<
   @Column(name = "type", nullable = false, updatable = false)
   private String type;
 
-
   @Override
   public ApiAssetType toApi() {
     return new ApiAssetType(this);

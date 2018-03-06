@@ -5,7 +5,6 @@ import io.lovelacetech.server.model.Log;
 import io.lovelacetech.server.model.api.enums.LogType;
 
 import java.beans.Transient;
-import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZoneOffset;

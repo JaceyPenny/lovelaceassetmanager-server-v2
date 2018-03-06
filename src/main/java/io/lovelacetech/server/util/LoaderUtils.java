@@ -1,7 +1,6 @@
 package io.lovelacetech.server.util;
 
 import com.google.common.base.Functions;
-import io.lovelacetech.server.model.Location;
 import io.lovelacetech.server.model.Log;
 import io.lovelacetech.server.model.api.enums.AccessLevel;
 import io.lovelacetech.server.model.api.model.*;

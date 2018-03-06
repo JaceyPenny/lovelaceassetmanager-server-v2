@@ -37,9 +37,7 @@ public class Asset implements DatabaseModel<Asset>, ApiModelConvertible<ApiAsset
   private UUID deviceId;
 
   @ManyToOne(fetch = FetchType.EAGER)
-  @JoinTable(name = "asset_asset_type", schema = "lovelace",
-      joinColumns = {@JoinColumn(name = "asset_id", nullable = false, updatable = false)},
-      inverseJoinColumns = {@JoinColumn(name = "asset_type_id", nullable = false, updatable = false)})
+  @JoinColumn(name = "asset_type_id")
   private AssetType assetType;
 
   @Override
