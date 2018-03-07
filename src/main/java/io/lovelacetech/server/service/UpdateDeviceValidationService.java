@@ -29,7 +29,9 @@ public class UpdateDeviceValidationService {
       return UpdateDeviceResponse.INVALID_TIMESTAMP;
     }
 
-    String preHashString = url.replaceAll("/", "") + "/" + deviceCode + updateDeviceSecret + timestamp;
+    System.out.println("DEVICE CODE: " + deviceCode);
+
+    String preHashString = url + deviceCode + updateDeviceSecret + timestamp;
     String hashedString = HashUtil.getSha256HashString(preHashString);
 
     System.out.println("PREHASH: " + preHashString);

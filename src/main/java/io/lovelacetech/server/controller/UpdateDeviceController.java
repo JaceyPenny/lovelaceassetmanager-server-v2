@@ -38,8 +38,10 @@ public class UpdateDeviceController {
       @RequestParam(name = "time") long unixTime,
       @RequestParam(name = "hash") String hash,
       @RequestBody ApiDeviceUpdate deviceUpdate) {
+    System.out.println("REQUEST DEVICE CODE: " + deviceCode);
+
     UpdateDeviceResponse response = updateDeviceValidationService
-        .checkRequestValidity("POST/api/deviceUpdate/", deviceCode, unixTime, hash);
+        .checkRequestValidity("POSTapideviceUpdate/", deviceCode, unixTime, hash);
     if (response != UpdateDeviceResponse.SUCCESS) {
       return response;
     }
