@@ -8,6 +8,8 @@ import io.lovelacetech.server.service.InviteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
+
 @RestController
 @CrossOrigin
 @RequestMapping(value = "/api/secure/invite")
@@ -20,13 +22,17 @@ public class InviteController extends BaseController {
     this.inviteService = inviteService;
   }
 
-  @RequestMapping(value = "/{email}", method = RequestMethod.PUT)
+  @PutMapping
   public InviteApiResponse inviteUser(
       @RequestAttribute ApiUser authenticatedUser,
-      @PathVariable String email) {
+      @RequestBody Map<String, String> body) {
     checkAccessIsAtLeast(authenticatedUser, AccessLevel.ADMIN);
 
-    ApiInvite invite = inviteService.inviteByEmail(authenticatedUser, email);
+    if (body.get("email") == null) {
+      return new InviteApiResponse().setInvalidBody();
+    }
+
+    ApiInvite invite = inviteService.inviteByEmail(authenticatedUser, body.get("email"));
     if (invite == null) {
       return new InviteApiResponse().setInvalidBody();
     }

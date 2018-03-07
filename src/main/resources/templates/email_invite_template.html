@@ -59,7 +59,7 @@
 <div class="container">
 
     <header>
-        <img src="http://34.224.211.20/assets/img/full-logo.png" width="300"/>
+        <img src="http://dashboard.lovelacetech.io/assets/img/full-logo.png" width="300"/>
         <h1>Invitation To Join</h1>
         <div class="border"></div>
     </header>
@@ -67,11 +67,11 @@
     <!-- Main body of email: Provides a link to the registration page -->
     <div class="body">
         <p>
-            You've been invited by <span th:text="{sponsorName}"></span> to join them at
-            <span th:text="{companyName}"></span> To accept the invitation, click or copy and
-            paste the following link into your web browser.<br><br>
-            <a th:href="@{https://dashboard.lovelacetech.io/#/registerUser/{invite.code}}"
-               th:text="@{https://dashboard.lovelacetech.io/#/registerUser/{invite.code}}"
+            You've been invited by <span th:text="${sponsorName}"></span> to join them at
+            <span th:text="${companyName}"></span>. To accept the invitation, click or copy and
+            paste the following link into your web browser.<br></br><br></br>
+            <a th:href="${'https://dashboard.lovelacetech.io/#/registerUser/' + invite.code}"
+               th:text="${'https://dashboard.lovelacetech.io/#/registerUser/' + invite.code}"
                href="http://google.com/">
                 https://dashboard.lovelacetech.io/#/registerUser/default
             </a>

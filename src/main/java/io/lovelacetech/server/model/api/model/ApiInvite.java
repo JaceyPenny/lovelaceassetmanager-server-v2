@@ -12,6 +12,10 @@ public class ApiInvite extends BaseApiModel<Invite> {
   private String code;
   private String email;
 
+  public ApiInvite() {
+
+  }
+
   public ApiInvite(Invite invite) {
     id = invite.getId();
     user = invite.getUser().toApi();
