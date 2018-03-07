@@ -22,20 +22,12 @@ public class UpdateDeviceValidationService {
 
     long currentEpochSecond = Calendar.getInstance().toInstant().getEpochSecond();
 
-    System.out.println("TIMESTAMP: " + timestamp);
-    System.out.println("SERVER TIMESTAMP: " + currentEpochSecond);
-
     if (Math.abs(currentEpochSecond - timestamp) > 300) { // check if timestamp is within 5 minutes
       return UpdateDeviceResponse.INVALID_TIMESTAMP;
     }
 
-    System.out.println("DEVICE CODE: " + deviceCode);
-
     String preHashString = url + deviceCode + updateDeviceSecret + timestamp;
     String hashedString = HashUtil.getSha256HashString(preHashString);
-
-    System.out.println("PREHASH: " + preHashString);
-    System.out.println("HASH: " + hashedString);
 
     return hashedString.equalsIgnoreCase(hash) ?
         UpdateDeviceResponse.SUCCESS :
