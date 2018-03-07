@@ -81,7 +81,6 @@ public class DeviceUpdateCommand {
 
   public UpdateDeviceResponse execute() {
     if (!checkCommand()) {
-      System.out.println("Command is bad");
       return UpdateDeviceResponse.UNKNOWN;
     }
 
@@ -119,7 +118,6 @@ public class DeviceUpdateCommand {
           apiDevice, locationRepository, companyRepository);
 
       if (company == null) {
-        System.out.println("Somehow, the company was null");
         return UpdateDeviceResponse.UNKNOWN;
       }
 

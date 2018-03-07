@@ -286,7 +286,7 @@ public class LoaderUtils {
     if (location != null) {
       Company company = companyRepository.findOne(location.getCompanyId());
       if (company != null) {
-        company.toApi();
+        return company.toApi();
       }
     }
 
