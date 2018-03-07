@@ -1,6 +1,7 @@
 package io.lovelacetech.server.command.deviceupdate;
 
 import com.google.common.base.Strings;
+import io.lovelacetech.server.model.Asset;
 import io.lovelacetech.server.model.Device;
 import io.lovelacetech.server.model.api.enums.UpdateDeviceResponse;
 import io.lovelacetech.server.model.api.model.ApiAsset;
@@ -126,11 +127,11 @@ public class DeviceUpdateCommand {
           company.getId(), assetTypeRepository);
       List<ApiAsset> assets = LoaderUtils.generateAssetsForRfids(
           rfidsWithoutAssets, apiDevice.getId(), assetType);
-      assetRepository.save(RepositoryUtils.toDatabaseList(assets));
+      assets = RepositoryUtils.toApiList(
+          assetRepository.save(RepositoryUtils.toDatabaseList(assets)));
 
       newlyAddedAssets.addAll(assets);
     }
-
 
     // Update the assets and create logs.
     LogUtils.removeAssetsFromDeviceAndLog(
