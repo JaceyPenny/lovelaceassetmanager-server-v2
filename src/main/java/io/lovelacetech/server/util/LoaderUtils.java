@@ -1,13 +1,14 @@
 package io.lovelacetech.server.util;
 
 import com.google.common.base.Functions;
+import io.lovelacetech.server.model.AssetType;
+import io.lovelacetech.server.model.Company;
+import io.lovelacetech.server.model.Location;
 import io.lovelacetech.server.model.Log;
 import io.lovelacetech.server.model.api.enums.AccessLevel;
+import io.lovelacetech.server.model.api.enums.AssetStatus;
 import io.lovelacetech.server.model.api.model.*;
-import io.lovelacetech.server.repository.AssetRepository;
-import io.lovelacetech.server.repository.DeviceRepository;
-import io.lovelacetech.server.repository.LocationRepository;
-import io.lovelacetech.server.repository.LogRepository;
+import io.lovelacetech.server.repository.*;
 
 import java.util.*;
 import java.util.function.Function;
@@ -275,5 +276,57 @@ public class LoaderUtils {
         .stream()
         .filter((asset) -> rfids.contains(asset.getRfid()))
         .collect(Collectors.toList());
+  }
+
+  public static ApiCompany getCompanyForDevice(
+      ApiDevice device,
+      LocationRepository locationRepository,
+      CompanyRepository companyRepository) {
+    Location location = locationRepository.findOne(device.getLocationId());
+    if (location != null) {
+      Company company = companyRepository.findOne(location.getCompanyId());
+      if (company != null) {
+        company.toApi();
+      }
+    }
+
+    return null;
+  }
+
+  public static List<ApiAsset> generateAssetsForRfids(List<String> rfids, UUID homeId, ApiAssetType apiAssetType) {
+    List<ApiAsset> assets = new ArrayList<>();
+
+    for (String rfid : rfids) {
+      ApiAsset newAsset = new ApiAsset();
+      newAsset.setAssetType(apiAssetType);
+      newAsset.setHomeId(homeId);
+      newAsset.setDeviceId(homeId);
+      newAsset.setName("{NEW ASSET}");
+      newAsset.setRfid(rfid);
+      newAsset.setStatus(AssetStatus.AVAILABLE);
+
+      assets.add(newAsset);
+    }
+
+    return assets;
+  }
+
+  public static ApiAssetType getOrCreateDefaultAssetType(
+      UUID companyId,
+      AssetTypeRepository assetTypeRepository) {
+    String defaultAssetTypeName = ApiAssetType.DEFAULT_ASSET_TYPE;
+
+    AssetType assetType = assetTypeRepository
+        .findOneByCompanyIdAndType(companyId, defaultAssetTypeName);
+
+    if (assetType == null) {
+      // create default asset type
+      assetType = new AssetType();
+      assetType.setCompanyId(companyId);
+      assetType.setType(defaultAssetTypeName);
+      assetTypeRepository.saveAndFlush(assetType);
+    }
+
+    return assetType.toApi();
   }
 }
