@@ -1,5 +1,6 @@
 package io.lovelacetech.server.configuration;
 
+import org.flywaydb.core.Flyway;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceBuilder;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -10,6 +11,17 @@ import javax.sql.DataSource;
 
 @Configuration
 public class DatabaseConfig {
+
+  @Bean(initMethod = "migrate")
+  Flyway flyway() {
+    Flyway flyway = new Flyway();
+    flyway.setBaselineOnMigrate(true);
+    flyway.setSchemas("lovelace");
+    flyway.setLocations("classpath:db/migration");
+    flyway.setDataSource(dataSource());
+    return flyway;
+  }
+
   @Bean
   @Primary
   @ConfigurationProperties(prefix = "spring.datasource")
