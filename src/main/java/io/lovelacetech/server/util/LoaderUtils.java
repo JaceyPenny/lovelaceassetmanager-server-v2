@@ -303,6 +303,7 @@ public class LoaderUtils {
       newAsset.setDeviceId(homeId);
       newAsset.setName("{NEW ASSET}");
       newAsset.setRfid(rfid);
+      newAsset.setSerial("");
       newAsset.setStatus(AssetStatus.AVAILABLE);
 
       assets.add(newAsset);

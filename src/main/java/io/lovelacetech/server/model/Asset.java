@@ -5,6 +5,7 @@ import io.lovelacetech.server.model.api.model.ApiAsset;
 import io.lovelacetech.server.model.converter.AssetStatusConverter;
 import io.lovelacetech.server.util.UUIDUtils;
 import org.h2.util.StringUtils;
+import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
 import java.util.UUID;
@@ -14,6 +15,7 @@ import java.util.UUID;
 public class Asset implements DatabaseModel<Asset>, ApiModelConvertible<ApiAsset> {
   @Id
   @GeneratedValue
+  @ColumnDefault("uuid_generate_v4()")
   @Column(name = "id", unique = true, nullable = false, updatable = false)
   private UUID id;
 
@@ -22,6 +24,9 @@ public class Asset implements DatabaseModel<Asset>, ApiModelConvertible<ApiAsset
 
   @Column(name = "rfid", nullable = false, unique = true, updatable = false)
   private String rfid;
+
+  @Column(name = "serial", nullable = false, unique = true, updatable = true)
+  private String serial;
 
   @Convert(converter = AssetStatusConverter.class)
   @Column(name = "status")
@@ -65,6 +70,10 @@ public class Asset implements DatabaseModel<Asset>, ApiModelConvertible<ApiAsset
       status = other.status;
     }
 
+    if (other.serial != null) {
+      serial = other.serial;
+    }
+
     if (UUIDUtils.isValidId(other.homeId)) {
       homeId = other.homeId;
     }
@@ -104,6 +113,14 @@ public class Asset implements DatabaseModel<Asset>, ApiModelConvertible<ApiAsset
 
   public void setRfid(String rfid) {
     this.rfid = rfid;
+  }
+
+  public String getSerial() {
+    return serial;
+  }
+
+  public void setSerial(String serial) {
+    this.serial = serial;
   }
 
   public AssetStatus getStatus() {

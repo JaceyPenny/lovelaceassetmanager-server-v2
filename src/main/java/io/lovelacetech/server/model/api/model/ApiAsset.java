@@ -14,6 +14,7 @@ public class ApiAsset extends BaseApiModel<Asset> {
   private UUID id;
   private String name;
   private String rfid;
+  private String serial;
   private AssetStatus status;
   private UUID homeId;
   private UUID locationId;
@@ -23,13 +24,6 @@ public class ApiAsset extends BaseApiModel<Asset> {
   private ApiLog lastLog;
 
   public ApiAsset() {
-    this.id = null;
-    this.name = "";
-    this.rfid = "";
-    this.status = AssetStatus.AVAILABLE;
-    this.homeId = null;
-    this.locationId = null;
-    this.deviceId = null;
     this.assetType = new ApiAssetType();
   }
 
@@ -37,6 +31,7 @@ public class ApiAsset extends BaseApiModel<Asset> {
     this.id = asset.getId();
     this.name = asset.getName();
     this.rfid = asset.getRfid();
+    this.serial = asset.getSerial();
     this.status = asset.getStatus();
     this.homeId = asset.getHomeId();
     this.locationId = asset.getLocationId();
@@ -68,6 +63,15 @@ public class ApiAsset extends BaseApiModel<Asset> {
 
   public ApiAsset setRfid(String rfid) {
     this.rfid = rfid;
+    return this;
+  }
+
+  public String getSerial() {
+    return serial;
+  }
+
+  public ApiAsset setSerial(String serial) {
+    this.serial = serial;
     return this;
   }
 
@@ -153,6 +157,7 @@ public class ApiAsset extends BaseApiModel<Asset> {
   public boolean isValid() {
     return !Strings.isNullOrEmpty(name)
         && !Strings.isNullOrEmpty(rfid)
+        && serial != null
         && UUIDUtils.isValidId(homeId)
         && assetType != null
         && status != null;
@@ -165,6 +170,7 @@ public class ApiAsset extends BaseApiModel<Asset> {
     asset.setId(UUIDUtils.isValidId(id) ? id : null);
     asset.setName(name);
     asset.setRfid(rfid);
+    asset.setSerial(serial);
     asset.setStatus(status);
     asset.setHomeId(homeId);
     asset.setLocationId(locationId);
@@ -181,6 +187,7 @@ public class ApiAsset extends BaseApiModel<Asset> {
     resultingMap.put("id", id);
     resultingMap.put("name", name);
     resultingMap.put("rfid", rfid);
+    resultingMap.put("serial", serial);
     resultingMap.put("status", status);
     resultingMap.put("homeId", homeId);
     resultingMap.put("locationId", locationId);

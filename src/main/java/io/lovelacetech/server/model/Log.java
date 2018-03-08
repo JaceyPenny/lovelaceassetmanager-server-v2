@@ -6,6 +6,7 @@ import io.lovelacetech.server.model.converter.JsonbConverter;
 import io.lovelacetech.server.model.converter.LocalDateTimeConverter;
 import io.lovelacetech.server.model.converter.LogTypeConverter;
 import io.lovelacetech.server.util.UUIDUtils;
+import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -17,6 +18,7 @@ import java.util.UUID;
 public class Log implements DatabaseModel<Log>, ApiModelConvertible<ApiLog> {
   @Id
   @GeneratedValue
+  @ColumnDefault("uuid_generate_v4()")
   @Column(name = "id", unique = true, nullable = false, updatable = false)
   private UUID id;
 

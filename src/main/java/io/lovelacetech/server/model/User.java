@@ -5,6 +5,7 @@ import io.lovelacetech.server.model.api.enums.AccessLevel;
 import io.lovelacetech.server.model.api.model.ApiUser;
 import io.lovelacetech.server.model.converter.AccessLevelConverter;
 import io.lovelacetech.server.util.UUIDUtils;
+import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
 import java.util.List;
@@ -15,6 +16,7 @@ import java.util.UUID;
 public class User implements DatabaseModel<User>, ApiModelConvertible<ApiUser> {
   @Id
   @GeneratedValue
+  @ColumnDefault("uuid_generate_v4()")
   @Column(name = "id", unique = true, nullable = false, updatable = false)
   private UUID id;
 

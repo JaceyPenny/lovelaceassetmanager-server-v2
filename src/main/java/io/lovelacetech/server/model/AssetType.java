@@ -2,6 +2,7 @@ package io.lovelacetech.server.model;
 
 import io.lovelacetech.server.model.api.model.ApiAssetType;
 import io.lovelacetech.server.util.UUIDUtils;
+import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
 import java.util.UUID;
@@ -12,6 +13,7 @@ public class AssetType implements DatabaseModel<AssetType>, ApiModelConvertible<
 
   @Id
   @GeneratedValue
+  @ColumnDefault("uuid_generate_v4()")
   @Column(name = "id", unique = true, nullable = false, updatable = false)
   private UUID id;
 

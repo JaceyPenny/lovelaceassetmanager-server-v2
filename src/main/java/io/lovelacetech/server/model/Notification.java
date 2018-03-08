@@ -4,6 +4,7 @@ import io.lovelacetech.server.model.api.enums.NotificationType;
 import io.lovelacetech.server.model.api.model.ApiNotification;
 import io.lovelacetech.server.model.converter.NotificationTypeConverter;
 import io.lovelacetech.server.util.UUIDUtils;
+import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
 import java.sql.Time;
@@ -16,6 +17,7 @@ public class Notification implements DatabaseModel<Notification>, ApiModelConver
 
   @Id
   @GeneratedValue
+  @ColumnDefault("uuid_generate_v4()")
   @Column(name = "id", unique = true, nullable = false, updatable = false)
   private UUID id;
 

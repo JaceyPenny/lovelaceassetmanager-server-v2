@@ -110,6 +110,10 @@ public class SaveAssetCommand extends AssetCommand<SaveAssetCommand> {
       assetUpdate.setStatus(AssetStatus.AVAILABLE);
     }
 
+    if (assetUpdate.getSerial() == null) {
+      assetUpdate.setSerial("");
+    }
+
     if (!assetUpdate.toApi().isValid()) {
       return new AssetApiResponse().setInvalidBody();
     }

@@ -2,6 +2,7 @@ package io.lovelacetech.server.model;
 
 import com.google.common.base.Strings;
 import io.lovelacetech.server.model.api.model.ApiCompany;
+import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
 import java.util.UUID;
@@ -11,6 +12,7 @@ import java.util.UUID;
 public class Company implements DatabaseModel<Company>, ApiModelConvertible<ApiCompany> {
   @Id
   @GeneratedValue
+  @ColumnDefault("uuid_generate_v4()")
   @Column(name = "id", unique = true, nullable = false, updatable = false)
   private UUID id;
 

@@ -3,6 +3,7 @@ package io.lovelacetech.server.model;
 import io.lovelacetech.server.model.api.model.ApiLocation;
 import io.lovelacetech.server.util.UUIDUtils;
 import org.assertj.core.util.Strings;
+import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
 import java.util.UUID;
@@ -13,6 +14,7 @@ public class Location implements DatabaseModel<Location>, ApiModelConvertible<Ap
 
   @Id
   @GeneratedValue
+  @ColumnDefault("uuid_generate_v4()")
   @Column(name = "id", unique = true, nullable = false, updatable = false)
   private UUID id;
 

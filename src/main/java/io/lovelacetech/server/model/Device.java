@@ -3,6 +3,7 @@ package io.lovelacetech.server.model;
 import io.lovelacetech.server.model.api.model.ApiDevice;
 import io.lovelacetech.server.util.UUIDUtils;
 import org.assertj.core.util.Strings;
+import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
 import java.util.UUID;
@@ -12,6 +13,7 @@ import java.util.UUID;
 public class Device implements DatabaseModel<Device>, ApiModelConvertible<ApiDevice> {
   @Id
   @GeneratedValue
+  @ColumnDefault("uuid_generate_v4()")
   @Column(name = "id", unique = true, nullable = false, updatable = false)
   private UUID id;
 
