@@ -42,6 +42,9 @@ public class User implements DatabaseModel<User>, ApiModelConvertible<ApiUser> {
   @Column(name = "last_name")
   private String lastName;
 
+  @Column(name = "phone_number", unique = true)
+  private String phoneNumber;
+
   @ManyToMany(fetch = FetchType.EAGER)
   @JoinTable(name = "users_locations", schema = "lovelace",
       joinColumns = {@JoinColumn(name = "user_id", nullable = false, updatable = false)},
@@ -92,6 +95,10 @@ public class User implements DatabaseModel<User>, ApiModelConvertible<ApiUser> {
 
     if (!Strings.isNullOrEmpty(other.lastName)) {
       lastName = other.lastName;
+    }
+
+    if (other.phoneNumber != null) {
+      phoneNumber = other.phoneNumber.isEmpty() ? null : other.phoneNumber;
     }
   }
 
@@ -167,5 +174,13 @@ public class User implements DatabaseModel<User>, ApiModelConvertible<ApiUser> {
   @Transient
   public void setLocations(List<Location> locations) {
     this.locations = locations;
+  }
+
+  public String getPhoneNumber() {
+    return phoneNumber;
+  }
+
+  public void setPhoneNumber(String phoneNumber) {
+    this.phoneNumber = phoneNumber;
   }
 }

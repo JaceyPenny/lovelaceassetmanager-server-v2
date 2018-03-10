@@ -87,7 +87,8 @@ public class UserController extends BaseController {
    *    (optional) "email": String,
    *    (optional) "username": String,
    *    (optional) "firstName": String,
-   *    (optional) "lastName": String
+   *    (optional) "lastName": String,
+   *    (optional) "phoneNumber": String
    * }}</pre>
    * <br><br>
    * <b>  RESULT:  </b><br>
@@ -123,6 +124,7 @@ public class UserController extends BaseController {
    *    (optional) "username": String,
    *    (optional) "firstName": String,
    *    (optional) "lastName": String,
+   *    (optional) "phoneNumber": String,
    *    (optional) "accessLevel": {USER|ADMIN|SUPER}
    * }}</pre>
    * <br><br>

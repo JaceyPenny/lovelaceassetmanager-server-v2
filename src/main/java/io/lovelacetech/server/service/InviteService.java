@@ -1,6 +1,8 @@
 package io.lovelacetech.server.service;
 
-import com.sendgrid.*;
+import com.sendgrid.Mail;
+import com.sendgrid.Request;
+import com.sendgrid.SendGrid;
 import io.lovelacetech.server.model.Company;
 import io.lovelacetech.server.model.Invite;
 import io.lovelacetech.server.model.api.model.ApiInvite;

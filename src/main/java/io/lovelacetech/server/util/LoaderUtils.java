@@ -242,7 +242,9 @@ public class LoaderUtils {
   public static void populateAssetsLastLog(List<ApiAsset> assets, LogRepository logRepository) {
     for (ApiAsset asset : assets) {
       Log lastLog = logRepository.findFirstByObjectIdOrderByTimestampDesc(asset.getId());
-      asset.setLastLog(lastLog.toApi());
+      if (lastLog != null) {
+        asset.setLastLog(lastLog.toApi());
+      }
     }
   }
 

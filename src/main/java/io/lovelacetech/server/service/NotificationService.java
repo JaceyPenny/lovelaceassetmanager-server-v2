@@ -1,12 +1,16 @@
 package io.lovelacetech.server.service;
 
-import com.sendgrid.*;
+import com.sendgrid.Mail;
+import com.sendgrid.Request;
+import com.sendgrid.SendGrid;
+import com.twilio.rest.api.v2010.account.MessageCreator;
 import io.lovelacetech.server.model.User;
 import io.lovelacetech.server.model.api.model.ApiNotification;
 import io.lovelacetech.server.model.api.model.ApiUser;
 import io.lovelacetech.server.repository.*;
 import io.lovelacetech.server.util.LoaderUtils;
 import io.lovelacetech.server.util.RepositoryUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
@@ -21,6 +25,7 @@ public class NotificationService {
   private final SendGrid sendGrid;
   private final MailContentBuilder mailContentBuilder;
   private final EmailBuilder emailBuilder;
+  private final TwilioService twilioService;
 
   private final UserRepository userRepository;
   private final NotificationRepository notificationRepository;
@@ -29,10 +34,12 @@ public class NotificationService {
   private final AssetRepository assetRepository;
   private final LogRepository logRepository;
 
+  @Autowired
   public NotificationService(
       SendGrid sendGrid,
       MailContentBuilder mailContentBuilder,
       EmailBuilder emailBuilder,
+      TwilioService twilioService,
       UserRepository userRepository,
       NotificationRepository notificationRepository,
       LocationRepository locationRepository,
@@ -42,6 +49,7 @@ public class NotificationService {
     this.sendGrid = sendGrid;
     this.mailContentBuilder = mailContentBuilder;
     this.emailBuilder = emailBuilder;
+    this.twilioService = twilioService;
     this.userRepository = userRepository;
     this.notificationRepository = notificationRepository;
     this.locationRepository = locationRepository;
@@ -83,9 +91,15 @@ public class NotificationService {
         user.getEmail(),
         html);
 
+    MessageCreator twilioMessage = twilioService.getMessageForNotification(notification, user);
+
     try {
       Request request = emailBuilder.buildRequest(mail);
       sendGrid.api(request);
+
+      if (twilioMessage != null) {
+        twilioMessage.create();
+      }
     } catch (IOException ex) {
       // do nothing
     }

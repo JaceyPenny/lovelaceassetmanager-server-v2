@@ -1,7 +1,6 @@
 package io.lovelacetech.server.command.deviceupdate;
 
 import com.google.common.base.Strings;
-import io.lovelacetech.server.model.Asset;
 import io.lovelacetech.server.model.Device;
 import io.lovelacetech.server.model.api.enums.UpdateDeviceResponse;
 import io.lovelacetech.server.model.api.model.ApiAsset;

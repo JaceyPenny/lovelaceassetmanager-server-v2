@@ -16,6 +16,7 @@ public class ApiUser extends BaseApiModel<User> {
   private UUID companyId;
   private String firstName;
   private String lastName;
+  private String phoneNumber;
 
   private List<ApiLocation> locations;
 
@@ -28,6 +29,7 @@ public class ApiUser extends BaseApiModel<User> {
     this.companyId = UUIDUtils.empty();
     this.firstName = "";
     this.lastName = "";
+    this.phoneNumber = null;
     this.locations = new ArrayList<>();
   }
 
@@ -40,6 +42,7 @@ public class ApiUser extends BaseApiModel<User> {
     this.companyId = user.getCompanyId();
     this.firstName = user.getFirstName();
     this.lastName = user.getLastName();
+    this.phoneNumber = user.getPhoneNumber();
     this.locations = RepositoryUtils.toApiList(user.getLocations());
   }
 
@@ -106,6 +109,15 @@ public class ApiUser extends BaseApiModel<User> {
     return this;
   }
 
+  public String getPhoneNumber() {
+    return phoneNumber;
+  }
+
+  public ApiUser setPhoneNumber(String phoneNumber) {
+    this.phoneNumber = phoneNumber;
+    return this;
+  }
+
   public List<ApiLocation> getLocations() {
     return locations;
   }
@@ -121,7 +133,8 @@ public class ApiUser extends BaseApiModel<User> {
         .setEmail((String) user.get("email"))
         .setUsername((String) user.get("username"))
         .setFirstName((String) user.get("firstName"))
-        .setLastName((String) user.get("lastName"));
+        .setLastName((String) user.get("lastName"))
+        .setPhoneNumber((String) user.get("phoneNumber"));
 
     if (user.get("companyId") != null) {
       result.setCompanyId(UUID.fromString((String) user.get("companyId")));
@@ -142,6 +155,7 @@ public class ApiUser extends BaseApiModel<User> {
     user.setCompanyId(companyId);
     user.setFirstName(firstName);
     user.setLastName(lastName);
+    user.setPhoneNumber(phoneNumber);
     user.setLocations(RepositoryUtils.toDatabaseList(locations));
 
     return user;
@@ -157,6 +171,7 @@ public class ApiUser extends BaseApiModel<User> {
     resultingMap.put("companyId", companyId);
     resultingMap.put("firstName", firstName);
     resultingMap.put("lastName", lastName);
+    resultingMap.put("phoneNumber", phoneNumber);
 
     return resultingMap;
   }
