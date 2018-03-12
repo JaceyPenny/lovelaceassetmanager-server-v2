@@ -8,5 +8,5 @@ import java.util.UUID;
 
 @RepositoryRestResource
 public interface InviteRepository extends JpaRepository<Invite, UUID> {
-
+  Invite findByCode(String code);
 }
