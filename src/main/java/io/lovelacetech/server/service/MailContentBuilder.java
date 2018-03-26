@@ -2,6 +2,7 @@ package io.lovelacetech.server.service;
 
 import io.lovelacetech.server.model.api.model.ApiInvite;
 import io.lovelacetech.server.model.api.model.ApiNotification;
+import io.lovelacetech.server.model.api.model.ApiPasswordReset;
 import io.lovelacetech.server.model.api.model.ApiUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -32,5 +33,11 @@ public class MailContentBuilder {
     context.setVariable("sponsorName", sponsorName);
     context.setVariable("invite", invite);
     return templateEngine.process("email_invite_template", context);
+  }
+
+  public String buildPasswordReset(ApiPasswordReset passwordReset) {
+    Context context = new Context();
+    context.setVariable("passwordReset", passwordReset);
+    return templateEngine.process("password_reset_template", context);
   }
 }
