@@ -143,6 +143,15 @@ public class ApiUser extends BaseApiModel<User> {
     return result;
   }
 
+  public void sanitize() {
+    phoneNumber = "";
+    accessLevel = null;
+    id = null;
+    locations = null;
+    firstName = null;
+    lastName = null;
+  }
+
   @Override
   public User toDatabase() {
     User user = new User();
