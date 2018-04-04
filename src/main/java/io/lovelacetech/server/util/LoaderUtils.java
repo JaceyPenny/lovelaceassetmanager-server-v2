@@ -1,14 +1,12 @@
 package io.lovelacetech.server.util;
 
 import com.google.common.base.Functions;
-import io.lovelacetech.server.model.AssetType;
-import io.lovelacetech.server.model.Company;
-import io.lovelacetech.server.model.Location;
-import io.lovelacetech.server.model.Log;
+import io.lovelacetech.server.model.*;
 import io.lovelacetech.server.model.api.enums.AccessLevel;
 import io.lovelacetech.server.model.api.enums.AssetStatus;
 import io.lovelacetech.server.model.api.model.*;
 import io.lovelacetech.server.repository.*;
+import org.springframework.data.rest.core.util.MapUtils;
 
 import java.util.*;
 import java.util.function.Function;
@@ -331,5 +329,26 @@ public class LoaderUtils {
     }
 
     return assetType.toApi();
+  }
+
+  public static void populateLogUserFullNames(List<ApiLog> logs, UserRepository userRepository) {
+    Set<UUID> userUuidSet = new HashSet<>();
+    for (ApiLog log : logs) {
+      if (UUIDUtils.isValidId(log.getUserId())) {
+        userUuidSet.add(log.getUserId());
+      }
+    }
+
+    ArrayList<UUID> userUuidList = new ArrayList<>(userUuidSet);
+    List<User> users = userRepository.findAllByIdIn(userUuidList);
+    Map<UUID, User> idToUserMap = users.stream()
+        .collect(Collectors.toMap(User::getId, Function.identity()));
+
+    for (ApiLog log : logs) {
+      if (UUIDUtils.isValidId(log.getUserId())) {
+        User user = idToUserMap.get(log.getUserId());
+        log.setUserFullName(user.getFirstName() + ' ' + user.getLastName());
+      }
+    }
   }
 }

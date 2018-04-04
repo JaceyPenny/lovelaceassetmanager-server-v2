@@ -2,13 +2,13 @@ package io.lovelacetech.server.controller;
 
 import io.lovelacetech.server.model.Asset;
 import io.lovelacetech.server.model.Log;
+import io.lovelacetech.server.model.api.model.ApiLog;
 import io.lovelacetech.server.model.api.model.ApiUser;
 import io.lovelacetech.server.model.api.response.log.LogListApiResponse;
-import io.lovelacetech.server.repository.AssetRepository;
-import io.lovelacetech.server.repository.DeviceRepository;
-import io.lovelacetech.server.repository.LocationRepository;
-import io.lovelacetech.server.repository.LogRepository;
+import io.lovelacetech.server.repository.*;
 import io.lovelacetech.server.util.AccessUtils;
+import io.lovelacetech.server.util.LoaderUtils;
+import io.lovelacetech.server.util.RepositoryUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,17 +23,20 @@ public class LogController extends BaseController{
   private final DeviceRepository deviceRepository;
   private final AssetRepository assetRepository;
   private final LogRepository logRepository;
+  private final UserRepository userRepository;
 
   @Autowired
   public LogController(
       LocationRepository locationRepository,
       DeviceRepository deviceRepository,
       AssetRepository assetRepository,
-      LogRepository logRepository) {
+      LogRepository logRepository,
+      UserRepository userRepository) {
     this.locationRepository = locationRepository;
     this.deviceRepository = deviceRepository;
     this.assetRepository = assetRepository;
     this.logRepository = logRepository;
+    this.userRepository = userRepository;
   }
 
   /**
@@ -54,9 +57,12 @@ public class LogController extends BaseController{
   public LogListApiResponse getLogs(@RequestAttribute ApiUser authenticatedUser) {
     checkIsSuper(authenticatedUser);
 
+    List<ApiLog> logs = RepositoryUtils.toApiList(logRepository.findAll());
+    LoaderUtils.populateLogUserFullNames(logs, userRepository);
+
     return new LogListApiResponse()
         .setSuccess()
-        .setResponse(logRepository.findAll());
+        .setResponse(logs);
   }
 
   /**
@@ -82,11 +88,13 @@ public class LogController extends BaseController{
       return new LogListApiResponse().setNotFound();
     }
 
-    if (!AccessUtils.userCanAccessAsset(authenticatedUser, asset, deviceRepository, locationRepository)) {
+    if (!AccessUtils
+        .userCanAccessAsset(authenticatedUser, asset, deviceRepository, locationRepository)) {
       return new LogListApiResponse().setAccessDenied();
     }
 
-    List<Log> logs = logRepository.findAllByObjectId(asset.getId());
+    List<ApiLog> logs = RepositoryUtils.toApiList(logRepository.findAllByObjectId(asset.getId()));
+    LoaderUtils.populateLogUserFullNames(logs, userRepository);
     return new LogListApiResponse().setSuccess().setResponse(logs);
   }
 }

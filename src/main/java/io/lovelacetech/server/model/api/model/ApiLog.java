@@ -21,6 +21,7 @@ public class ApiLog extends BaseApiModel<Log> {
   private LocalDateTime timestamp;
   private UUID objectId;
   private UUID userId;
+  private String userFullName;
   private Map<String, Object> oldData;
   private Map<String, Object> newData;
 
@@ -128,5 +129,13 @@ public class ApiLog extends BaseApiModel<Log> {
     log.setNewData(newData);
 
     return log;
+  }
+
+  public String getUserFullName() {
+    return userFullName;
+  }
+
+  public void setUserFullName(String userFullName) {
+    this.userFullName = userFullName;
   }
 }
