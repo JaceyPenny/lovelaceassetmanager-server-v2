@@ -1,6 +1,7 @@
 package io.lovelacetech.server.controller;
 
 import io.lovelacetech.server.model.Asset;
+import io.lovelacetech.server.model.Device;
 import io.lovelacetech.server.model.Log;
 import io.lovelacetech.server.model.api.model.ApiLog;
 import io.lovelacetech.server.model.api.model.ApiUser;
@@ -94,6 +95,39 @@ public class LogController extends BaseController{
     }
 
     List<ApiLog> logs = RepositoryUtils.toApiList(logRepository.findAllByObjectId(asset.getId()));
+    LoaderUtils.populateLogUserFullNames(logs, userRepository);
+    return new LogListApiResponse().setSuccess().setResponse(logs);
+  }
+
+  /**
+   * <b>  GET /api/secure/logs/byDeviceId/{deviceId}</b><br><br>
+   * Gets all the Logs for the supplied deviceId (UUID).
+   * <br><br><b>  RESPONSE:  </b><br>
+   * <pre>{@code    {
+   *   "status": 200,
+   *   "message": "success",
+   *   "response": {
+   *     "logs": [Log]
+   *   }
+   * }}</pre>
+   * <br><br><b>  PERMISSIONS:  </b><br>
+   * The user must have access to the Device they are requesting logs for.
+   */
+  @RequestMapping(value = "/byDeviceId/{deviceId}", method = RequestMethod.GET)
+  public LogListApiResponse getLogsByDeviceId(
+      @RequestAttribute ApiUser authenticatedUser,
+      @PathVariable UUID deviceId) {
+    Device device = deviceRepository.findOne(deviceId);
+    if (device == null) {
+      return new LogListApiResponse().setNotFound();
+    }
+
+    if (!AccessUtils
+        .userCanAccessDevice(authenticatedUser, device, locationRepository)) {
+      return new LogListApiResponse().setAccessDenied();
+    }
+
+    List<ApiLog> logs = RepositoryUtils.toApiList(logRepository.findAllByObjectId(device.getId()));
     LoaderUtils.populateLogUserFullNames(logs, userRepository);
     return new LogListApiResponse().setSuccess().setResponse(logs);
   }
