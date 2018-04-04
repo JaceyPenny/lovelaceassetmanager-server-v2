@@ -99,16 +99,18 @@ public class RegistrationController {
     }
 
     User newUser = registration.createUser(passwordEncoder);
-    User userResult = LogUtils.registerUserAndLog(newUser.toApi(), userRepository, logRepository);
+    newUser = LogUtils.registerUserAndLog(newUser, userRepository, logRepository);
 
-    if (userResult == null) {
+    if (newUser == null) {
       return new AuthenticationApiResponse()
           .setDefault();
     }
 
-    inviteService.addNewlyRegisteredUserByInvite(newUser, registration.getInviteCode());
+    if (registration.getInviteCode() != null) {
+      inviteService.addNewlyRegisteredUserByInvite(newUser, registration.getInviteCode());
+    }
 
-    ApiUser apiUser = userResult.toApi();
+    ApiUser apiUser = newUser.toApi();
     String jwt = AuthenticationUtils.jwtSign(apiUser);
 
     return new AuthenticationApiResponse()

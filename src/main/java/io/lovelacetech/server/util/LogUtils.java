@@ -314,15 +314,15 @@ public class LogUtils {
   }
 
   public static User registerUserAndLog(
-      ApiUser user,
+      User user,
       UserRepository userRepository,
       LogRepository logRepository) {
-    User result = userRepository.save(user.toDatabase());
+    user = userRepository.save(user);
 
-    Log registerUserLog = createRegisterUserLog(result.toApi());
+    Log registerUserLog = createRegisterUserLog(user.toApi());
     logRepository.save(registerUserLog);
 
-    return result;
+    return user;
   }
 
   private static Log createRegisterUserLog(ApiUser user) {
