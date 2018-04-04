@@ -5,11 +5,13 @@ import com.sendgrid.Request;
 import com.sendgrid.SendGrid;
 import io.lovelacetech.server.model.Company;
 import io.lovelacetech.server.model.Invite;
+import io.lovelacetech.server.model.User;
 import io.lovelacetech.server.model.api.model.ApiCompany;
 import io.lovelacetech.server.model.api.model.ApiInvite;
 import io.lovelacetech.server.model.api.model.ApiUser;
 import io.lovelacetech.server.repository.CompanyRepository;
 import io.lovelacetech.server.repository.InviteRepository;
+import io.lovelacetech.server.repository.UserRepository;
 import io.lovelacetech.server.util.RegistrationUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,17 +26,20 @@ public class InviteService {
 
   private final CompanyRepository companyRepository;
   private final InviteRepository inviteRepository;
+  private final UserRepository userRepository;
 
   @Autowired
   public InviteService(
       EmailManager emailManager,
       CodeGenerator codeGenerator,
       CompanyRepository companyRepository,
-      InviteRepository inviteRepository) {
+      InviteRepository inviteRepository,
+      UserRepository userRepository) {
     this.emailManager = emailManager;
     this.codeGenerator = codeGenerator;
     this.companyRepository = companyRepository;
     this.inviteRepository = inviteRepository;
+    this.userRepository = userRepository;
   }
 
   public ApiInvite inviteByEmail(ApiUser user, String email) {
@@ -59,5 +64,17 @@ public class InviteService {
     newInvite.setEmail(email);
 
     return newInvite;
+  }
+
+  public boolean addNewlyRegisteredUserByInvite(User user, String inviteCode){
+    Invite invite = inviteRepository.findByCode(inviteCode);
+
+    if (invite.getCode().equals(inviteCode) && user.getEmail().equals(invite.getEmail())) {
+      user.setCompanyId(invite.getUser().getCompanyId());
+      userRepository.save(user);
+      return true;
+    }
+
+    return false;
   }
 }

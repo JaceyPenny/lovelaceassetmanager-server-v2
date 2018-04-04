@@ -7,6 +7,7 @@ import io.lovelacetech.server.model.api.model.ApiUser;
 import io.lovelacetech.server.model.api.response.authentication.AuthenticationApiResponse;
 import io.lovelacetech.server.repository.LogRepository;
 import io.lovelacetech.server.repository.UserRepository;
+import io.lovelacetech.server.service.InviteService;
 import io.lovelacetech.server.util.AuthenticationUtils;
 import io.lovelacetech.server.util.LogUtils;
 import io.lovelacetech.server.util.Messages;
@@ -25,14 +26,18 @@ public class RegistrationController {
   private final PasswordEncoder passwordEncoder;
   private final LogRepository logRepository;
 
+  private final InviteService inviteService;
+
   @Autowired
   public RegistrationController(
       UserRepository userRepository,
       PasswordEncoder passwordEncoder,
-      LogRepository logRepository) {
+      LogRepository logRepository,
+      InviteService inviteService) {
     this.userRepository = userRepository;
     this.passwordEncoder = passwordEncoder;
     this.logRepository = logRepository;
+    this.inviteService = inviteService;
   }
 
   /**
@@ -100,6 +105,8 @@ public class RegistrationController {
       return new AuthenticationApiResponse()
           .setDefault();
     }
+
+    inviteService.addNewlyRegisteredUserByInvite(newUser, registration.getInviteCode());
 
     ApiUser apiUser = userResult.toApi();
     String jwt = AuthenticationUtils.jwtSign(apiUser);

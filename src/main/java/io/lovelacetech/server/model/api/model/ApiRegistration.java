@@ -11,6 +11,7 @@ public class ApiRegistration extends BaseApiModel {
   private String password;
   private String firstName;
   private String lastName;
+  private String inviteCode;
 
   public String getEmail() {
     return email;
@@ -75,5 +76,13 @@ public class ApiRegistration extends BaseApiModel {
     newUser.setAccessLevel(AccessLevel.USER);
 
     return newUser;
+  }
+
+  public String getInviteCode() {
+    return inviteCode;
+  }
+
+  public void setInviteCode(String inviteCode) {
+    this.inviteCode = inviteCode;
   }
 }
