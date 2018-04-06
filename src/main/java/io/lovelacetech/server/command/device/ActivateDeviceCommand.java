@@ -104,6 +104,15 @@ public class ActivateDeviceCommand extends DeviceCommand<ActivateDeviceCommand> 
     }
 
     existingDeviceWithCode.setLocationId(locationId);
+
+    Device existingDeviceWithNameAndLocationId = getDeviceRepository().findOneByNameAndLocationId(
+        existingDeviceWithCode.getName(), existingDeviceWithCode.getLocationId());
+    if (existingDeviceWithNameAndLocationId != null) {
+      return new DeviceApiResponse()
+          .setConflict()
+          .setMessage(Messages.DEVICE_CANNOT_SHARE_NAME);
+    }
+
     existingDeviceWithCode = LogUtils.registerDeviceAndLog(
         user, existingDeviceWithCode.toApi(), getDeviceRepository(), logRepository);
 

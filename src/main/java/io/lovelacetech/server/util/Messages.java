@@ -44,26 +44,27 @@ public class Messages {
   /*
    * Location response messages
    */
-  public static final String NO_LOCATIONS_FOUND = "no locations found";
-  public static final String LOCATION_CONFLICTING_NAME = "another location at this company already has this name";
-  public static final String NO_LOCATION_FOUND_WITH_ID = "no location was found with this id";
+  public static final String NO_LOCATIONS_FOUND = "No locations found";
+  public static final String LOCATION_CONFLICTING_NAME = "Another location at this company already has this name";
+  public static final String NO_LOCATION_FOUND_WITH_ID = "No location was found with this id";
   public static final String LOCATION_BAD_ID = "companyId does not reference a company";
 
   /*
    * Device response messages
    */
-  public static final String DEVICE_CONFLICTING_DEVICE_CODE = "another device already has this device code";
-  public static final String DEVICE_ALREADY_ACTIVATED = "this device has already been activated";
-  public static final String DEVICE_NO_DEVICE_CODE = "no device was found with this device code";
-  public static final String DEVICE_CANNOT_MODIFY_DEVICE_CODE = "device codes cannot be updated";
+  public static final String DEVICE_CONFLICTING_DEVICE_CODE = "Another device already has this device code";
+  public static final String DEVICE_ALREADY_ACTIVATED = "This device has already been activated";
+  public static final String DEVICE_NO_DEVICE_CODE = "No device was found with this device code";
+  public static final String DEVICE_CANNOT_MODIFY_DEVICE_CODE = "Device codes cannot be updated";
+  public static final String DEVICE_CANNOT_SHARE_NAME = "There is already another device with that name at this location";
   public static final String DEVICE_BAD_ID = "locationId does not reference a location";
 
   /*
    * Asset response messages
    */
-  public static final String ASSET_CONFLICTING_RFID = "another asset already has this RFID tag";
-  public static final String ASSET_BAD_ID = "one or more of the IDs you've specified do not reference proper locations or devices. check your input";
-  public static final String ASSET_CANNOT_CREATE_NEW_ASSET_TYPE = "only admins can specify new asset types";
+  public static final String ASSET_CONFLICTING_RFID = "Another asset already has this RFID tag";
+  public static final String ASSET_BAD_ID = "One or more of the IDs you've specified do not reference proper locations or devices. check your input";
+  public static final String ASSET_CANNOT_CREATE_NEW_ASSET_TYPE = "Only admins can specify new asset types";
 
   /*
    * Authentication messages
@@ -74,8 +75,8 @@ public class Messages {
   /*
    * Registration messages
    */
-  public static final String REGISTRATION_EMAIL_ALREADY_EXISTS = "another user is using this email";
-  public static final String REGISTRATION_USERNAME_ALREADY_EXISTS = "another user is using this username";
-  public static final String REGISTRATION_PASSWORD_INVALID = "the password must meet the minimum strength requirements";
-  public static final String REGISTRATION_EMAIL_INVALID = "the email supplied is not in the valid format";
+  public static final String REGISTRATION_EMAIL_ALREADY_EXISTS = "Another user is using this email";
+  public static final String REGISTRATION_USERNAME_ALREADY_EXISTS = "Another user is using this username";
+  public static final String REGISTRATION_PASSWORD_INVALID = "The password must meet the minimum strength requirements";
+  public static final String REGISTRATION_EMAIL_INVALID = "The email supplied is not in the valid format";
 }

@@ -16,4 +16,6 @@ public interface DeviceRepository extends JpaRepository<Device, UUID> {
   List<Device> findAllByLocationIdIn(List<UUID> locationIds);
 
   int countAllByLocationId(UUID locationId);
+
+  Device findOneByNameAndLocationId(String name, UUID locationId);
 }

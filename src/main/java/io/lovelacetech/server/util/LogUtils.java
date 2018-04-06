@@ -87,8 +87,10 @@ public class LogUtils {
       ApiUser user,
       ApiDevice device,
       DeviceRepository deviceRepository,
+      AssetRepository assetRepository,
       LogRepository logRepository,
       boolean hardDelete) {
+    removeAssetsFromDeviceAndLog(device.getAssets(), device.getId(), device.getLocationId(), assetRepository, logRepository);
     Log deleteDeviceLog = createDeleteDeviceLog(device, user);
 
     if (hardDelete) {

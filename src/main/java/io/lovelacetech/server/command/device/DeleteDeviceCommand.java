@@ -2,15 +2,13 @@ package io.lovelacetech.server.command.device;
 
 import io.lovelacetech.server.model.Device;
 import io.lovelacetech.server.model.api.enums.AccessLevel;
+import io.lovelacetech.server.model.api.model.ApiDevice;
 import io.lovelacetech.server.model.api.model.ApiUser;
 import io.lovelacetech.server.model.api.response.device.DeviceApiResponse;
 import io.lovelacetech.server.repository.AssetRepository;
 import io.lovelacetech.server.repository.LocationRepository;
 import io.lovelacetech.server.repository.LogRepository;
-import io.lovelacetech.server.util.AccessUtils;
-import io.lovelacetech.server.util.AuthenticationUtils;
-import io.lovelacetech.server.util.LogUtils;
-import io.lovelacetech.server.util.UUIDUtils;
+import io.lovelacetech.server.util.*;
 
 import java.util.UUID;
 
@@ -75,18 +73,15 @@ public class DeleteDeviceCommand extends DeviceCommand<DeleteDeviceCommand> {
       return new DeviceApiResponse().setAccessDenied();
     }
 
-    int assetsInDevice = assetRepository.countAllByDeviceId(deviceId);
-    if (assetsInDevice > 0) {
-      return new DeviceApiResponse().setCannotModify();
-    }
-
     int assetsWithHomeId = assetRepository.countAllByHomeId(deviceId);
     if (assetsWithHomeId > 0) {
-      return new DeviceApiResponse().setCannotModify();
+      return new DeviceApiResponse().setCannotModify().setMessage("You must change the \"home\" of all the assets in this Device to another Device before deleting.");
     }
 
+    ApiDevice device = deletedDevice.toApi();
+    LoaderUtils.populateDevice(device, assetRepository);
     LogUtils.deleteDeviceAndLog(
-        user, deletedDevice.toApi(), getDeviceRepository(), logRepository, false);
+        user, device, getDeviceRepository(), assetRepository, logRepository, false);
     return new DeviceApiResponse()
         .setSuccess()
         .setResponse(deletedDevice.toApi());

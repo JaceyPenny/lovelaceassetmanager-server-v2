@@ -108,6 +108,13 @@ public class SaveDeviceCommand extends DeviceCommand<SaveDeviceCommand> {
           .setMessage(Messages.DEVICE_CONFLICTING_DEVICE_CODE);
     }
 
+    Device existingDeviceWithNameAndLocationId = getDeviceRepository().findOneByNameAndLocationId(deviceUpdate.getName(), deviceUpdate.getLocationId());
+    if (existingDeviceWithNameAndLocationId != null) {
+      return new DeviceApiResponse()
+          .setConflict()
+          .setMessage(Messages.DEVICE_CANNOT_SHARE_NAME);
+    }
+
     try {
       if (deviceUpdate.hasId()) {
         deviceUpdate = LogUtils.editDeviceAndLog(
