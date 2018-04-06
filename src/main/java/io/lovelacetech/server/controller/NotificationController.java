@@ -44,7 +44,7 @@ public class NotificationController extends BaseController {
    * <b>  GET /api/secure/notifications/</b><br><br>
    * Gets all the Notification objects in the database.
    * <br><br><b>  RESPONSE:  </b><br>
-   * <pre>{@code    {
+   * <pre>{@code {
    *   "status": 200,
    *   "message": "success",
    *   "response": {
@@ -67,7 +67,7 @@ public class NotificationController extends BaseController {
    * <b>  GET /api/secure/notifications/forAuthenticated</b><br><br>
    * Gets all the Notification objects owned by the authenticated User.
    * <br><br><b>  RESPONSE:  </b><br>
-   * <pre>{@code    {
+   * <pre>{@code {
    *   "status": 200,
    *   "message": "success",
    *   "response": {
@@ -99,7 +99,7 @@ public class NotificationController extends BaseController {
    * notification or the "notificationType". All other fields will be ignored for <b>UPDATE</b>.
    * <br><br>
    * <b>  REQUEST BODY (CREATE):  </b>
-   * <pre>{@code    {
+   * <pre>{@code {
    *   (required) "notificationType": {email|text|email_text},
    *   (required) "time": "hh:mm:ss",
    *   (semi-optional) "locationIds": [locationId1, locationId2, ...],
@@ -107,14 +107,14 @@ public class NotificationController extends BaseController {
    * }}</pre>
    * <br>
    * <b>  REQUEST BODY (UPDATE):  </b>
-   * <pre>{@code    {
+   * <pre>{@code {
    *   (required) "id": Notification.id,
    *   (optional) "notificationType": {EMAIL|TEXT|EMAIL_TEXT}
    *   (optional) "time": "hh:mm:ss"
    * }}</pre>
    * <br><br>
    * <b>  RESPONSE:  </b><br>
-   * <pre>{@code    {
+   * <pre>{@code {
    *   "status": 200,
    *   "message": "success",
    *   "response": Notification
@@ -142,7 +142,7 @@ public class NotificationController extends BaseController {
    * Sets the state of a notification to "active" or "inactive" depending on the supplied
    * parameter "active" at the end of the request URL.<br><br>
    * <b>  RESPONSE:  </b>
-   * <pre>{@code    {
+   * <pre>{@code {
    *   "status": 200,
    *   "message": "success",
    *   "response": null
@@ -173,7 +173,7 @@ public class NotificationController extends BaseController {
    * <b>  DELETE /api/secure/notifications/{notificationId}</b><br>
    * Deletes a notification by id. Returns the deleted notification in the response body.
    * <br><br><b>  RESPONSE:  </b><br>
-   * <pre>{@code    {
+   * <pre>{@code {
    *   "status": 200,
    *   "message": "success",
    *   "response": Notification

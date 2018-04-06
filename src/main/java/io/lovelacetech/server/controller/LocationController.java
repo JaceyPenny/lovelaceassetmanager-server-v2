@@ -40,7 +40,7 @@ public class LocationController extends BaseController {
    * <b>  GET /api/secure/locations/ </b><br>
    * Gets all Locations in the database.<br><br>
    * <b>  RESPONSE:  </b>
-   * <pre>{@code    {
+   * <pre>{@code {
    *   "status": 200,
    *   "message": "success",
    *   "response": {
@@ -65,7 +65,7 @@ public class LocationController extends BaseController {
    * filled with its children Devices and Assets by setting the request parameter "filled" to
    * "true".
    * <br><br><b>  RESPONSE:  </b>
-   * <pre>{@code    {
+   * <pre>{@code {
    *   "status": 200,
    *   "message": "success",
    *   "response": Location
@@ -101,7 +101,7 @@ public class LocationController extends BaseController {
    * has been granted access to, if they are a USER. If you want each Location's children populated
    * in the response, specify "?filled=true" at the end of the URL.<br><br>
    * <b>  RESPONSE:  </b>
-   * <pre>{@code    {
+   * <pre>{@code {
    *   "status": 200,
    *   "message": "success",
    *   "response": {
@@ -128,7 +128,7 @@ public class LocationController extends BaseController {
    * <b>  GET /api/secure/locations/byCompanyId/{companyId}  </b>
    * <br> Gets all the locations in the Company identified by "companyId".
    * <br><br><b>  RESPONSE:  </b>
-   * <pre>{@code    {
+   * <pre>{@code {
    *   "status": 200,
    *   "message": "success",
    *   "response" {
@@ -159,21 +159,21 @@ public class LocationController extends BaseController {
    * <b>  POST /api/secure/locations/forAuthenticated </b><br>
    * Adds a new location to the database for the authenticated user.
    * <br><br><b>  REQUEST BODY (CREATE):  </b>
-   * <pre>{@code    {
+   * <pre>{@code {
    *   (required) "name": String,
    *   (required) "city": String,
    *   (required) "state" String(2),  // e.g. "AR", "CA", ...
    * }}</pre>
    * <br><br>
    * <b>  REQUEST BODY (UPDATE):  </b>
-   * <pre>{@code    {
+   * <pre>{@code {
    *   (required) "id": UUID,
    *   (optional) "name": String
    *   (optional) "city": String,
    *   (optional) "state": String(2),
    * }}</pre><br><br>
    * <b>  RESPONSE:  </b>
-   * <pre>{@code    {
+   * <pre>{@code {
    *   "status": 200,
    *   "message": "success",
    *   "response": Location
@@ -200,7 +200,7 @@ public class LocationController extends BaseController {
    * Deletes a Location by id. The Location must be completely empty before total deletion.
    * <br><br>
    * <b>  REQUEST BODY:  </b>
-   * <pre>{@code    {
+   * <pre>{@code {
    *   "status": 200,
    *   "message": "success",
    *   "response": Location

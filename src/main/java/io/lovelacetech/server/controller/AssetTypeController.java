@@ -12,6 +12,9 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.transaction.Transactional;
 
+/**
+ * The API controller for modifying AssetType objects in the database
+ */
 @RestController
 @CrossOrigin
 @Transactional
@@ -34,7 +37,7 @@ public class AssetTypeController {
    * Creates a new AssetType with the specified name.
    * <br><br>
    * <b>  RESULT:  </b><br>
-   * <pre>{@code    {
+   * <pre>{@code {
    *   "status": 200,
    *   "message": "success",
    *   "response": null
@@ -42,6 +45,10 @@ public class AssetTypeController {
    * <br>
    * <b>  PERMISSIONS  </b><br>
    * The user must be an admin at their company.
+   *
+   * @param authenticatedUser User
+   * @param newAssetTypeName String
+   * @return default
    */
   @RequestMapping(value = "/{newAssetTypeName}", method = RequestMethod.PUT)
   public DefaultApiResponse putAssetType(
@@ -60,7 +67,7 @@ public class AssetTypeController {
    * Updates the name of the existing AssetType with the name "existingName" to the name "newName".
    * <br><br>
    * <b>  RESULT:  </b><br>
-   * <pre>{@code    {
+   * <pre>{@code {
    *   "status": 200,
    *   "message": "success",
    *   "response": null
@@ -68,6 +75,11 @@ public class AssetTypeController {
    * <br>
    * <b>  PERMISSIONS  </b><br>
    * The user must be an admin at their company.
+   *
+   * @param authenticatedUser User
+   * @param existingName String
+   * @param newName String
+   * @return default
    */
   @RequestMapping(value = "/{existingName}/{newName}", method = RequestMethod.POST)
   public DefaultApiResponse editAssetType(
@@ -91,7 +103,7 @@ public class AssetTypeController {
    * exists with the default name, then a new AssetType will be created.
    * <br><br>
    * <b>  RESULT:  </b><br>
-   * <pre>{@code    {
+   * <pre>{@code {
    *   "status": 200,
    *   "message": "success",
    *   "response": null
@@ -99,6 +111,10 @@ public class AssetTypeController {
    * <br>
    * <b>  PERMISSIONS  </b><br>
    * The user must be an admin at their company
+   *
+   * @param authenticatedUser User
+   * @param assetTypeName String
+   * @return default
    */
   @RequestMapping(value = "/{assetTypeName}", method = RequestMethod.DELETE)
   public DefaultApiResponse deleteAssetType(

@@ -40,7 +40,7 @@ public class PasswordResetController {
    * code.
    * <br><br>
    * <b>  RESULT:  </b><br>
-   * <pre>{@code    {
+   * <pre>{@code {
    *   "status": 200,
    *   "message": "success",
    *   "response": null
@@ -62,7 +62,7 @@ public class PasswordResetController {
    * particularly useful, and is provided for debugging purposes.
    * <br><br>
    * <b>  RESULT:  </b><br>
-   * <pre>{@code    {
+   * <pre>{@code {
    *   "status": 200,
    *   "message": "success",
    *   "response": {
@@ -91,13 +91,13 @@ public class PasswordResetController {
    * password must meet the same criteria as for registering a new user.
    * <br><br>
    * <b>  REQUEST BODY:</b><br>
-   * <pre>{@code    {
+   * <pre>{@code {
    *   "code": String (password reset code provided in email),
    *   "newPassword": String (the desired new password)
    * }}</pre>
    * <br>
    * <b>  RESULT:  </b><br>
-   * <pre>{@code    {
+   * <pre>{@code {
    *   "status": 200,
    *   "message": "success",
    *   "response": null

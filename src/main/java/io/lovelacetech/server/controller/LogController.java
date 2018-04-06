@@ -44,7 +44,7 @@ public class LogController extends BaseController{
    * <b>  GET /api/secure/logs/</b><br><br>
    * Gets all the Log objects in the database.
    * <br><br><b>  RESPONSE:  </b><br>
-   * <pre>{@code    {
+   * <pre>{@code {
    *   "status": 200,
    *   "message": "success",
    *   "response": {
@@ -70,7 +70,7 @@ public class LogController extends BaseController{
    * <b>  GET /api/secure/logs/byAssetId/{assetId}</b><br><br>
    * Gets all the Logs for the supplied assetId (UUID).
    * <br><br><b>  RESPONSE:  </b><br>
-   * <pre>{@code    {
+   * <pre>{@code {
    *   "status": 200,
    *   "message": "success",
    *   "response": {
@@ -103,7 +103,7 @@ public class LogController extends BaseController{
    * <b>  GET /api/secure/logs/byDeviceId/{deviceId}</b><br><br>
    * Gets all the Logs for the supplied deviceId (UUID).
    * <br><br><b>  RESPONSE:  </b><br>
-   * <pre>{@code    {
+   * <pre>{@code {
    *   "status": 200,
    *   "message": "success",
    *   "response": {

@@ -34,7 +34,7 @@ public class UserController extends BaseController {
    * Gets all the Users in the database and returns in a list.
    * <br><br>
    * <b>  RESULT:  </b><br>
-   * <pre>{@code    {
+   * <pre>{@code {
    *   "status": 200,
    *   "message": "success",
    *   "response": {
@@ -60,7 +60,7 @@ public class UserController extends BaseController {
    * Gets the User object for the authenticated User.
    * <br><br>
    * <b>  RESULT:  </b><br>
-   * <pre>{@code    {
+   * <pre>{@code {
    *   "status": 200,
    *   "message": "success",
    *   "response": User
@@ -83,7 +83,7 @@ public class UserController extends BaseController {
    * Updates the authenticated user's profile with the following body:
    * <br>
    * <b>REQUEST BODY:</b>
-   * <pre>{@code    {
+   * <pre>{@code {
    *    (optional) "email": String,
    *    (optional) "username": String,
    *    (optional) "firstName": String,
@@ -92,7 +92,7 @@ public class UserController extends BaseController {
    * }}</pre>
    * <br><br>
    * <b>  RESULT:  </b><br>
-   * <pre>{@code    {
+   * <pre>{@code {
    *   "status": 200,
    *   "message": "success",
    *   "response": User
@@ -118,7 +118,7 @@ public class UserController extends BaseController {
    * Updates another user's profile. This is only accessible to ADMIN users.
    * <br>
    * <b>REQUEST BODY:</b>
-   * <pre>{@code    {
+   * <pre>{@code {
    *    (required) "id": User.id,
    *    (optional) "email": String,
    *    (optional) "username": String,
@@ -129,7 +129,7 @@ public class UserController extends BaseController {
    * }}</pre>
    * <br><br>
    * <b>  RESULT:  </b><br>
-   * <pre>{@code    {
+   * <pre>{@code {
    *   "status": 200,
    *   "message": "success",
    *   "response": User
@@ -156,7 +156,7 @@ public class UserController extends BaseController {
    * gets all the users that belong to this Admin's company.
    * <br><br>
    * <b>  RESULT:  </b><br>
-   * <pre>{@code    {
+   * <pre>{@code {
    *   "status": 200,
    *   "message": "success",
    *   "response": {
@@ -187,7 +187,7 @@ public class UserController extends BaseController {
    * respectively, "ACCESS_DENIED" will be thrown.
    * <br><br>
    * <b>  RESULT:  </b><br>
-   * <pre>{@code    {
+   * <pre>{@code {
    *   "status": 200,
    *   "message": "success",
    *   "response": User
@@ -220,11 +220,11 @@ public class UserController extends BaseController {
    * respectively, "ACCESS_DENIED" will be thrown.
    * <br><br>
    * <b>  REQUEST BODY:  </b>
-   * <pre>{@code    {
+   * <pre>{@code {
    *   "locationIds": [ locationId1, locationId2, ... ]
    * }}</pre>
    * <b>  RESULT:  </b><br>
-   * <pre>{@code    {
+   * <pre>{@code {
    *   "status": 200,
    *   "message": "success",
    *   "response": User
@@ -257,7 +257,7 @@ public class UserController extends BaseController {
    * respectively, "ACCESS_DENIED" will be thrown.
    * <br><br>
    * <b>  RESULT:  </b><br>
-   * <pre>{@code    {
+   * <pre>{@code {
    *   "status": 200,
    *   "message": "success",
    *   "response": User
@@ -290,11 +290,11 @@ public class UserController extends BaseController {
    * respectively, "ACCESS_DENIED" will be thrown.
    * <br><br>
    * <b>  REQUEST BODY:  </b>
-   * <pre>{@code    {
+   * <pre>{@code {
    *   "locationIds": [ locationId1, locationId2, ... ]
    * }}</pre>
    * <b>  RESULT:  </b><br>
-   * <pre>{@code    {
+   * <pre>{@code {
    *   "status": 200,
    *   "message": "success",
    *   "response": User
@@ -327,11 +327,11 @@ public class UserController extends BaseController {
    * respectively, "ACCESS_DENIED" will be thrown.
    * <br><br>
    * <b>  REQUEST BODY:  </b>
-   * <pre>{@code    {
+   * <pre>{@code {
    *   "locationIds": [ locationId1, locationId2, ... ]
    * }}</pre>
    * <b>  RESULT:  </b><br>
-   * <pre>{@code    {
+   * <pre>{@code {
    *   "status": 200,
    *   "message": "success",
    *   "response": User
@@ -364,7 +364,7 @@ public class UserController extends BaseController {
    * <p>
    * <br><br>
    * <b>  RESULT:  </b><br>
-   * <pre>{@code    {
+   * <pre>{@code {
    *   "status": 200,
    *   "message": success,
    *   "response": User

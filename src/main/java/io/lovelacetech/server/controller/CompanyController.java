@@ -18,6 +18,9 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.UUID;
 
+/**
+ * The API controller for modifying Company objects in the database
+ */
 @RestController
 @CrossOrigin
 @RequestMapping("/api/secure/companies")
@@ -52,7 +55,7 @@ public class CompanyController extends BaseController {
    * Gets all the Companies in the database and returns in a list.
    * <br><br>
    * <b>  RESULT:  </b><br>
-   * <pre>{@code    {
+   * <pre>{@code {
    *     "status": 200,
    *     "message": "success",
    *     "response": {
@@ -62,6 +65,10 @@ public class CompanyController extends BaseController {
    * <br><br>
    * <b>  PERMISSIONS  </b><br>
    * User must be SUPER.
+   *
+   * @param authenticatedUser User
+   * @param filled boolean
+   * @return [Company]
    */
   @RequestMapping(value = "/", method = RequestMethod.GET)
   public CompanyListApiResponse getCompanies(
@@ -91,7 +98,7 @@ public class CompanyController extends BaseController {
    * Gets the Company with id "companyId"
    * <br><br>
    * <b>  RESULT:  </b><br>
-   * <pre>{@code    {
+   * <pre>{@code {
    *     "status": 200,
    *     "message": "success",
    *     "response": Company
@@ -100,6 +107,11 @@ public class CompanyController extends BaseController {
    * <b>  PERMISSIONS  </b><br>
    * User must either be SUPER, or must be a member of the Company with id "companyId"; That is to
    * say, the user's companyId must match the "companyId" from the query.
+   *
+   * @param authenticatedUser User
+   * @param companyId UUID
+   * @param filled boolean
+   * @return Company
    */
   @RequestMapping(value = "/byCompanyId/{companyId}", method = RequestMethod.GET)
   public CompanyApiResponse getCompanyByCompanyId(
@@ -123,7 +135,7 @@ public class CompanyController extends BaseController {
    * Gets the Company with name "name"
    * <br><br>
    * <b>  RESULT:  </b><br>
-   * <pre>{@code    {
+   * <pre>{@code {
    *     "status": 200,
    *     "message": "success",
    *     "response": Company
@@ -131,6 +143,10 @@ public class CompanyController extends BaseController {
    * <br><br>
    * <b>  PERMISSIONS  </b><br>
    * User must be SUPER.
+   *
+   * @param authenticatedUser User
+   * @param name String
+   * @return Company
    */
   @RequestMapping(value = "/byName/{name}", method = RequestMethod.GET)
   public CompanyApiResponse getCompanyByName(
@@ -150,7 +166,7 @@ public class CompanyController extends BaseController {
    * Gets any Companies whose names or phone numbers match those from the query.
    * <br><br>
    * <b>  RESULT:  </b><br>
-   * <pre>{@code    {
+   * <pre>{@code {
    *     "status": 200,
    *     "message": "success",
    *     "response": {
@@ -160,6 +176,11 @@ public class CompanyController extends BaseController {
    * <br><br>
    * <b>  PERMISSIONS  </b><br>
    * User must be SUPER.
+   *
+   * @param authenticatedUser User
+   * @param name String
+   * @param phoneNumber String
+   * @return [Company]
    */
   @RequestMapping(value = "/byNameOrPhoneNumber/{name}/{phoneNumber}", method = RequestMethod.GET)
   public CompanyListApiResponse getCompanyByNameOrPhoneNumber(
@@ -181,7 +202,7 @@ public class CompanyController extends BaseController {
    * Gets the Company with phoneNumber "phoneNumber"
    * <br><br>
    * <b>  RESULT:  </b><br>
-   * <pre>{@code    {
+   * <pre>{@code {
    *     "status": 200,
    *     "message": "success",
    *     "response": Company
@@ -189,6 +210,10 @@ public class CompanyController extends BaseController {
    * <br><br>
    * <b>  PERMISSIONS  </b><br>
    * User must be SUPER.
+   *
+   * @param authenticatedUser User
+   * @param phoneNumber String
+   * @return Company
    */
   @RequestMapping(value = "/byPhoneNumber/{phoneNumber}", method = RequestMethod.GET)
   public CompanyApiResponse getCompanyByPhoneNumber(
@@ -211,11 +236,15 @@ public class CompanyController extends BaseController {
    * recursive. See {@link io.lovelacetech.server.util.LoaderUtils}.
    * <br><br>
    * <b>  RESULT:  </b><br>
-   * <pre>{@code    {
+   * <pre>{@code {
    *     "status": 200,
    *     "message": "success",
    *     "response": Company
    * }}</pre>
+   *
+   * @param authenticatedUser User
+   * @param filled boolean
+   * @return Company
    */
   @RequestMapping(value = "/forAuthenticated", method = RequestMethod.GET)
   public CompanyApiResponse getCompanyForAuthenticatedUserFilled(
@@ -238,13 +267,16 @@ public class CompanyController extends BaseController {
    * Returns a list of the Asset Types registered with this company. These asset types are created
    * by Admin users.<br><br>
    * <b>  RESPONSE:  </b><br>
-   * <pre>{@code    {
+   * <pre>{@code {
    *   "status": 200,
    *   "message": "success",
    *   "response": {
    *     "assetTypes": [String, String, ...]
    *   }
    * }}</pre>
+   *
+   * @param authenticatedUser User
+   * @return AssetTypeList
    */
   @RequestMapping(value = "/assetTypes", method = RequestMethod.GET)
   public AssetTypeStringListApiResponse getAssetTypesForCompany(
@@ -265,7 +297,7 @@ public class CompanyController extends BaseController {
    * <br><br>
    * To <b>CREATE</b> a Company, supply the body in the following manner:
    * <br>
-   * <pre>{@code    {
+   * <pre>{@code {
    *   (required) "name": ...,
    *   (required) "phoneNumber": ...
    * }}</pre>
@@ -273,13 +305,13 @@ public class CompanyController extends BaseController {
    * Company's id, and their "accessLevel" set to ADMIN.
    * <br><br>
    * To <b>UPDATE</b> a Company, supply the body in the following manner:
-   * <pre>{@code    {
+   * <pre>{@code {
    *   (required) "id": ...,
    *   (optional) "name": ...,
    *   (optional) "phoneNumber": ...
    * }}</pre>
    * <br><b>  RESULT:  </b>
-   * <pre>{@code    {
+   * <pre>{@code {
    *   "status": 200,
    *   "message": "success",
    *   "response": Company
@@ -287,6 +319,10 @@ public class CompanyController extends BaseController {
    * <br><b>  PERMISSIONS  </b><br>
    * If the calling user is updating a Company, they must be the ADMIN for that Company. Any user
    * is allowed to create a Company.
+   *
+   * @param authenticatedUser User
+   * @param company Company
+   * @return Company
    */
   @RequestMapping(value = "/forAuthenticated", method = RequestMethod.POST)
   public CompanyApiResponse putCompanyForAuthenticatedUser(

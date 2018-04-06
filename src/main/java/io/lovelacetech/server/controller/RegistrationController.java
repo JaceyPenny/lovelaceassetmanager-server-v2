@@ -47,7 +47,7 @@ public class RegistrationController {
    * by an ADMIN user.
    * <br>
    * <b>  REQUEST BODY:  </b><br>
-   * <pre>{@code    {
+   * <pre>{@code {
    *   (required) "email": String,
    *   (required) "username": String,
    *   (required) "password": String (plaintext),
@@ -55,7 +55,7 @@ public class RegistrationController {
    *   (required) "lastName": String
    * }}</pre><br>
    * <b>  RESULT:  </b><br>
-   * <pre>{@code    {
+   * <pre>{@code {
    *   "status": 200,
    *   "message": "success",
    *   "response": {

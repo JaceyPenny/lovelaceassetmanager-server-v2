@@ -41,7 +41,7 @@ public class DeviceController extends BaseController {
    * <b> GET /api/secure/devices/ </b>
    * <br> Gets all the devices in the database.
    * <br><br><b>  RESPONSE:  </b>
-   * <pre>{@code    {
+   * <pre>{@code {
    *   "status": 200,
    *   "message": "success",
    *   "response": {
@@ -64,7 +64,7 @@ public class DeviceController extends BaseController {
    * <b> GET /api/secure/devices/byDeviceId/{deviceId}?filled={true|false} </b>
    * <br>Gets a single Device by "deviceId".
    * <br><br><b>  RESPONSE:  </b>
-   * <pre>{@code    {
+   * <pre>{@code {
    *   "status": 200,
    *   "message": "success",
    *   "response": Device
@@ -98,7 +98,7 @@ public class DeviceController extends BaseController {
    * <b> GET /api/secure/devices/byLocationId/{locationId}?filled={true|false} </b><br>
    * Gets the Devices at the Location with "locationId".<br><br>
    * <b>  RESPONSE:  </b>
-   * <pre>{@code    {
+   * <pre>{@code {
    *   "status": 200,
    *   "message": "success",
    *   "response": {
@@ -135,7 +135,7 @@ public class DeviceController extends BaseController {
    * <br>Gets all the devices belonging to the authenticated user. Specify the "filled" parameter
    * to have the device populated with its children Assets.
    * <br><br><b>  RESPONSE:  </b>
-   * <pre>{@code    {
+   * <pre>{@code {
    *   "status": 200,
    *   "message": "success",
    *   "response": {
@@ -162,7 +162,7 @@ public class DeviceController extends BaseController {
    * <b> POST /api/secure/devices/forAuthenticated </b>
    * <br>Creates or updates a Device in the database.<br><br>
    * <b>  REQUEST BODY (CREATE):</b>
-   * <pre>{@code    {
+   * <pre>{@code {
    *   (required) "deviceCode": String,
    *   (required) "name": String,
    *   (optional) "locationId": UUID
@@ -170,14 +170,14 @@ public class DeviceController extends BaseController {
    * This method should really only be used by Lovelace employees to register
    * a manufactured device.
    * <br><br><b>  REQUEST BODY (UPDATE):  </b>
-   * <pre>{@code    {
+   * <pre>{@code {
    *   (required) "id": UUID,
    *   (optional) "name": String,
    *   (optional) "locationId": UUID
    * }}</pre>
    * <br><br>
    * <b>  RESPONSE:  </b>
-   * <pre>{@code    {
+   * <pre>{@code {
    *   "status": 200,
    *   "message": "success",
    *   "response": Device
@@ -207,12 +207,12 @@ public class DeviceController extends BaseController {
    * Activates a new Device by device code, adding it to the location identified
    * by "locationId".<br><br>
    * <b>  REQUEST BODY:  </b>
-   * <pre>{@code    {
+   * <pre>{@code {
    *   (required) "deviceCode": String,
    *   (required) "locationId": UUID
    * }}</pre><br><br>
    * <b>  RESPONSE:  </b>
-   * <pre>{@code    {
+   * <pre>{@code {
    *   "status": 200,
    *   "message": "success",
    *   "response": Device
@@ -243,7 +243,7 @@ public class DeviceController extends BaseController {
    * its locationId is set to null, effectively "deactivating" it from the user's point of view.
    * <br><br>
    * <b>  REQUEST BODY:  </b>
-   * <pre>{@code    {
+   * <pre>{@code {
    *   "status": 200,
    *   "message": "success",
    *   "response": Device

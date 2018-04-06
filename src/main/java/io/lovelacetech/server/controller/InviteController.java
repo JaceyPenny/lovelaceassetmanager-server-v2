@@ -48,11 +48,11 @@ public class InviteController extends BaseController {
    * <b> PUT /api/secure/invite </b>
    * <br>Invites a new user by their email, supplied in the PUT body.
    * <br><br><b>  REQUEST BODY:  </b>
-   * <pre>{@code    {
+   * <pre>{@code {
    *   "email": String
    * }}</pre>
    * <br><br><b>  RESPONSE:  </b>
-   * <pre>{@code    {
+   * <pre>{@code {
    *   "status": 200,
    *   "message": "success",
    *   "response": Invite

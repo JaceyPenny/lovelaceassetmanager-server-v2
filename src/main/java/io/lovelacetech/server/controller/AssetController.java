@@ -12,6 +12,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
 
+/**
+ * The API controller for modifying Asset objects in the database
+ */
 @RestController
 @CrossOrigin
 @RequestMapping(value = "/api/secure/assets")
@@ -43,7 +46,7 @@ public class AssetController extends BaseController {
    * Gets all the Assets in the database and returns in a list.
    * <br><br>
    * <b>  RESULT:  </b><br>
-   * <pre>{@code    {
+   * <pre>{@code {
    *   "status": 200,
    *   "message": "success",
    *   "response": {
@@ -53,6 +56,9 @@ public class AssetController extends BaseController {
    * <br>
    * <b>  PERMISSIONS  </b><br>
    * User must be SUPER to access this endpoint.
+   *
+   * @param authenticatedUser User
+   * @return [Asset]
    */
   @RequestMapping(value = "/", method = RequestMethod.GET)
   public AssetListApiResponse getAssets(@RequestAttribute ApiUser authenticatedUser) {
@@ -69,7 +75,7 @@ public class AssetController extends BaseController {
    * Gets a single Asset by its ID.
    * <br><br>
    * <b>  RESULT:  </b><br>
-   * <pre>{@code    {
+   * <pre>{@code {
    *   "status": 200,
    *   "message": "success",
    *   "response": Asset
@@ -78,6 +84,10 @@ public class AssetController extends BaseController {
    * <b>  PERMISSIONS  </b><br>
    * The user must have permissions for this Asset. See {@link AccessUtils} for definitions
    * concerning user access.
+   *
+   * @param authenticatedUser User
+   * @param assetId UUID
+   * @return Asset
    */
   @RequestMapping(value = "/byAssetId/{assetId}", method = RequestMethod.GET)
   public AssetApiResponse getAssetByAssetId(
@@ -100,7 +110,7 @@ public class AssetController extends BaseController {
    * Gets the list of Assets currently in the Device with id "deviceId".
    * <br><br>
    * <b>  RESULT:  </b><br>
-   * <pre>{@code    {
+   * <pre>{@code {
    *   "status": 200,
    *   "message": "success",
    *   "response": {
@@ -111,6 +121,10 @@ public class AssetController extends BaseController {
    * <b>  PERMISSIONS  </b><br>
    * The user must have permissions for the Device with id "deviceId". See {@link AccessUtils}
    * for definitions concerning user access.
+   *
+   * @param authenticatedUser User
+   * @param deviceId UUID
+   * @return [Asset]
    */
   @RequestMapping(value = "/currentlyInDeviceId/{deviceId}", method = RequestMethod.GET)
   public AssetListApiResponse getAssetsInDeviceByDeviceId(
@@ -133,7 +147,7 @@ public class AssetController extends BaseController {
    * Gets the list of Assets currently in the Location (aka "missing") with id "locationId".
    * <br><br>
    * <b>  RESULT:  </b><br>
-   * <pre>{@code    {
+   * <pre>{@code {
    *   "status": 200,
    *   "message": "success",
    *   "response": {
@@ -144,6 +158,10 @@ public class AssetController extends BaseController {
    * <b>  PERMISSIONS  </b><br>
    * The user must have permission for the Location with id "locationId". See {@link AccessUtils}
    * for definitions concerning user access.
+   *
+   * @param authenticatedUser User
+   * @param locationId UUID
+   * @return [Asset]
    */
   @RequestMapping(value = "/currentlyInLocationId/{locationId}", method = RequestMethod.GET)
   public AssetListApiResponse getAssetsInLocationByLocationId(
@@ -166,7 +184,7 @@ public class AssetController extends BaseController {
    * returned Assets all have their homeId set to "deviceId"
    * <br><br>
    * <b>  RESULT:  </b><br>
-   * <pre>{@code    {
+   * <pre>{@code {
    *   "status": 200,
    *   "message": "success",
    *   "response": {
@@ -177,6 +195,10 @@ public class AssetController extends BaseController {
    * <b>  PERMISSIONS  </b><br>
    * The user must have permissions for the Device with id "deviceId". See {@link AccessUtils}
    * for definitions concerning user access.
+   *
+   * @param authenticatedUser User
+   * @param deviceId UUID
+   * @return [Asset]
    */
   @RequestMapping(value = "/belongingToDeviceId/{deviceId}", method = RequestMethod.GET)
   public AssetListApiResponse getAssetsBelongingToDeviceId(
@@ -200,7 +222,7 @@ public class AssetController extends BaseController {
    * <br><br>
    * To <b>CREATE</b> an Asset, supply the body in the following manner:
    * <br>
-   * <pre>{@code    {
+   * <pre>{@code {
    *   (required) "homeId": Device.id,
    *   (required) "rfid": HexString,
    *   (optional) "name": String,
@@ -212,7 +234,7 @@ public class AssetController extends BaseController {
    * <br><br>
    * To <b>UPDATE</b> an Asset, supply the body in the following manner:
    * <br>
-   * <pre>{@code    {
+   * <pre>{@code {
    *    (required) "id": uuid,
    *    (optional) "name": String,
    *    (optional) "status": [AVAILABLE, REPAIR],
@@ -223,7 +245,7 @@ public class AssetController extends BaseController {
    * }}</pre>
    * <br><br>
    * <b>  RESULT:  </b><br>
-   * <pre>{@code    {
+   * <pre>{@code {
    *   "status": 200,
    *   "message": "success",
    *   "response": Asset
@@ -232,6 +254,10 @@ public class AssetController extends BaseController {
    * <b>  PERMISSIONS  </b><br>
    * The user must have permission for the IDs specified for any of: {homeId, locationId, deviceId}.
    * See {@link AccessUtils} for definitions concerning user access
+   *
+   * @param authenticatedUser User
+   * @param asset Asset
+   * @return Asset
    */
   @RequestMapping(value = "/forAuthenticated", method = RequestMethod.POST)
   public AssetApiResponse putAssetForAuthenticated(
@@ -254,13 +280,17 @@ public class AssetController extends BaseController {
    * <b>  DELETE /api/secure/assets/{assetId}</b><br>
    * Deletes an Asset by id. Returns the deleted Asset in the response body.
    * <br><br><b>  RESPONSE:  </b><br>
-   * <pre>{@code    {
+   * <pre>{@code {
    *   "status": 200,
    *   "message": "success",
    *   "response": Asset
    * }}</pre>
    * <br><b>  PERMISSIONS:  </b><br>
    * The authenticated user must have access to the Asset in order to delete it.
+   *
+   * @param authenticatedUser User
+   * @param assetId UUID
+   * @return Asset
    */
   @RequestMapping(value = "/{assetId}", method = RequestMethod.DELETE)
   public AssetApiResponse deleteAssetById(

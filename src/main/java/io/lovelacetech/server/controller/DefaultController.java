@@ -6,6 +6,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+/**
+ * The landing API controller. Doesn't do anything
+ */
 @RestController
 @CrossOrigin
 @RequestMapping("/")
