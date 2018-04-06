@@ -12,6 +12,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
 
+/**
+ * The API controller for modifying Device objects in the database
+ */
 @RestController
 @CrossOrigin
 @RequestMapping(value = "/api/secure/devices")
@@ -50,6 +53,9 @@ public class DeviceController extends BaseController {
    * }}</pre><br><br>
    * <b> PERMISSIONS: </b><br>
    * The user must be a SUPER.
+   *
+   * @param authenticatedUser User
+   * @return [Device]
    */
   @RequestMapping(value = "/", method = RequestMethod.GET)
   public DeviceListApiResponse getDevices(@RequestAttribute ApiUser authenticatedUser) {
@@ -76,6 +82,11 @@ public class DeviceController extends BaseController {
    *   <li>Be an ADMIN of the company that this Device belongs to</li>
    *   <li>Be a USER with permissions for the Location this Device belongs to.</li>
    * </ul>
+   *
+   * @param authenticatedUser User
+   * @param deviceId UUID
+   * @param filled boolean
+   * @return Device
    */
   @RequestMapping(value = "/byDeviceId/{deviceId}", method = RequestMethod.GET)
   public DeviceApiResponse getDeviceByDeviceId(
@@ -112,6 +123,11 @@ public class DeviceController extends BaseController {
    *   <li>Be an ADMIN of the company that the Location belongs to</li>
    *   <li>Be a user with permissions for the Location with "locationId"</li>
    * </ul>
+   *
+   * @param authenticatedUser User
+   * @param locationId UUID
+   * @param filled boolean
+   * @return [Device]
    */
   @RequestMapping(value = "/byLocationId/{locationId}", method = RequestMethod.GET)
   public DeviceListApiResponse getDevicesByLocationId(
@@ -144,6 +160,10 @@ public class DeviceController extends BaseController {
    * }}</pre><br><br>
    * <b>  PERMISSIONS:  </b>
    * User must be authenticated.
+   *
+   * @param authenticatedUser User
+   * @param filled boolean
+   * @return [Device]
    */
   @RequestMapping(value = "/forAuthenticated", method = RequestMethod.GET)
   public DeviceListApiResponse getDevicesForAuthenticated(
@@ -185,6 +205,10 @@ public class DeviceController extends BaseController {
    * <b>  PERMISSIONS:  </b>
    * To create, user must be SUPER. To update, user must have permissions
    * on the Location for this Device.
+   *
+   * @param authenticatedUser User
+   * @param device Device
+   * @return Device
    */
   @RequestMapping(value = "/forAuthenticated", method = RequestMethod.POST)
   public DeviceApiResponse putDeviceForAuthenticated(
@@ -208,6 +232,7 @@ public class DeviceController extends BaseController {
    * by "locationId".<br><br>
    * <b>  REQUEST BODY:  </b>
    * <pre>{@code {
+   *   (optional) "name": String,
    *   (required) "deviceCode": String,
    *   (required) "locationId": UUID
    * }}</pre><br><br>
@@ -220,6 +245,10 @@ public class DeviceController extends BaseController {
    * <br><b>  PERMISSIONS:  </b>
    * <br>The user must be an ADMIN for the Company where they're trying to activate
    * this new Device.
+   *
+   * @param authenticatedUser User
+   * @param deviceActivation DeviceActivation
+   * @return Device
    */
   @RequestMapping(value = "/activateDevice", method = RequestMethod.POST)
   public DeviceApiResponse activateDeviceWithCode(
@@ -250,6 +279,10 @@ public class DeviceController extends BaseController {
    * }}</pre>
    * <br><b>  PERMISSIONS:  </b>
    * <br>The user must be an ADMIN for the company where they're trying to delete this device.
+   *
+   * @param authenticatedUser User
+   * @param deviceId UUID
+   * @return Device
    */
   @RequestMapping(value = "/{deviceId}", method = RequestMethod.DELETE)
   public DeviceApiResponse deleteDeviceById(
