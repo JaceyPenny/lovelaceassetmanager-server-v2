@@ -7,10 +7,7 @@ import io.lovelacetech.server.model.api.response.location.LocationApiResponse;
 import io.lovelacetech.server.repository.AssetRepository;
 import io.lovelacetech.server.repository.DeviceRepository;
 import io.lovelacetech.server.repository.LogRepository;
-import io.lovelacetech.server.util.AccessUtils;
-import io.lovelacetech.server.util.AuthenticationUtils;
-import io.lovelacetech.server.util.LogUtils;
-import io.lovelacetech.server.util.UUIDUtils;
+import io.lovelacetech.server.util.*;
 
 import java.util.UUID;
 
@@ -75,12 +72,12 @@ public class DeleteLocationCommand extends LocationCommand<DeleteLocationCommand
 
     int devicesInLocation = deviceRepository.countAllByLocationId(locationId);
     if (devicesInLocation > 0) {
-      return new LocationApiResponse().setCannotModify();
+      return new LocationApiResponse().setCannotModify().setMessage(Messages.LOCATION_MUST_REMOVE_DEVICES);
     }
 
     int assetsInLocation = assetRepository.countAllByLocationId(locationId);
     if (assetsInLocation > 0) {
-      return new LocationApiResponse().setCannotModify();
+      return new LocationApiResponse().setCannotModify().setMessage(Messages.LOCATION_MUST_REMOVE_ASSETS);
     }
 
     LogUtils.deleteLocationAndLog(

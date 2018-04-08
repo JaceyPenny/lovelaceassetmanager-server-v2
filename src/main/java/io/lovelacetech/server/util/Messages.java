@@ -48,6 +48,8 @@ public class Messages {
   public static final String LOCATION_CONFLICTING_NAME = "Another location at this company already has this name";
   public static final String NO_LOCATION_FOUND_WITH_ID = "No location was found with this id";
   public static final String LOCATION_BAD_ID = "companyId does not reference a company";
+  public static final String LOCATION_MUST_REMOVE_DEVICES = "You must remove all the devices at this location";
+  public static final String LOCATION_MUST_REMOVE_ASSETS = "You must remove all the assets at this location";
 
   /*
    * Device response messages
