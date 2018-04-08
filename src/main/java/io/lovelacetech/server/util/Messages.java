@@ -3,42 +3,42 @@ package io.lovelacetech.server.util;
 public class Messages {
   public static final String API_WELCOME = "Welcome to the LovelaceAssetManager API. We will soon be including documentation here, but for now, authenticate yourself at \"/api/authenticate\"";
 
-  public static final String DEFAULT = "an unknown error occurred";
+  public static final String DEFAULT = "An unknown error occurred";
   public static final String SUCCESS = "success";
-  public static final String NOT_FOUND = "requested resource not found";
-  public static final String ACCESS_DENIED = "access denied";
-  public static final String INVALID_BODY = "invalid body. please fill in all required fields";
-  public static final String CONFLICT = "there was a conflict with another record in the database";
-  public static final String CANNOT_MODIFY = "you have attempted to modify a non-modifiable field";
-  public static final String USER_DOES_NOT_BELONG_TO_COMPANY = "the calling user does not belong to a company";
+  public static final String NOT_FOUND = "Requested resource not found";
+  public static final String ACCESS_DENIED = "Access denied";
+  public static final String INVALID_BODY = "Invalid body. Please fill in all required fields";
+  public static final String CONFLICT = "There was a conflict with another record in the database";
+  public static final String CANNOT_MODIFY = "You have attempted to modify a non-modifiable field";
+  public static final String USER_DOES_NOT_BELONG_TO_COMPANY = "The calling user does not belong to a company";
 
   /*
    * Company response messages
    */
-  public static final String NO_COMPANIES_FOUND = "no companies found";
-  public static final String COMPANY_CONFLICTING_NAME = "another company already has this name";
+  public static final String NO_COMPANIES_FOUND = "No companies found";
+  public static final String COMPANY_CONFLICTING_NAME = "Another company already has this name";
 
   public static String NO_COMPANY_FOUND_BY_NAME(String name) {
-    return "no company found with name: " + name;
+    return "No company found with name: " + name;
   }
 
   public static String NO_COMPANY_FOUND_BY_PHONE_NUMBER(String phoneNumber) {
-    return "no company found with phone number: " + phoneNumber;
+    return "No company found with phone number: " + phoneNumber;
   }
 
   /*
    * User response messages
    */
-  public static final String USER_ALREADY_HAS_LOCATION = "this user already has permissions for this location";
-  public static final String NO_USERS_FOUND = "no users found";
-  public static final String NO_USER_FOUND_BY_ID = "no users found with this id";
+  public static final String USER_ALREADY_HAS_LOCATION = "This user already has permissions for this location";
+  public static final String NO_USERS_FOUND = "No users found";
+  public static final String NO_USER_FOUND_BY_ID = "No users found with this id";
 
   public static String NO_USER_FOUND_BY_EMAIL(String email) {
-    return "no user found with email: " + email;
+    return "No user found with email: " + email;
   }
 
   public static String NO_USER_FOUND_BY_EMAIL_PASSWORD(String email) {
-    return "no user found email and password: " + email;
+    return "No user found email and password: " + email;
   }
 
   /*
